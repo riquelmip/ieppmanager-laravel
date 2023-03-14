@@ -16,6 +16,9 @@
     <!--Open Sans Font [ OPTIONAL ]-->
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css'>
 
+    <!--Pace - Page Load Progress Par [OPTIONAL]-->
+    <link href="{{ asset('template/plugins/pace/pace.min.css') }}" rel="stylesheet">
+    <script src="{{ asset('template/plugins/pace/pace.min.js') }}"></script>
 
     <!--Bootstrap Stylesheet [ REQUIRED ]-->
     <link href="{{ asset('template/css/bootstrap.min.css') }}" rel="stylesheet">
@@ -28,18 +31,16 @@
     <!--Nifty Premium Icon [ DEMONSTRATION ]-->
     <link href="{{ asset('template/css/demo/nifty-demo-icons.min.css') }}" rel="stylesheet">
 
-
+    <!--Switchery [ OPTIONAL ]-->
+    <link href="{{ asset('template/plugins/switchery/switchery.min.css') }}" rel="stylesheet">
     <!--=================================================-->
 
+    <!--Toastr alertas-->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
 
 
-    <!--Pace - Page Load Progress Par [OPTIONAL]-->
-    <link href="{{ asset('template/plugins/pace/pace.min.css') }}" rel="stylesheet">
-    <script src="{{ asset('template/plugins/pace/pace.min.js') }}"></script>
 
 
-    <!--Demo [ DEMONSTRATION ]-->
-    <!--<link href="{{ asset('template/css/demo/nifty-demo.min.css') }}" rel="stylesheet">-->
 
 
 
@@ -197,6 +198,7 @@
 
         <div class="boxed">
 
+
             <!--CONTENT CONTAINER-->
             <!--===================================================-->
             <div id="content-container">
@@ -265,14 +267,11 @@
     <!--NiftyJS [ RECOMMENDED ]-->
     <script src="{{ asset('template/js/nifty.min.js') }}"></script>
 
+    <!--Switchery [ OPTIONAL ]-->
+    <script src="{{ asset('template/plugins/switchery/switchery.min.js') }}"></script>
 
-
-
-    <!--=================================================-->
-
-    <!--Demo script [ DEMONSTRATION ]-->
-    <!--<script src="{{ asset('template/js/demo/nifty-demo.min.js') }}"></script>-->
-
+    <!--Toastr alertas-->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 
     <!--DataTables [ OPTIONAL ]-->
     <script src="{{ asset('template/plugins/datatables/media/js/jquery.dataTables.js') }}"></script>

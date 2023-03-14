@@ -45,13 +45,21 @@ class RolController extends Controller
             //HAGO EL SELECT A LA BASE DE DATOS PARA PODER MOSTRAR LOS REGISTROS
             $permisos = Permission::get();
 
-       
-            return response()->json(['datos' => $permisos]);
+            return response()->json(
+                [
+                    'estado' => true,
+                    'msg' => 'Datos obtenidos correctamente',
+                    'datos' => $permisos
+                ]
+            );
         } catch (Exception $e) {
-            // Si ocurre una excepción al hacer la consulta, se maneja aquí
-            //return response()->json(['message' => 'Ocurrió un error al hacer la consulta'], 500);
-            return redirect()->route('content.roles.index')->with('error', true);
-            //return response()->json(['error' => $e->getMessage()]);
+            return response()->json(
+                [
+                    'estado' => false,
+                    'msg' => 'Ocurrió un error al obtener la información',
+                    'error' => $e->getMessage()
+                ]
+            );
         }
     }
 

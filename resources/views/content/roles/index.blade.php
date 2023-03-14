@@ -77,7 +77,7 @@
 @section('modals')
     <div class="modal fade" id="modal-roles" role="dialog" tabindex="-1" aria-labelledby="demo-default-modal"
         aria-hidden="true" style="display: none;">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
 
                 <!--Modal header-->
@@ -97,15 +97,16 @@
 
                     <div class="form-group">
                         <label class="control-label" for="name">Permisos</label>
-                        <table id="t-roles" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                        <table id="t-roles-permisos" class="table table-striped table-bordered" cellspacing="0"
+                            width="100%">
                             <thead>
                                 <tr>
+                                    <th>ID</th>
                                     <th>Nombre</th>
                                     <th>Estado</th>
                                 </tr>
                             </thead>
-                            <tbody id="tabla-roles-permisos">
-                               
+                            <tbody id="t-roles-permisos-body">
                             </tbody>
                         </table>
 
