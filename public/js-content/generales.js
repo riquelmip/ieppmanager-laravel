@@ -53,3 +53,36 @@ function datatable(tabla) {
         responsive: true,
     });
 }
+
+
+function cargarDatos(tabla, ruta) {
+    $.ajax({
+        type: "GET",
+        url: URL_RUTA + ruta,
+        beforeSend: function () {
+            // $(boton).prop('disabled', true).html(''
+            //     +'<div class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></div>'
+            // );
+        },
+        success: function (json) {
+            if (json["estado"]) {
+                //DESTRUYO LA TABLA
+                $("#" + tabla).DataTable().destroy();
+
+                //PONGO EL HTML EN EL DIV TBODY DE LA TABLA
+                $("#" + tabla + "-body").empty().html(json['datos']);
+
+                //INICIALIZO LA TABLA
+                datatable(tabla);
+
+                //MUESTRO LA ALERTA DE EXITO
+                //toastr.success(json["msg"], json["titulo"]);
+            } else {
+                toastr.error(json["msg"], json["titulo"]);
+            }
+        },
+        error: function (json) {
+            toastr.error(json["msg"], json["titulo"]);
+        },
+    });
+}

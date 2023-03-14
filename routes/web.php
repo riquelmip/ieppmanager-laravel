@@ -23,7 +23,7 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::group(['middleware' => ['auth']], function () {
-    Route::get('/roles/permisos', [RolController::class, 'getPermisos'])->name('roles/permisos');
+    Route::post('/roles/permisos', [RolController::class, 'getPermisos'])->name('roles/permisos');
+    Route::get('/roles/cargartabla', [RolController::class, 'cargarTabla'])->name('roles/cargartabla');
     Route::resource('roles', RolController::class);
-    Route::resource('usuarios', UsuarioController::class);
 });

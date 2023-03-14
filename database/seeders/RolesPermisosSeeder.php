@@ -47,6 +47,9 @@ class RolesPermisosSeeder extends Seeder
         // SI NO SE HA CREADO NINGUN ROL
         // $rol = Role::create(['name' => 'Super Administrador']);
 
+        ///////////////////////////////////////////////////////////
+        ////////////////        PARA SUPERADMIN
+        ////////////////////////////////////////////////////////
         //SI YA SE CREARON LOS ROLES
         $superadminRol = Role::findByName('Super-Administrador'); //Obtengo el registro del super admin
 
@@ -64,5 +67,29 @@ class RolesPermisosSeeder extends Seeder
 
         //SI YA SE CREARON ROLES
         //$usuario->assignRole('Administrador');
+
+
+
+
+
+
+
+        ///////////////////////////////////////////////////////////
+        ////////////////        PARA ADMIN
+        ////////////////////////////////////////////////////////
+        //SI YA SE CREARON LOS ROLES
+        $adminRol = Role::findByName('Administrador'); //Obtengo el registro del super admin
+
+        $permisosCreadosAdmin = Permission::all(); //Obtengo el listado de los permisos
+
+        $nombres_permisos_admin = []; //Creo un array vacio
+
+        foreach ($permisosCreadosAdmin as $permiso) {
+            $nombres_permisos_admin[] = $permiso->name; //Agrego solo el nombre al array
+        }
+
+        $adminRol->syncPermissions($nombres_permisos_admin); //Asigno los permisos al rol de super admin
+
+        
     }
 }

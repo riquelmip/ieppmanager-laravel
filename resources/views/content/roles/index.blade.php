@@ -26,12 +26,13 @@
 @endsection
 
 @section('content')
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Basic Data Tables -->
     <!--===================================================-->
     <div class="panel">
-        <div class="panel-heading">
+        {{-- <div class="panel-heading">
             <h3 class="panel-title">A continuación se muestra el listado</h3>
-        </div>
+        </div> --}}
         <div class="panel-body">
             <button id="btn-nuevo-rol" class="btn btn-primary">Nuevo</button>
             <br><br>
@@ -43,29 +44,8 @@
                         <th class="min-tablet">Acciones</th>
                     </tr>
                 </thead>
-                <tbody>
-                    @foreach ($roles as $rol)
-                        <tr>
-                            <td>{{ $rol->id }}</td>
-                            <td>{{ $rol->name }}</td>
-                            <td>
-                                <div class="text-center">
-                                    {!! Form::open(['method' => 'DELETE', 'route' => ['roles.destroy', $rol->id], 'class' => 'formBorrarRol']) !!}
-                                    @if ($rol->id != 1)
-                                        @can('editar-roles')
-                                            <a href="{{ route('roles.edit', $rol->id) }}" class="btn btn-icon btn-primary"><i
-                                                    class="demo-psi-pen-5 icon-lg"></i></a>
-                                        @endcan
-                                        @can('borrar-roles')
-                                            <button type="submit" class="btn btn-icon btn-danger"><i
-                                                    class="demo-psi-recycling icon-lg"></i></button>
-                                        @endcan
-                                    @endif
-                                    {!! Form::close() !!}
-                                </div>
-                            </td>
-                        </tr>
-                    @endforeach
+                <tbody id="t-roles-body">
+                    
                 </tbody>
             </table>
         </div>
@@ -77,7 +57,7 @@
 @section('modals')
     <div class="modal fade" id="modal-roles" role="dialog" tabindex="-1" aria-labelledby="demo-default-modal"
         aria-hidden="true" style="display: none;">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog">
             <div class="modal-content">
 
                 <!--Modal header-->
@@ -85,44 +65,73 @@
                     <button type="button" class="close" data-dismiss="modal"><i class="pci-cross pci-circle"></i></button>
                     <h4 class="modal-title">Nuevo Rol</h4>
                 </div>
-                {!! Form::open(['route' => 'roles.store', 'method' => 'POST']) !!}
-                <!--Modal body-->
-                <div class="modal-body">
 
-                    <div class="form-group">
-                        <label class="control-label" for="name">Nombre</label>
-                        {!! Form::text('name', null, ['class' => 'form-control']) !!}
-                    </div>
+                <form id="form-roles" url="{{ route('roles.store') }}">
 
+                    <!--Modal body-->
+                    <div class="modal-body">
 
-                    <div class="form-group">
-                        <label class="control-label" for="name">Permisos</label>
-                        <table id="t-roles-permisos" class="table table-striped table-bordered" cellspacing="0"
-                            width="100%">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Nombre</th>
-                                    <th>Estado</th>
-                                </tr>
-                            </thead>
-                            <tbody id="t-roles-permisos-body">
-                            </tbody>
-                        </table>
+                        <div class="form-group">
+                            <label class="control-label" for="name">Nombre</label>
+                            <input type="text" id="name" name="name" class="form-control">
+                        </div>
 
                     </div>
 
+                    <!--Modal footer-->
+                    <div class="modal-footer">
+                        <button data-dismiss="modal" class="btn btn-default" type="button">Cerrar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
 
 
+    <div class="modal fade" id="modal-permisos" role="dialog" tabindex="-1" aria-labelledby="demo-default-modal"
+        aria-hidden="true" style="display: none;">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
 
+                <!--Modal header-->
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><i class="pci-cross pci-circle"></i></button>
+                    <h4 class="modal-title">Permisos del Rol</h4>
                 </div>
 
-                <!--Modal footer-->
-                <div class="modal-footer">
-                    <button data-dismiss="modal" class="btn btn-default" type="button">Cerrar</button>
-                    <button type="submit" class="btn btn-primary">Guardar</button>
-                </div>
-                {!! Form::close() !!}
+                <form id="form-permisos" url="{{ route('roles.store') }}">
+
+                    <!--Modal body-->
+                    <div class="modal-body">
+
+                        <div class="form-group">
+                            <label class="control-label">Rol: </label>
+                            <table id="t-roles-permisos" class="table table-striped table-bordered" cellspacing="0"
+                                width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Nombre</th>
+                                        <th>Estado</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="t-roles-permisos-body">
+                                </tbody>
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                    <!--Modal footer-->
+                    <div class="modal-footer">
+                        <button data-dismiss="modal" class="btn btn-default" type="button">Cerrar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+
+                </form>
             </div>
         </div>
     </div>

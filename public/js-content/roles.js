@@ -1,10 +1,22 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // código a ejecutar cuando la página se carga
 
     $("#btn-nuevo-rol").click(function () {
+        //MUESTRO EL MODAL
+        $("#modal-roles").modal('show');
+    });
+
+    cargarDatos('t-roles', '/roles/cargartabla')
+
+    $("#form-roles").submit(function (event) {
+        event.preventDefault(); // detiene el comportamiento predeterminado del formulario
+        var formData = $(this).serialize();
         $.ajax({
-            type: "GET",
-            url: URL_RUTA + "/roles/permisos",
+            type: "POST",
+            url: $(this).attr("url"),
+            data: formData,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
             beforeSend: function () {
                 // $(boton).prop('disabled', true).html(''
                 //     +'<div class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></div>'
@@ -12,58 +24,71 @@ document.addEventListener("DOMContentLoaded", function () {
             },
             success: function (json) {
                 if (json["estado"]) {
-                    //CREO EL HTML DELA LISTA DE PERMISOS PARA LA TABLA
-                    let permisosHTML = "";
-
-                    for (let i = 0; i < json["datos"].length; i++) {
-                        let permiso = json["datos"][i];
-
-                        permisosHTML +=
-                            "<tr>" +
-                            "<td>" +
-                            permiso["id"] +
-                            "</td>" +
-                            "<td>" +
-                            permiso["name"] +
-                            "</td>" +
-                            '<td class="text-center">' +
-                            '<input class="js-switch" type="checkbox"></input>' +
-                            "</tr>";
-                    }
-
-                    //DESTRUYO LA TABLA
-                    $("#t-roles-permisos").DataTable().destroy();
-
-                    //PONGO EL HTML EN EL DIV TBODY DE LA TABLA
-                    $("#t-roles-permisos-body").empty().html(permisosHTML);
-
-                    //OBTENGO EL ARRAY DE TODOS LOS ELEMENTOS CON LA CLASE DE SWITCH
-                    var elems = Array.prototype.slice.call(
-                        document.querySelectorAll(".js-switch")
-                    );
-
-                    //RECORRO EL ARRAY DE TODOS LOS ELEMENTOS CON LA CLASE DE SWITCH Y CREO CADA UNO
-                    elems.forEach(function (html) {
-                        new Switchery(html);
-                    });
-
-                    //INICIALIZO LA TABLA
-                    datatable("t-roles-permisos");
-
-                    //MUESTRO LA ALERTA DE EXITO
-                    toastr.success(json["msg"], "Éxito");
-
-                    //MUESTRO EL MODAL
-                    $("#modal-roles").modal();
+                    cargarDatos('t-roles', '/roles/cargartabla');
+                    $('#modal-roles').modal('hide');
+                    $("#form-roles").trigger("reset");
+                    toastr.success(json["msg"], json["titulo"]);
                 } else {
-                    toastr.error(json["msg"], "Error");
+
+                    toastr.error(json["errors"], json["titulo"] + ', ' + json["msg"]);
                 }
             },
             error: function (json) {
-                toastr.success("Ocurrió un error", "Error");
+                toastr.error(json["msg"], json["titulo"]);
             },
         });
     });
-
-    datatable("t-roles");
 });
+
+function permisosRolModal(idRol) {
+    //obtenerPermisos();
+    $.ajax({
+        type: "POST",
+        url: URL_RUTA + "/roles/permisos",
+        data: JSON.stringify({ 'idRol': idRol }),
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        beforeSend: function () {
+            // $(boton).prop('disabled', true).html(''
+            //     +'<div class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></div>'
+            // );
+        },
+        success: function (json) {
+            if (json["estado"]) {
+                //CREO EL HTML DELA LISTA DE PERMISOS PARA LA TABLA
+
+                console.log(json);
+                //DESTRUYO LA TABLA
+                $("#t-roles-permisos").DataTable().destroy();
+
+                //PONGO EL HTML EN EL DIV TBODY DE LA TABLA
+                $("#t-roles-permisos-body").empty().html(json['datos']);
+
+                //OBTENGO EL ARRAY DE TODOS LOS ELEMENTOS CON LA CLASE DE SWITCH
+                var elems = Array.prototype.slice.call(
+                    document.querySelectorAll(".js-switch")
+                );
+
+                //RECORRO EL ARRAY DE TODOS LOS ELEMENTOS CON LA CLASE DE SWITCH Y CREO CADA UNO
+                elems.forEach(function (html) {
+                    new Switchery(html);
+                });
+
+                //INICIALIZO LA TABLA
+                datatable("t-roles-permisos");
+
+                //MUESTRO LA ALERTA DE EXITO
+                toastr.success(json["msg"], json["titulo"]);
+
+
+            } else {
+                toastr.error(json["msg"], json["titulo"]);
+            }
+        },
+        error: function (json) {
+            toastr.error(json["msg"], json["titulo"]);
+        },
+    });
+    $("#modal-permisos").modal('show');
+}

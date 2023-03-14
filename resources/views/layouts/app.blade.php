@@ -8,7 +8,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
     <title>@yield('title') | {{ config('app.name') }}</title>
-
+    <link rel="icon" href="{{ asset('/img/logosolo.png') }}">
 
     <!--STYLESHEET-->
     <!--=================================================-->
@@ -38,8 +38,8 @@
     <!--Toastr alertas-->
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
 
-
-
+    <!--Font-awesome-->
+    <link href="{{ asset('template/plugins/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
 
 
 

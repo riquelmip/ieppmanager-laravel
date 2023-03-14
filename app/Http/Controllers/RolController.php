@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
@@ -31,33 +32,74 @@ class RolController extends Controller
             $roles = Role::all();
 
             return view('content.roles.index', compact('roles'));
+
         } catch (Exception $e) {
-            // Si ocurre una excepción al hacer la consulta, se maneja aquí
-            //return response()->json(['message' => 'Ocurrió un error al hacer la consulta'], 500);
+
             return redirect()->route('content.roles.index')->with('error', true);
-            //return response()->json(['error' => $e->getMessage()]);
+
         }
     }
 
-    public function getPermisos()
+    public function getPermisos(Request $request)
     {
         try {
+            $idRol = intval(json_decode($request->getContent(), true)['idRol']);
             //HAGO EL SELECT A LA BASE DE DATOS PARA PODER MOSTRAR LOS REGISTROS
             $permisos = Permission::get();
+            $permisosRol = DB::table('role_has_permissions')->where('role_id', '=', $idRol)->get();
+            $permisosHTML = '';
+
+            foreach ($permisos as $permiso) {
+                //$permisosHTML .= $permiso['id'] . ' ';
+                foreach ($permisosRol as $permisoRol) {
+                    //$permisosHTML .= $permisoRol->permission_id . 's ';
+                    //tiene el permiso
+                    if ($permiso['id'] === $permisoRol->permission_id) {
+                        //el rol tiene el permiso
+
+                        $permisosHTML .=
+                            "<tr>" .
+                            "<td>" .
+                            $permiso["id"] .
+                            "</td>" .
+                            "<td>" .
+                            $permiso["name"] .
+                            "</td>" .
+                            '<td class="text-center">' .
+                            '<input class="js-switch" type="checkbox" id="permission[]" name="permission[]" checked></input>' .
+                            "</tr>";
+                    } else {
+                        $permisosHTML .=
+                            "<tr>" .
+                            "<td>" .
+                            $permiso["id"] .
+                            "</td>" .
+                            "<td>" .
+                            $permiso["name"] .
+                            "</td>" .
+                            '<td class="text-center">' .
+                            '<input class="js-switch" type="checkbox" id="permission[]" name="permission[]"></input>' .
+                            "</tr>";
+                    }
+                }
+            }
+            
 
             return response()->json(
                 [
                     'estado' => true,
+                    'titulo' => 'Éxito',
                     'msg' => 'Datos obtenidos correctamente',
-                    'datos' => $permisos
+                    'datos' => $permisosHTML
                 ]
             );
         } catch (Exception $e) {
             return response()->json(
                 [
                     'estado' => false,
+                    'titulo' => 'Error',
                     'msg' => 'Ocurrió un error al obtener la información',
-                    'error' => $e->getMessage()
+                    'errors' => $e->getMessage()
                 ]
             );
         }
@@ -65,62 +107,112 @@ class RolController extends Controller
 
     public function create()
     {
-        try {
-            //OBTENGO EL LISTADO DE PERMISOS
-            $permission = Permission::get();
-
-            //LLAMO A LA VISTA CREAR
-            return view('roles.crear', compact('permission'));
-        } catch (\Illuminate\Database\QueryException $e) {
-            // Si ocurre una excepción al hacer la consulta, se maneja aquí
-            //return response()->json(['message' => 'Ocurrió un error al hacer la consulta'], 500);
-            return redirect()->route('roles.index')->with('error', true);
-        }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //VALIDO EL FORMULARIO
-        $this->validate($request, ['name' => 'required', 'permission' => 'required']);
+        //VALIDO LOS CAMPOS
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+        ]);
+
+        //SI FALLA LA VALIDACION
+        if ($validator->fails()) {
+            $errors = implode('<br>', $validator->errors()->all());
+
+            return response()->json([
+                'estado' => false,
+                'titulo' => 'Error',
+                'msg' => 'Revise los campos',
+                'errors' => $errors
+            ]);
+        }
 
         try {
             //SI PASAN LAS VALIDACIONES, HAGO EL REGISTRO
             $rol = Role::create(['name' => $request->input('name')]);
 
             //ASIGNO LOS PERMISOS DE ESE ROL SEGUN LOS CHECKBOX DEL FORM
-            $rol->syncPermissions($request->input('permission'));
+            // $rol->syncPermissions($request->input('permission'));
 
-            return redirect()->route('roles.index')->with('crear', true);
-        } catch (\Illuminate\Database\QueryException $e) {
-            // Si ocurre una excepción al hacer la consulta, se maneja aquí
-            //return response()->json(['message' => 'Ocurrió un error al hacer la consulta'], 500);
-            return redirect()->route('roles.index')->with('error', true);
+            return response()->json(
+                [
+                    'estado' => true,
+                    'titulo' => 'Éxito',
+                    'msg' => 'Registro realizado',
+                    'datos' => $rol
+                ]
+            );
+        } catch (Exception $e) {
+            return response()->json(
+                [
+                    'estado' => false,
+                    'titulo' => 'Error',
+                    'msg' => 'Ocurrió un error al obtener la información',
+                    'errors' => $e->getMessage()
+                ]
+            );
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    public function cargarTabla()
+    {
+        try {
+            //HAGO EL SELECT A LA BASE DE DATOS PARA PODER MOSTRAR LOS REGISTROS
+            $roles = Role::all();
+
+            $tablaHTML = '';
+
+
+            foreach ($roles as $rol) {
+                $btnPermisos = '';
+                $btnEditar = '';
+                $btnEliminar = '';
+
+                if ($rol['id'] != 1) {
+                    $btnPermisos .= '<button type="button" onclick="permisosRolModal(\'' . $rol['id'] . '\')" class="btn btn-icon btn-warning"><i class="fa fa-shield"></i></button>';
+                    $btnEditar .= '<a href="#" class="btn btn-icon btn-primary"><i class="fa fa-edit"></i></a>';
+                    $btnEliminar .= '<a href="#" class="btn btn-icon btn-danger"><i class="fa fa-trash"></i></a>';
+                }
+
+                $tablaHTML .=  '<tr>' .
+                    '<td>' .
+                    $rol['id'] .
+                    '</td>' .
+                    '<td>' .
+                    $rol['name'] .
+                    '</td>' .
+                    '<td class="text-center">' .
+                    $btnPermisos . ' ' . $btnEditar . ' ' . $btnEliminar .
+                    '</td>' .
+                    '</tr>';
+            }
+
+            return response()->json(
+                [
+                    'estado' => true,
+                    'titulo' => 'Éxito',
+                    'msg' => 'Datos obtenidos correctamente',
+                    'datos' => $tablaHTML
+                ]
+            );
+        } catch (Exception $e) {
+            return response()->json(
+                [
+                    'estado' => false,
+                    'titulo' => 'Error',
+                    'msg' => 'Ocurrió un error al obtener la información',
+                    'errors' => $e->getMessage()
+                ]
+            );
+        }
+    }
+    
     public function show($id)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         try {
