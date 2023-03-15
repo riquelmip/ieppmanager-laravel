@@ -69,7 +69,7 @@ class RolController extends Controller
                         $permiso["name"] .
                         "</td>" .
                         '<td class="text-center">' .
-                        '<input class="js-switch" type="checkbox" id="permission[]" name="permission[]" onchange="quitarPermiso(' . $permiso['id'] . ',\'' . $idRol . '\')" checked></input>' .
+                    '<input class="js-switch" type="checkbox" id="permiso-' . $permiso['id'] . '-rol-' . $idRol . '" name="permiso-' . $permiso['id'] . '-rol-' . $idRol . '" onchange="quitarPermiso(' . $permiso['id'] . ',\'' . $idRol . '\')" checked></input>' .
                         "</tr>";
                 } else {
                     //SINO LO PONGO SIN CHECKAR
@@ -82,7 +82,7 @@ class RolController extends Controller
                         $permiso["name"] .
                         "</td>" .
                         '<td class="text-center">' .
-                        '<input class="js-switch" type="checkbox" id="permission[]" name="permission[]" onchange="ponerPermiso(' . $permiso['id'] . ',\'' . $idRol . '\')"></input>' .
+                    '<input class="js-switch" type="checkbox" id="permiso-' . $permiso['id'] . '-rol-' . $idRol . '" name="permiso-' . $permiso['id'] . '-rol-' . $idRol . '" onchange="ponerPermiso(' . $permiso['id'] . ',\'' . $idRol . '\')"></input>' .
                         "</tr>";
                 }
             }
@@ -151,6 +151,103 @@ class RolController extends Controller
                     'estado' => false,
                     'titulo' => 'Error',
                     'msg' => 'Ocurrió un error al obtener la información',
+                    'errors' => $e->getMessage()
+                ]
+            );
+        }
+    }
+
+    public function quitarPermiso(Request $request)
+    {
+        try {
+            //OBTENGO EL ID DEL ROL DEL POST
+            $idRol = intval(json_decode($request->getContent(), true)['idRol']);
+            //OBTENGO EL ID DEL PERMISO DEL POST
+            $idPermiso = intval(json_decode($request->getContent(), true)['idPermiso']);
+
+            //OBTENGO LOS DATOS DEL ROL
+            $rol = Role::findById($idRol);
+            //OBTENGO LOS DATOS DEL PERMISO
+            $permiso = Permission::findById($idPermiso);
+
+            //SI EL ROL TIENE ASIGNADO ESE PERMISO
+            if ($rol->hasPermissionTo($permiso['name'])) {
+                //LE QUITO EL PERMISO, ES DECIR LO REVOCO
+                $rol->revokePermissionTo($permiso['name']);
+                return response()->json(
+                    [
+                        'estado' => true,
+                        'titulo' => 'Éxito',
+                        'msg' => 'El permiso se ha quitado a este rol',
+                        'datos' => $rol
+                    ]
+                );
+            } else {
+                // El rol no tiene asignado el permiso
+                return response()->json(
+                    [
+                        'estado' => false,
+                        'titulo' => 'Error',
+                        'msg' => 'No se puede revocar el permiso, ya que no está asignado a este rol',
+                        'errors' => 'No se puede revocar el permiso, ya que no está asignado a este rol'
+                    ]
+                );
+            }
+        } catch (Exception $e) {
+            return response()->json(
+                [
+                    'estado' => false,
+                    'titulo' => 'Error',
+                    'msg' => 'Ocurrió un error al realizar el proceso',
+                    'errors' => $e->getMessage()
+                ]
+            );
+        }
+    }
+
+
+    public function ponerPermiso(Request $request)
+    {
+        try {
+            //OBTENGO EL ID DEL ROL DEL POST
+            $idRol = intval(json_decode($request->getContent(), true)['idRol']);
+            //OBTENGO EL ID DEL PERMISO DEL POST
+            $idPermiso = intval(json_decode($request->getContent(), true)['idPermiso']);
+
+            //OBTENGO LOS DATOS DEL ROL
+            $rol = Role::findById($idRol);
+            //OBTENGO LOS DATOS DEL PERMISO
+            $permiso = Permission::findById($idPermiso);
+
+            //SI EL ROL TIENE ASIGNADO ESE PERMISO
+            if ($rol->hasPermissionTo($permiso['name'])) {
+                return response()->json(
+                    [
+                        'estado' => false,
+                        'titulo' => 'Error',
+                        'msg' => 'El permiso ya está asignado a ese rol',
+                        'errors' => 'El permiso ya está asignado a ese rol'
+                    ]
+                );
+            } else {
+                // El rol no tiene asignado el permiso
+                //LE ASIGNO EL PERMISO
+                $rol->givePermissionTo($permiso['name']);
+                return response()->json(
+                    [
+                        'estado' => true,
+                        'titulo' => 'Éxito',
+                        'msg' => 'El permiso se ha asignado a este rol',
+                        'datos' => $rol
+                    ]
+                );
+            }
+        } catch (Exception $e) {
+            return response()->json(
+                [
+                    'estado' => false,
+                    'titulo' => 'Error',
+                    'msg' => 'Ocurrió un error al realizar el proceso',
                     'errors' => $e->getMessage()
                 ]
             );

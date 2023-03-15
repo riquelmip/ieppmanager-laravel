@@ -93,7 +93,7 @@ function permisosRolModal(idRol) {
             if (json["estado"]) {
                 //CREO EL HTML DELA LISTA DE PERMISOS PARA LA TABLA
 
-                console.log(json);
+                //console.log(json);
                 //DESTRUYO LA TABLA
                 $("#t-roles-permisos").DataTable().destroy();
 
@@ -127,7 +127,133 @@ function permisosRolModal(idRol) {
 }
 
 function quitarPermiso(idPermiso, idRol) {
-    // $('#'+idboton).replaceWith('<div id="'+idboton+'" onChange="fnt_desactivar_permisorol('+idpermisorol+',\''+idboton+'\')" title="Desactivar permiso" class="custom-control custom-switch custom-switch-off-light custom-switch-on-'+sidebar_activo+'">'+
-    // '<input type="checkbox" class="custom-control-input" id="customSwitch'+idboton+'" value="1" checked>'+
-    // '<label class="custom-control-label" for="customSwitch'+idboton+'"></label></div>');
+    //console.log(idPermiso, idRol);
+    $.ajax({
+        type: "POST",
+        url: URL_RUTA + "/roles/quitarpermiso",
+        data: JSON.stringify({ idPermiso: idPermiso, idRol: idRol }),
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
+        beforeSend: function () {
+            // $(boton).prop('disabled', true).html(''
+            //     +'<div class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></div>'
+            // );
+        },
+        success: function (json) {
+            if (json["estado"]) {
+
+                // Seleccionar el elemento HTML del switch
+                let switchElem = $('#permiso-' + idPermiso + '-rol-' + idRol)[0];
+
+                // Guardar el estado actual del switch
+                let isChecked = switchElem.checked;
+
+                // Obtener el estado actual de data-switchery
+                let dataSwitchery = switchElem.getAttribute('data-switchery');
+
+                // Guardar el evento onchange original
+                let originalOnChange = switchElem.onchange;
+
+                // Eliminar el objeto Switchery del elemento HTML
+                $(switchElem).next('.switchery').remove();
+
+                // Cambiar el evento onchange a la nueva función
+                switchElem.setAttribute('onchange', 'ponerPermiso(' + idPermiso + ', ' + idRol + ')');
+
+                // Crear un nuevo objeto Switchery para el elemento
+                let switchery = new Switchery(switchElem, { /* nuevas opciones */ });
+
+                // Establecer el estado del switch
+                if (isChecked) {
+                    switchery.setPosition(true);
+                } else {
+                    switchery.setPosition(false);
+                }
+
+                // Establecer el estado actual de data-switchery
+                switchElem.setAttribute('data-switchery', dataSwitchery);
+
+                //MUESTRO LA ALERTA DE EXITO
+                toastr.success(json["msg"], json["titulo"]);
+
+                // new Switchery(switchElem);
+
+
+            } else {
+                toastr.error(json["msg"], json["titulo"]);
+            }
+        },
+        error: function (json) {
+            toastr.error(json["msg"], json["titulo"]);
+        },
+    });
+
+}
+
+
+
+function ponerPermiso(idPermiso, idRol) {
+    //console.log(idPermiso, idRol);
+    $.ajax({
+        type: "POST",
+        url: URL_RUTA + "/roles/ponerpermiso",
+        data: JSON.stringify({ idPermiso: idPermiso, idRol: idRol }),
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
+        beforeSend: function () {
+            // $(boton).prop('disabled', true).html(''
+            //     +'<div class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></div>'
+            // );
+        },
+        success: function (json) {
+            if (json["estado"]) {
+
+                // Seleccionar el elemento HTML del switch
+                let switchElem = $('#permiso-' + idPermiso + '-rol-' + idRol)[0];
+
+                // Guardar el estado actual del switch
+                let isChecked = switchElem.checked;
+
+                // Obtener el estado actual de data-switchery
+                let dataSwitchery = switchElem.getAttribute('data-switchery');
+
+                // Guardar el evento onchange original
+                let originalOnChange = switchElem.onchange;
+
+                // Eliminar el objeto Switchery del elemento HTML
+                $(switchElem).next('.switchery').remove();
+
+                // Cambiar el evento onchange a la nueva función
+                switchElem.setAttribute('onchange', 'quitarPermiso(' + idPermiso + ', ' + idRol + ')');
+
+                // Crear un nuevo objeto Switchery para el elemento
+                let switchery = new Switchery(switchElem, { /* nuevas opciones */ });
+
+                // Establecer el estado del switch
+                if (isChecked) {
+                    switchery.setPosition(false);
+                } else {
+                    switchery.setPosition(true);
+                }
+
+                // Establecer el estado actual de data-switchery
+                switchElem.setAttribute('data-switchery', dataSwitchery);
+
+                //MUESTRO LA ALERTA DE EXITO
+                toastr.success(json["msg"], json["titulo"]);
+
+                // new Switchery(switchElem);
+
+
+            } else {
+                toastr.error(json["msg"], json["titulo"]);
+            }
+        },
+        error: function (json) {
+            toastr.error(json["msg"], json["titulo"]);
+        },
+    });
+
 }
