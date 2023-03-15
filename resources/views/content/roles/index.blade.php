@@ -45,7 +45,7 @@
                     </tr>
                 </thead>
                 <tbody id="t-roles-body">
-                    
+
                 </tbody>
             </table>
         </div>
@@ -107,14 +107,13 @@
                     <div class="modal-body">
 
                         <div class="form-group">
-                            <label class="control-label">Rol: </label>
                             <table id="t-roles-permisos" class="table table-striped table-bordered" cellspacing="0"
                                 width="100%">
                                 <thead>
                                     <tr>
                                         <th>ID</th>
                                         <th>Nombre</th>
-                                        <th>Estado</th>
+                                        <th class="min-tablet">Estado</th>
                                     </tr>
                                 </thead>
                                 <tbody id="t-roles-permisos-body">

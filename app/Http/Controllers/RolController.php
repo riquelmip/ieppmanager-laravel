@@ -32,58 +32,60 @@ class RolController extends Controller
             $roles = Role::all();
 
             return view('content.roles.index', compact('roles'));
-
         } catch (Exception $e) {
 
             return redirect()->route('content.roles.index')->with('error', true);
-
         }
     }
 
     public function getPermisos(Request $request)
     {
         try {
+            //OBTENGO EL ID DEL ROL DEL POST
             $idRol = intval(json_decode($request->getContent(), true)['idRol']);
-            //HAGO EL SELECT A LA BASE DE DATOS PARA PODER MOSTRAR LOS REGISTROS
+            //OBTENGO EL LISTADO DE LOS PERMISOS
             $permisos = Permission::get();
+            //OBTENGO EL LISTADO DE LOS PERMISOS ASIGNADOS AL ROL
             $permisosRol = DB::table('role_has_permissions')->where('role_id', '=', $idRol)->get();
+            //COMO ES UNA COLECCION EL LISTADO DE PERMISOS DEL ROL, CONVIERTO ESA COLECCION A ARRAY NATIVO PHP
+            $arrayPermisosRol = $permisosRol->toArray();
+            //EXTRAIGO LA COLUMNA DE EL ID DEL PERMISO EN UN SOLO ARRAY
+            $id_arrayPermisosRol = array_column($arrayPermisosRol, 'permission_id');
+            //CREO EL HTML
             $permisosHTML = '';
 
+            //RECORRO EL ARRAY DE LOS PERMISOS
             foreach ($permisos as $permiso) {
-                //$permisosHTML .= $permiso['id'] . ' ';
-                foreach ($permisosRol as $permisoRol) {
-                    //$permisosHTML .= $permisoRol->permission_id . 's ';
-                    //tiene el permiso
-                    if ($permiso['id'] === $permisoRol->permission_id) {
-                        //el rol tiene el permiso
 
-                        $permisosHTML .=
-                            "<tr>" .
-                            "<td>" .
-                            $permiso["id"] .
-                            "</td>" .
-                            "<td>" .
-                            $permiso["name"] .
-                            "</td>" .
-                            '<td class="text-center">' .
-                            '<input class="js-switch" type="checkbox" id="permission[]" name="permission[]" checked></input>' .
-                            "</tr>";
-                    } else {
-                        $permisosHTML .=
-                            "<tr>" .
-                            "<td>" .
-                            $permiso["id"] .
-                            "</td>" .
-                            "<td>" .
-                            $permiso["name"] .
-                            "</td>" .
-                            '<td class="text-center">' .
-                            '<input class="js-switch" type="checkbox" id="permission[]" name="permission[]"></input>' .
-                            "</tr>";
-                    }
+                //VERIFICO SI EL ID DEL LISTADO QUE VA EN EL FOR, EXISTE EN EL ARRAY COLUMNA ID DE LOS PERMISOS QUE YA ESTAN ASIGNADOS
+                if (in_array(intval($permiso['id']), $id_arrayPermisosRol)) {
+                    //SI COINCIDE, ENTONCES PONGO EL CHECK ACTIVADO
+                    $permisosHTML .=
+                        "<tr>" .
+                        "<td>" .
+                        $permiso["id"] .
+                        "</td>" .
+                        "<td>" .
+                        $permiso["name"] .
+                        "</td>" .
+                        '<td class="text-center">' .
+                        '<input class="js-switch" type="checkbox" id="permission[]" name="permission[]" onchange="quitarPermiso(' . $permiso['id'] . ',\'' . $idRol . '\')" checked></input>' .
+                        "</tr>";
+                } else {
+                    //SINO LO PONGO SIN CHECKAR
+                    $permisosHTML .=
+                        "<tr>" .
+                        "<td>" .
+                        $permiso["id"] .
+                        "</td>" .
+                        "<td>" .
+                        $permiso["name"] .
+                        "</td>" .
+                        '<td class="text-center">' .
+                        '<input class="js-switch" type="checkbox" id="permission[]" name="permission[]" onchange="ponerPermiso(' . $permiso['id'] . ',\'' . $idRol . '\')"></input>' .
+                        "</tr>";
                 }
             }
-            
 
             return response()->json(
                 [
@@ -207,7 +209,7 @@ class RolController extends Controller
             );
         }
     }
-    
+
     public function show($id)
     {
         //
