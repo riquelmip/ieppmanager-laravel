@@ -1,28 +1,12 @@
 @extends('layouts.app')
 
-@section('content-head')
-    <div id="page-head">
+@section('title', 'Roles de Usuario')
 
-        <!--Page Title-->
-        <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-        <div id="page-title">
-            <h1 class="page-header text-overflow">Data Tables</h1>
-        </div>
-        <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-        <!--End page title-->
-
-
-        <!--Breadcrumb-->
-        <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-        <ol class="breadcrumb">
-            <li><a href="#"><i class="demo-pli-home"></i></a></li>
-            <li><a href="#">Tables</a></li>
-            <li class="active">Data Tables</li>
-        </ol>
-        <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-        <!--End breadcrumb-->
-
-    </div>
+@section('page-name')
+    @php
+        $page_menu = 'inicio';
+        $page_submenu = 'inicio';
+    @endphp
 @endsection
 
 @section('content')

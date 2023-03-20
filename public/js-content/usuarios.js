@@ -1,25 +1,26 @@
 document.addEventListener("DOMContentLoaded", function () {
-    $("#btn-nuevo-rol").click(function () {
+    $("#btn-nuevo-usuario").click(function () {
         //RESETAR EL FORM
 
         //PONER EL ID EN 0 PARA QUE SEA CREACION
-        $("#idRol").val(0);
+        $("#idUsuario").val(0);
 
         //RESETEO EL FORM
-        $("#form-roles").trigger("reset");
+        $("#form-usuarios").trigger("reset");
 
         //MUESTRO EL MODAL
-        $("#modal-roles").modal("show");
+        $("#modal-usuarios").modal("show");
     });
 
-    cargarDatos("t-roles", "/roles/cargartabla");
+    $("#estado").select2();
+    cargarDatos("t-usuarios", "/usuarios/cargartabla");
 
-    $("#form-roles").submit(function (event) {
+    $("#form-usuarios").submit(function (event) {
         event.preventDefault(); // detiene el comportamiento predeterminado del formulario
         var formData = $(this).serialize();
         $.ajax({
             type: "POST",
-            url: APP_URL + "/roles/guardar",
+            url: APP_URL + "/usuarios/guardar",
             data: formData,
             headers: {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
@@ -29,9 +30,9 @@ document.addEventListener("DOMContentLoaded", function () {
             },
             success: function (json) {
                 if (json["estado"]) {
-                    cargarDatos("t-roles", "/roles/cargartabla");
-                    $("#modal-roles").modal("hide");
-                    $("#form-roles").trigger("reset");
+                    cargarDatos("t-usuarios", "/usuarios/cargartabla");
+                    $("#modal-usuarios").modal("hide");
+                    $("#form-usuarios").trigger("reset");
                     toastr.success(json["msg"], json["titulo"]);
                 } else {
                     toastr.error(
@@ -54,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
         var formData = $(this).serialize();
         $.ajax({
             type: "POST",
-            url: APP_URL + "/roles/permisos",
+            url: APP_URL + "/usuarios/permisos",
             data: formData,
             headers: {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
@@ -64,9 +65,9 @@ document.addEventListener("DOMContentLoaded", function () {
             },
             success: function (json) {
                 if (json["estado"]) {
-                    cargarDatos("t-roles", "/roles/cargartabla");
-                    $("#modal-roles").modal("hide");
-                    $("#form-roles").trigger("reset");
+                    cargarDatos("t-usuarios", "/usuarios/cargartabla");
+                    $("#modal-usuarios").modal("hide");
+                    $("#form-usuarios").trigger("reset");
                     toastr.success(json["msg"], json["titulo"]);
                 } else {
                     toastr.error(
@@ -89,7 +90,7 @@ function permisosRolModal(idRol) {
     //obtenerPermisos();
     $.ajax({
         type: "POST",
-        url: APP_URL + "/roles/permisos",
+        url: APP_URL + "/usuarios/permisos",
         data: JSON.stringify({ idRol: idRol }),
         headers: {
             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
@@ -103,10 +104,10 @@ function permisosRolModal(idRol) {
 
                 //console.log(json);
                 //DESTRUYO LA TABLA
-                $("#t-roles-permisos").DataTable().destroy();
+                $("#t-usuarios-permisos").DataTable().destroy();
 
                 //PONGO EL HTML EN EL DIV TBODY DE LA TABLA
-                $("#t-roles-permisos-body").empty().html(json["datos"]);
+                $("#t-usuarios-permisos-body").empty().html(json["datos"]);
 
                 //OBTENGO EL ARRAY DE TODOS LOS ELEMENTOS CON LA CLASE DE SWITCH
                 var elems = Array.prototype.slice.call(
@@ -119,7 +120,7 @@ function permisosRolModal(idRol) {
                 });
 
                 //INICIALIZO LA TABLA
-                datatable("t-roles-permisos");
+                datatable("t-usuarios-permisos");
 
                 //MUESTRO LA ALERTA DE EXITO
                 toastr.success(json["msg"], json["titulo"]);
@@ -141,7 +142,7 @@ function quitarPermiso(idPermiso, idRol) {
     //console.log(idPermiso, idRol);
     $.ajax({
         type: "POST",
-        url: APP_URL + "/roles/quitarpermiso",
+        url: APP_URL + "/usuarios/quitarpermiso",
         data: JSON.stringify({ idPermiso: idPermiso, idRol: idRol }),
         headers: {
             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
@@ -153,7 +154,7 @@ function quitarPermiso(idPermiso, idRol) {
             if (json["estado"]) {
                 // Seleccionar el elemento HTML del switch
                 let switchElem = $(
-                    "#permiso-" + idPermiso + "-rol-" + idRol
+                    "#permiso-" + idPermiso + "-usuario-" + idRol
                 )[0];
 
                 // Guardar el estado actual del switch
@@ -210,7 +211,7 @@ function ponerPermiso(idPermiso, idRol) {
     //console.log(idPermiso, idRol);
     $.ajax({
         type: "POST",
-        url: APP_URL + "/roles/ponerpermiso",
+        url: APP_URL + "/usuarios/ponerpermiso",
         data: JSON.stringify({ idPermiso: idPermiso, idRol: idRol }),
         headers: {
             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
@@ -222,7 +223,7 @@ function ponerPermiso(idPermiso, idRol) {
             if (json["estado"]) {
                 // Seleccionar el elemento HTML del switch
                 let switchElem = $(
-                    "#permiso-" + idPermiso + "-rol-" + idRol
+                    "#permiso-" + idPermiso + "-usuario-" + idRol
                 )[0];
 
                 // Guardar el estado actual del switch
@@ -278,7 +279,7 @@ function ponerPermiso(idPermiso, idRol) {
 function editarRolModal(idRol) {
     $.ajax({
         type: "GET",
-        url: APP_URL + "/roles/ver/" + idRol,
+        url: APP_URL + "/usuarios/ver/" + idRol,
         headers: {
             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
         },
@@ -292,7 +293,7 @@ function editarRolModal(idRol) {
                 $("#name").val(json["datos"]["name"]);
 
                 //MUESTRO EL MODAL
-                $("#modal-roles").modal("show");
+                $("#modal-usuarios").modal("show");
 
                 //MUESTRO LA ALERTA DE EXITO
                 toastr.success(json["msg"], json["titulo"]);
@@ -322,7 +323,7 @@ function eliminarRol() {
     //HAGO LA PETICION
     $.ajax({
         type: "POST",
-        url: APP_URL + "/roles/eliminar",
+        url: APP_URL + "/usuarios/eliminar",
         data: JSON.stringify({ idRol: idRol }),
         headers: {
             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
@@ -335,7 +336,7 @@ function eliminarRol() {
                 //PONGO EL ID EN EL MODAL EN 0
                 $("#id-eliminar").val(0);
                 //CARGO NUEVAMENTE LA TABLA
-                cargarDatos("t-roles", "/roles/cargartabla");
+                cargarDatos("t-usuarios", "/usuarios/cargartabla");
                 //QUITO EL MODAL
                 $("#modal-eliminar").modal("hide");
                 //PONGO LA ALERTA

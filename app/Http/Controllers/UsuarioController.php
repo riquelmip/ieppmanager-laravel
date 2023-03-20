@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use App\Models\User;
+use Exception;
+use Illuminate\Support\Facades\Validator;
 
 class UsuarioController extends Controller
 {
@@ -25,21 +27,152 @@ class UsuarioController extends Controller
         $this->middleware('permission:borrar-usuarios', ['only' => ['destroy']]);
     }
 
+   
     public function index()
     {
         try {
-            //OBTENGO EL LISTADO DE USUARIOS PARA MOSTRAR LA VISTA
-            $usuarios = User::paginate(5);
+            return view('content.usuarios.index');
+        } catch (Exception $e) {
 
-            return view('usuarios.index', compact('usuarios'));
-        } catch (\Illuminate\Database\QueryException $e) {
-            // Si ocurre una excepción al hacer la consulta, se maneja aquí
-            //return response()->json(['message' => 'Ocurrió un error al hacer la consulta'], 500);
-            return redirect()->route('usuarios.index')->with('error', true);
+            // return redirect()->route('content.roles.index')->with('error', true);
+        }
+    }
+
+    public function cargarTabla()
+    {
+        try {
+            //HAGO EL SELECT A LA BASE DE DATOS PARA PODER MOSTRAR LOS REGISTROS
+            $usuarios = User::all();
+
+            $tablaHTML = '';
+
+
+            foreach ($usuarios as $usuario) {
+                if ($usuario['estado'] === 0) {
+                    $usuario['estado'] = '<span class="badge badge-warning">Inactivo</span>';
+                } else {
+                    $usuario['estado'] = '<span class="badge badge-primary">Activo</span>';
+                }
+
+                $btnEditar = '';
+                $btnEliminar = '';
+
+                if ($usuario['id'] != 1) {
+                    $btnEditar .= '<button type="button" onclick="editarUsuarioModal(\'' . $usuario['id'] . '\')" class="btn btn-icon btn-primary"><i class="fa fa-edit"></i></button>';
+                    $btnEliminar .= '<button type="button" onclick="eliminarUsuarioModalConfirm(\'' . $usuario['id'] . '\')" class="btn btn-icon btn-danger"><i class="fa fa-trash"></i></button>';
+                }
+
+                $tablaHTML .=  '<tr>' .
+                '<td>' .
+                $usuario['id'] .
+                '</td>' .
+                '<td>' .
+                $usuario['username'] .
+                '</td>' .
+                '<td>' .
+                $usuario['email'] .
+                '</td>' .
+                '<td>' .
+                $usuario['estado'] .
+                '</td>' .
+                '<td class="text-center">' .
+                $btnEditar . ' ' . $btnEliminar .
+                    '</td>' .
+                    '</tr>';
+            }
+
+            return response()->json(
+                [
+                    'estado' => true,
+                    'titulo' => 'Éxito',
+                    'msg' => 'Datos obtenidos correctamente',
+                    'datos' => $tablaHTML
+                ]
+            );
+        } catch (Exception $e) {
+            return response()->json(
+                [
+                    'estado' => false,
+                    'titulo' => 'Error',
+                    'msg' => 'Ocurrió un error al obtener la información',
+                    'errors' => $e->getMessage()
+                ]
+            );
+        }
+    }
+
+    public function guardar(Request $request)
+    {
+        $idUsuario = $request->input('idUsuario');
+
+        //VALIDO LOS CAMPOS
+        $validator = Validator::make($request->all(), [
+            'username' => 'required',
+            'email' => 'required',
+            'password' => 'required',
+            'rol' => 'required',
+            'estado' => 'required',
+        ]);
+
+        //SI FALLA LA VALIDACION
+        if ($validator->fails()) {
+            $errors = implode('<br>', $validator->errors()->all());
+
+            return response()->json([
+                'estado' => false,
+                'titulo' => 'Error',
+                'msg' => 'Revise los campos',
+                'errors' => $errors
+            ]);
+        }
+
+        try {
+            //SI EL ID ES 0, ENTONCES ES NUEVO REGISTRO
+            if (intval($idUsuario) === 0) {
+                //SI PASAN LAS VALIDACIONES, HAGO EL REGISTRO
+                $rol = Role::create(['name' => $request->input('name')]);
+
+                return response()->json(
+                    [
+                        'estado' => true,
+                        'titulo' => 'Éxito',
+                        'msg' => 'Registro realizado',
+                        'datos' => $rol
+                    ]
+                );
+            } else {
+                //ES EDICION
+
+                //OBTENGO LOS DATOS DE ESE ROL
+                $rol = Role::findById($idRol);
+
+                //HAGO LA EDICION DEL NOMBRE
+                $rol->name = $request->input('name');
+                $rol->save();
+
+                return response()->json(
+                    [
+                        'estado' => true,
+                        'titulo' => 'Éxito',
+                        'msg' => 'Actualización realizada',
+                        'datos' => $rol
+                    ]
+                );
+            }
+        } catch (Exception $e) {
+            return response()->json(
+                [
+                    'estado' => false,
+                    'titulo' => 'Error',
+                    'msg' => 'Ocurrió un error',
+                    'errors' => $e->getMessage()
+                ]
+            );
         }
     }
 
 
+    
     public function create()
     {
         try {

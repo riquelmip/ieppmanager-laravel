@@ -31,6 +31,13 @@ class RolesPermisosSeeder extends Seeder
             'crear-roles',
             'editar-roles',
             'borrar-roles',
+            'asignar-permisos',
+
+            //Tabla usuarios
+            'ver-usuarios',
+            'crear-usuarios',
+            'editar-usuarios',
+            'borrar-usuarios',
         ];
 
         foreach ($permisos as $permiso) {
@@ -38,8 +45,7 @@ class RolesPermisosSeeder extends Seeder
         }
 
         //CREO EL SUPER USUARIO
-        $usuario = User::create([
-            'name' => 'superadmin',
+        $usuario = User::create(['username' => 'superadmin',
             'email' => 'superadmin@gmail.com',
             'password' => Hash::make('superadmin'),
         ]);
@@ -78,7 +84,7 @@ class RolesPermisosSeeder extends Seeder
         ////////////////        PARA ADMIN
         ////////////////////////////////////////////////////////
         //SI YA SE CREARON LOS ROLES
-        $adminRol = Role::findByName('Administrador'); //Obtengo el registro del super admin
+        $adminRol = Role::findByName('Administrador'); //Obtengo el registro del admin
 
         $permisosCreadosAdmin = Permission::all(); //Obtengo el listado de los permisos
 
@@ -88,7 +94,7 @@ class RolesPermisosSeeder extends Seeder
             $nombres_permisos_admin[] = $permiso->name; //Agrego solo el nombre al array
         }
 
-        $adminRol->syncPermissions($nombres_permisos_admin); //Asigno los permisos al rol de super admin
+        $adminRol->syncPermissions($nombres_permisos_admin); //Asigno los permisos al rol de admin
 
         
     }

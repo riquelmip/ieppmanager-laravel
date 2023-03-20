@@ -1,5 +1,3 @@
-const URL_RUTA = "http://127.0.0.1:8000";
-
 toastr.options = {
     closeButton: true,
     debug: false,
@@ -58,11 +56,9 @@ function datatable(tabla) {
 function cargarDatos(tabla, ruta) {
     $.ajax({
         type: "GET",
-        url: URL_RUTA + ruta,
+        url: APP_URL + ruta,
         beforeSend: function () {
-            // $(boton).prop('disabled', true).html(''
-            //     +'<div class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></div>'
-            // );
+            div_cargando.style.display = "flex";
         },
         success: function (json) {
             if (json["estado"]) {
@@ -83,6 +79,9 @@ function cargarDatos(tabla, ruta) {
         },
         error: function (json) {
             toastr.error(json["msg"], json["titulo"]);
+        },
+        complete: function () {
+            div_cargando.style.display = "none";
         },
     });
 }

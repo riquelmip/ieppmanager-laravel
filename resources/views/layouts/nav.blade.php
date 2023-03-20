@@ -33,7 +33,7 @@
 
                             @if (Route::has('login'))
                                 @auth
-                                    <p class="mnp-name">Hola, {{ \Illuminate\Support\Facades\Auth::user()->name }}</p>
+                                    <p class="mnp-name">Hola, {{ \Illuminate\Support\Facades\Auth::user()->username }}</p>
                                     <span class="mnp-desc">{{ \Illuminate\Support\Facades\Auth::user()->email }}</span>
                                 @else
                                     <p class="mnp-name">Hola, Invitado</p>
@@ -55,8 +55,8 @@
                         <li class="list-header">GENERAL</li>
 
                         <!--INICIO-->
-                        <li class="active-sub">
-                            <a href="widgets.html">
+                        <li @if ($page_menu == 'inicio') ? class="active-sub" @endif>
+                            <a href="{{ route('inicio') }}">
                                 <i class="demo-pli-home"></i>
                                 <span class="menu-title">
                                     Inicio
@@ -65,7 +65,8 @@
                         </li>
 
                         <!--USUARIOS-->
-                        <li>
+
+                        <li @if ($page_menu == 'usuarios') ? class="active-sub" @endif>
                             <a href="#">
                                 <i class="demo-pli-checked-user"></i>
                                 <span class="menu-title">Usuarios</span>
@@ -73,10 +74,9 @@
                             </a>
 
                             <!--Submenu-->
-                            <ul class="collapse">
-                                <li><a href="{{ route('roles') }}l">Usuarios</a></li>
-                                <li><a href="{{ route('roles') }}">Roles</a></li>
-                                <li><a href="dashboard-3.html">Permisos</a></li>
+                            <ul @if ($page_menu == 'usuarios') ? class="collapse in" : class="collapse" @endif>
+                                <li @if ($page_submenu == 'usuarios') ? class="active-link" @endif><a href="{{ route('usuarios') }}">Usuarios</a></li>
+                                <li @if ($page_submenu == 'roles') ? class="active-link" @endif><a href="{{ route('roles') }}">Roles</a></li>
                             </ul>
                         </li>
 
@@ -112,85 +112,7 @@
 
 
 
-                        <!--Menu list item-->
-                        <li class="active-sub">
-                            <a href="#">
-                                <i class="demo-pli-receipt-4"></i>
-                                <span class="menu-title">Tables</span>
-                                <i class="arrow"></i>
-                            </a>
-
-                            <!--Submenu-->
-                            <ul class="collapse in">
-                                <li><a href="tables-static.html">Static Tables</a></li>
-                                <li><a href="tables-bootstrap.html">Bootstrap Tables</a></li>
-                                <li class="active-link"><a href="tables-datatable.html">Data Tables</a>
-                                </li>
-                                <li><a href="tables-footable.html">Foo Tables</a></li>
-
-                            </ul>
-                        </li>
-
-                        <!--Menu list item-->
-                        <li>
-                            <a href="#">
-                                <i class="demo-pli-bar-chart"></i>
-                                <span class="menu-title">Charts</span>
-                                <i class="arrow"></i>
-                            </a>
-
-                            <!--Submenu-->
-                            <ul class="collapse">
-                                <li><a href="charts-morris-js.html">Morris JS</a></li>
-                                <li><a href="charts-flot-charts.html">Flot Charts</a></li>
-                                <li><a href="charts-easy-pie-charts.html">Easy Pie Charts</a></li>
-                                <li><a href="charts-sparklines.html">Sparklines</a></li>
-
-                            </ul>
-                        </li>
-
-                        <!--Menu list item-->
-                        <li>
-                            <a href="#">
-                                <i class="demo-pli-repair"></i>
-                                <span class="menu-title">Miscellaneous</span>
-                                <i class="arrow"></i>
-                            </a>
-
-                            <!--Submenu-->
-                            <ul class="collapse">
-                                <li><a href="misc-timeline.html">Timeline</a></li>
-                                <li><a href="misc-maps.html">Google Maps</a></li>
-                                <li><a href="xplugins-notifications.html">Notifications<span
-                                            class="label label-purple pull-right">Improved</span></a></li>
-                                <li><a href="misc-nestable-list.html">Nestable List</a></li>
-                                <li><a href="misc-animate-css.html">CSS Animations</a></li>
-                                <li><a href="misc-css-loaders.html">CSS Loaders</a></li>
-                                <li><a href="misc-spinkit.html">Spinkit</a></li>
-                                <li><a href="misc-tree-view.html">Tree View</a></li>
-                                <li><a href="misc-clipboard.html">Clipboard</a></li>
-                                <li><a href="misc-x-editable.html">X-Editable</a></li>
-
-                            </ul>
-                        </li>
-
-                        <!--Menu list item-->
-                        <li>
-                            <a href="#">
-                                <i class="demo-pli-warning-window"></i>
-                                <span class="menu-title">Grid System</span>
-                                <i class="arrow"></i>
-                            </a>
-
-                            <!--Submenu-->
-                            <ul class="collapse">
-                                <li><a href="grid-bootstrap.html">Bootstrap Grid</a></li>
-                                <li><a href="grid-liquid-fixed.html">Liquid Fixed</a></li>
-                                <li><a href="grid-match-height.html">Match Height</a></li>
-                                <li><a href="grid-masonry.html">Masonry</a></li>
-
-                            </ul>
-                        </li>
+                       
 
                         <li class="list-divider"></li>
 

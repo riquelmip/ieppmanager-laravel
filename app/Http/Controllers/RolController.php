@@ -15,14 +15,14 @@ class RolController extends Controller
     function __construct()
     {
         //DOY LOS PERMISOS SEGUN EL ROL
-        //El metodo index tiene todos los permisos debido a que ahi estan los botones
         $this->middleware('permission:ver-roles|crear-roles|editar-roles|borrar-roles', ['only' => ['index']]);
-        //Permiso de crear roles solo tiene acceso los metodos create y store
-        $this->middleware('permission:crear-roles', ['only' => ['create', 'store']]);
-        //Permiso de editar roles solo tiene acceso los metodos edit y update
-        $this->middleware('permission:editar-roles', ['only' => ['edit', 'update']]);
-        //Permiso de borrar roles solo tiene acceso el metodo destroy
-        $this->middleware('permission:borrar-roles', ['only' => ['destroy']]);
+        $this->middleware('permission:ver-roles',
+            ['only' => ['cargarTabla', 'obtenerRol']]
+        );
+        $this->middleware('permission:crear-roles', ['only' => ['guardar']]);
+        $this->middleware('permission:editar-roles', ['only' => ['guardar']]);
+        $this->middleware('permission:borrar-roles', ['only' => ['eliminarRol']]);
+        $this->middleware('permission:asignar-permisos', ['only' => ['ponerPermiso', 'quitarPermiso', 'obtenerPermisos']]);
     }
 
     public function index()
@@ -102,10 +102,6 @@ class RolController extends Controller
                 ]
             );
         }
-    }
-
-    public function create()
-    {
     }
 
     public function guardar(Request $request)
@@ -222,7 +218,6 @@ class RolController extends Controller
         }
     }
 
-
     public function ponerPermiso(Request $request)
     {
         try {
@@ -288,7 +283,7 @@ class RolController extends Controller
                 if ($rol['id'] != 1) {
                     $btnPermisos .= '<button type="button" onclick="permisosRolModal(\'' . $rol['id'] . '\')" class="btn btn-icon btn-warning"><i class="fa fa-shield"></i></button>';
                     $btnEditar .= '<button type="button" onclick="editarRolModal(\'' . $rol['id'] . '\')" class="btn btn-icon btn-primary"><i class="fa fa-edit"></i></button>';
-                    $btnEliminar .= '<a href="#" class="btn btn-icon btn-danger"><i class="fa fa-trash"></i></a>';
+                    $btnEliminar .= '<button type="button" onclick="eliminarRolModalConfirm(\'' . $rol['id'] . '\')" class="btn btn-icon btn-danger"><i class="fa fa-trash"></i></button>';
                 }
 
                 $tablaHTML .=  '<tr>' .
@@ -349,56 +344,31 @@ class RolController extends Controller
         }
     }
 
-
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //VALIDO EL FORMULARIO
-        $this->validate($request, ['name' => 'required', 'permission' => 'required']);
-
-        try {
-            //OBTENGO LOS DATOS DE ESE ROL
-            $rol = Role::findById($id);
-
-            //HAGO LA EDICION DEL NOMBRE
-            $rol->name = $request->input('name');
-            $rol->save();
-
-            //ASIGNO NUEVAMENTE LOS PERMISOS
-            $rol->syncPermissions($request->input('permission'));
-
-            return redirect()->route('roles.index')->with('editar', true);
-        } catch (\Illuminate\Database\QueryException $e) {
-            // Si ocurre una excepción al hacer la consulta, se maneja aquí
-            //return response()->json(['message' => 'Ocurrió un error al hacer la consulta'], 500);
-            return redirect()->route('roles.index')->with('error', true);
-        }
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    public function eliminarRol(Request $request)
     {
         try {
+            //OBTENGO EL ID DEL ROL DEL POST
+            $idRol = intval(json_decode($request->getContent(), true)['idRol']);
             //OBTENGO EL REGISTRO DE ROL Y LO ELIMINO
-            DB::table('roles')->where('id', $id)->delete();
+            DB::table('roles')->where('id', $idRol)->delete();
 
-            return redirect()->route('roles.index')->with('eliminar', true);
-        } catch (\Illuminate\Database\QueryException $e) {
-            // Si ocurre una excepción al hacer la consulta, se maneja aquí
-            //return response()->json(['message' => 'Ocurrió un error al hacer la consulta'], 500);
-            return redirect()->route('roles.index')->with('error', true);
+            return response()->json(
+                [
+                    'estado' => true,
+                    'titulo' => 'Éxito',
+                    'msg' => 'Eliminación realizada',
+                    'datos' => $idRol
+                ]
+            );
+        } catch (Exception $e) {
+            return response()->json(
+                [
+                    'estado' => false,
+                    'titulo' => 'Error',
+                    'msg' => 'Ocurrió un error al realizar el proceso',
+                    'errors' => $e->getMessage()
+                ]
+            );
         }
     }
 }

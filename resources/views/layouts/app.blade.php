@@ -41,7 +41,8 @@
     <!--Font-awesome-->
     <link href="{{ asset('template/plugins/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
 
-
+    <!--select2-->
+    <link href="{{ asset('template/plugins/select2/css/select2.min.css') }}" rel="stylesheet">
 
 
     <!--DataTables [ OPTIONAL ]-->
@@ -68,6 +69,10 @@
         #div_cargando img {
             width: 70px;
             height: 70px;
+        }
+
+        .select2-container--default .select2-dropdown {
+            z-index: 19999;
         }
     </style>
 
@@ -232,7 +237,28 @@
 
 
                 <!--CONTENIDO DE CADA PAGINA-->
-                @yield('content-head')
+                <div id="page-head">
+
+                    <!--Page Title-->
+                    <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+                    <div id="page-title">
+                        <h1 class="page-header text-overflow">@yield('title')</h1>
+                    </div>
+                    <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+                    <!--End page title-->
+
+
+                    <!--Breadcrumb-->
+                    <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+                    <ol class="breadcrumb">
+                        <li><a href="#"><i class="demo-pli-home"></i></a></li>
+                        <li><a href="#">Inicio</a></li>
+                        <li class="active">@yield('title')</li>
+                    </ol>
+                    <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+                    <!--End breadcrumb-->
+
+                </div>
 
                 <!--Page content-->
                 <!--===================================================-->
@@ -249,6 +275,9 @@
             <!--===================================================-->
             <!--END CONTENT CONTAINER-->
 
+            <!-- VARIABLES DE CADA PAGINA -->
+            @yield('page-name')
+            <!-- VARIABLES DE CADA PAGINA -->
 
             <!--MAIN NAVIGATION-->
             <!--===================================================-->
@@ -301,10 +330,18 @@
     <!--Toastr alertas-->
     <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 
+    <!--select2s-->
+    <script src="{{ asset('template/plugins/select2/js/select2.min.js') }}"></script>
+
     <!--DataTables [ OPTIONAL ]-->
     <script src="{{ asset('template/plugins/datatables/media/js/jquery.dataTables.js') }}"></script>
     <script src="{{ asset('template/plugins/datatables/media/js/dataTables.bootstrap.js') }}"></script>
     <script src="{{ asset('template/plugins/datatables/extensions/Responsive/js/dataTables.responsive.min.js') }}">
+    </script>
+
+    <!-- VARIABLE DE ENTORNO: AP URL PARA PETICIONES -->
+    <script>
+        const APP_URL = "{{ env('APP_URL') }}";
     </script>
 
     <script src="{{ asset('js-content/generales.js') }}"></script>
