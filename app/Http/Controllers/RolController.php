@@ -28,17 +28,14 @@ class RolController extends Controller
     public function index()
     {
         try {
-            //HAGO EL SELECT A LA BASE DE DATOS PARA PODER MOSTRAR LOS REGISTROS
-            $roles = Role::all();
-
-            return view('content.roles.index', compact('roles'));
+            return view('content.roles.index');
         } catch (Exception $e) {
 
-            return redirect()->route('content.roles.index')->with('error', true);
+            // return redirect()->route('content.roles.index')->with('error', true);
         }
     }
 
-    public function getPermisos(Request $request)
+    public function obtenerPermisos(Request $request)
     {
         try {
             //OBTENGO EL ID DEL ROL DEL POST
@@ -69,7 +66,7 @@ class RolController extends Controller
                         $permiso["name"] .
                         "</td>" .
                         '<td class="text-center">' .
-                    '<input class="js-switch" type="checkbox" id="permiso-' . $permiso['id'] . '-rol-' . $idRol . '" name="permiso-' . $permiso['id'] . '-rol-' . $idRol . '" onchange="quitarPermiso(' . $permiso['id'] . ',\'' . $idRol . '\')" checked></input>' .
+                        '<input class="js-switch" type="checkbox" id="permiso-' . $permiso['id'] . '-rol-' . $idRol . '" name="permiso-' . $permiso['id'] . '-rol-' . $idRol . '" onchange="quitarPermiso(' . $permiso['id'] . ',\'' . $idRol . '\')" checked></input>' .
                         "</tr>";
                 } else {
                     //SINO LO PONGO SIN CHECKAR
@@ -82,7 +79,7 @@ class RolController extends Controller
                         $permiso["name"] .
                         "</td>" .
                         '<td class="text-center">' .
-                    '<input class="js-switch" type="checkbox" id="permiso-' . $permiso['id'] . '-rol-' . $idRol . '" name="permiso-' . $permiso['id'] . '-rol-' . $idRol . '" onchange="ponerPermiso(' . $permiso['id'] . ',\'' . $idRol . '\')"></input>' .
+                        '<input class="js-switch" type="checkbox" id="permiso-' . $permiso['id'] . '-rol-' . $idRol . '" name="permiso-' . $permiso['id'] . '-rol-' . $idRol . '" onchange="ponerPermiso(' . $permiso['id'] . ',\'' . $idRol . '\')"></input>' .
                         "</tr>";
                 }
             }
@@ -111,8 +108,10 @@ class RolController extends Controller
     {
     }
 
-    public function store(Request $request)
+    public function guardar(Request $request)
     {
+        $idRol = $request->input('idRol');
+
         //VALIDO LOS CAMPOS
         $validator = Validator::make($request->all(), [
             'name' => 'required',
@@ -131,26 +130,44 @@ class RolController extends Controller
         }
 
         try {
-            //SI PASAN LAS VALIDACIONES, HAGO EL REGISTRO
-            $rol = Role::create(['name' => $request->input('name')]);
+            //SI EL ID ES 0, ENTONCES ES NUEVO REGISTRO
+            if (intval($idRol) === 0) {
+                //SI PASAN LAS VALIDACIONES, HAGO EL REGISTRO
+                $rol = Role::create(['name' => $request->input('name')]);
 
-            //ASIGNO LOS PERMISOS DE ESE ROL SEGUN LOS CHECKBOX DEL FORM
-            // $rol->syncPermissions($request->input('permission'));
+                return response()->json(
+                    [
+                        'estado' => true,
+                        'titulo' => 'Éxito',
+                        'msg' => 'Registro realizado',
+                        'datos' => $rol
+                    ]
+                );
+            } else {
+                //ES EDICION
 
-            return response()->json(
-                [
-                    'estado' => true,
-                    'titulo' => 'Éxito',
-                    'msg' => 'Registro realizado',
-                    'datos' => $rol
-                ]
-            );
+                //OBTENGO LOS DATOS DE ESE ROL
+                $rol = Role::findById($idRol);
+
+                //HAGO LA EDICION DEL NOMBRE
+                $rol->name = $request->input('name');
+                $rol->save();
+
+                return response()->json(
+                    [
+                        'estado' => true,
+                        'titulo' => 'Éxito',
+                        'msg' => 'Actualización realizada',
+                        'datos' => $rol
+                    ]
+                );
+            }
         } catch (Exception $e) {
             return response()->json(
                 [
                     'estado' => false,
                     'titulo' => 'Error',
-                    'msg' => 'Ocurrió un error al obtener la información',
+                    'msg' => 'Ocurrió un error',
                     'errors' => $e->getMessage()
                 ]
             );
@@ -270,7 +287,7 @@ class RolController extends Controller
 
                 if ($rol['id'] != 1) {
                     $btnPermisos .= '<button type="button" onclick="permisosRolModal(\'' . $rol['id'] . '\')" class="btn btn-icon btn-warning"><i class="fa fa-shield"></i></button>';
-                    $btnEditar .= '<a href="#" class="btn btn-icon btn-primary"><i class="fa fa-edit"></i></a>';
+                    $btnEditar .= '<button type="button" onclick="editarRolModal(\'' . $rol['id'] . '\')" class="btn btn-icon btn-primary"><i class="fa fa-edit"></i></button>';
                     $btnEliminar .= '<a href="#" class="btn btn-icon btn-danger"><i class="fa fa-trash"></i></a>';
                 }
 
@@ -307,30 +324,32 @@ class RolController extends Controller
         }
     }
 
-    public function show($id)
-    {
-        //
-    }
-
-    public function edit($id)
+    public function obtenerRol($id)
     {
         try {
             //OBTENGO LOS DATOS DEL ROL
             $rol = Role::findById($id);
-
-            //OBTENGO EL LISTADO DE PERMISOS
-            $permisos = Permission::get();
-
-            //OBTENGO LOS PERMISOS DE ESE ROL
-            $rolesPermisos = DB::table('role_has_permissions')->where('role_has_permissions.role_id', $id)->pluck('role_has_permissions.permission_id', 'role_has_permissions.permission_id')->all();
-
-            return view('roles.editar', compact('rol', 'permisos', 'rolesPermisos'));
-        } catch (\Illuminate\Database\QueryException $e) {
-            // Si ocurre una excepción al hacer la consulta, se maneja aquí
-            //return response()->json(['message' => 'Ocurrió un error al hacer la consulta'], 500);
-            return redirect()->route('roles.index')->with('error', true);
+            return response()->json(
+                [
+                    'estado' => true,
+                    'titulo' => 'Éxito',
+                    'msg' => 'Datos obtenidos correctamente',
+                    'datos' => $rol
+                ]
+            );
+        } catch (Exception $e) {
+            return response()->json(
+                [
+                    'estado' => false,
+                    'titulo' => 'Error',
+                    'msg' => 'Ocurrió un error al obtener la información',
+                    'errors' => $e->getMessage()
+                ]
+            );
         }
     }
+
+
 
     /**
      * Update the specified resource in storage.

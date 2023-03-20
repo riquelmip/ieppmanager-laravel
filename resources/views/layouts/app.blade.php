@@ -49,6 +49,27 @@
     <link href="{{ asset('template/plugins/datatables/extensions/Responsive/css/responsive.dataTables.min.css') }}"
         rel="stylesheet">
 
+    <style>
+        #div_cargando {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: #0054A4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(254, 254, 255, .65);
+            z-index: 20000;
+            display: none;
+
+        }
+
+        #div_cargando img {
+            width: 70px;
+            height: 70px;
+        }
+    </style>
 
     <!--SECCION CSS DE CADA PAGINA-->
     @yield('page-css')
@@ -86,8 +107,13 @@
 <!--You may remove all ID or Class names which contain "demo-", they are only used for demonstration. -->
 
 <body>
-    <div id="container" class="effect aside-float aside-bright mainnav-lg">
 
+    <div id="container" class="effect aside-float aside-bright mainnav-lg">
+        <div id="div_cargando">
+            <div>
+                <img src="{{ asset('img/loading.svg') }}" alt="Cargando...">
+            </div>
+        </div>
         <!--NAVBAR-->
         <!--===================================================-->
         <header id="navbar">
@@ -202,6 +228,8 @@
             <!--CONTENT CONTAINER-->
             <!--===================================================-->
             <div id="content-container">
+
+
 
                 <!--CONTENIDO DE CADA PAGINA-->
                 @yield('content-head')

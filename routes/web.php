@@ -23,9 +23,11 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::group(['middleware' => ['auth']], function () {
-    Route::post('/roles/permisos', [RolController::class, 'getPermisos'])->name('roles/permisos');
+    Route::get('/roles', [RolController::class, 'index'])->name('roles');
+    Route::post('/roles/permisos', [RolController::class, 'obtenerPermisos'])->name('roles/permisos');
     Route::post('/roles/quitarpermiso', [RolController::class, 'quitarPermiso'])->name('roles/quitarpermiso');
     Route::post('/roles/ponerpermiso', [RolController::class, 'ponerPermiso'])->name('roles/ponerpermiso');
     Route::get('/roles/cargartabla', [RolController::class, 'cargarTabla'])->name('roles/cargartabla');
-    Route::resource('roles', RolController::class);
+    Route::get('/roles/ver/{id}', [RolController::class, 'obtenerRol']);
+    Route::post('/roles/guardar', [RolController::class, 'guardar'])->name('roles/guardar');
 });

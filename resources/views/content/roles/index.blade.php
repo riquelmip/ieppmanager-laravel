@@ -63,11 +63,11 @@
                 <!--Modal header-->
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><i class="pci-cross pci-circle"></i></button>
-                    <h4 class="modal-title">Nuevo Rol</h4>
+                    <h4 class="modal-title">Rol</h4>
                 </div>
 
-                <form id="form-roles" url="{{ route('roles.store') }}">
-
+                <form id="form-roles">
+                    <input type="hidden" value="0" name="idRol" id="idRol">
                     <!--Modal body-->
                     <div class="modal-body">
 
@@ -101,7 +101,7 @@
                     <h4 class="modal-title">Permisos del Rol</h4>
                 </div>
 
-                <form id="form-permisos" url="{{ route('roles.store') }}">
+                <form id="form-permisos">
 
                     <!--Modal body-->
                     <div class="modal-body">

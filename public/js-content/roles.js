@@ -1,5 +1,10 @@
 document.addEventListener("DOMContentLoaded", function () {
     $("#btn-nuevo-rol").click(function () {
+        //RESETAR EL FORM
+
+        //PONER EL ID EN 0 PARA QUE SEA CREACION
+        $("#idRol").val(0);
+
         //MUESTRO EL MODAL
         $("#modal-roles").modal("show");
     });
@@ -11,15 +16,13 @@ document.addEventListener("DOMContentLoaded", function () {
         var formData = $(this).serialize();
         $.ajax({
             type: "POST",
-            url: $(this).attr("url"),
+            url: URL_RUTA + "/roles/guardar",
             data: formData,
             headers: {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
             },
             beforeSend: function () {
-                // $(boton).prop('disabled', true).html(''
-                //     +'<div class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></div>'
-                // );
+                div_cargando.style.display = "flex";
             },
             success: function (json) {
                 if (json["estado"]) {
@@ -36,6 +39,9 @@ document.addEventListener("DOMContentLoaded", function () {
             },
             error: function (json) {
                 toastr.error(json["msg"], json["titulo"]);
+            },
+            complete: function () {
+                div_cargando.style.display = "none";
             },
         });
     });
@@ -45,15 +51,13 @@ document.addEventListener("DOMContentLoaded", function () {
         var formData = $(this).serialize();
         $.ajax({
             type: "POST",
-            url: $(this).attr("url"),
+            url: URL_RUTA + "/roles/permisos",
             data: formData,
             headers: {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
             },
             beforeSend: function () {
-                // $(boton).prop('disabled', true).html(''
-                //     +'<div class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></div>'
-                // );
+                div_cargando.style.display = "flex";
             },
             success: function (json) {
                 if (json["estado"]) {
@@ -70,6 +74,9 @@ document.addEventListener("DOMContentLoaded", function () {
             },
             error: function (json) {
                 toastr.error(json["msg"], json["titulo"]);
+            },
+            complete: function () {
+                div_cargando.style.display = "none";
             },
         });
     });
@@ -85,9 +92,7 @@ function permisosRolModal(idRol) {
             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
         },
         beforeSend: function () {
-            // $(boton).prop('disabled', true).html(''
-            //     +'<div class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></div>'
-            // );
+            div_cargando.style.display = "flex";
         },
         success: function (json) {
             if (json["estado"]) {
@@ -122,6 +127,9 @@ function permisosRolModal(idRol) {
         error: function (json) {
             toastr.error(json["msg"], json["titulo"]);
         },
+        complete: function () {
+            div_cargando.style.display = "none";
+        },
     });
     $("#modal-permisos").modal("show");
 }
@@ -136,33 +144,37 @@ function quitarPermiso(idPermiso, idRol) {
             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
         },
         beforeSend: function () {
-            // $(boton).prop('disabled', true).html(''
-            //     +'<div class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></div>'
-            // );
+            div_cargando.style.display = "flex";
         },
         success: function (json) {
             if (json["estado"]) {
-
                 // Seleccionar el elemento HTML del switch
-                let switchElem = $('#permiso-' + idPermiso + '-rol-' + idRol)[0];
+                let switchElem = $(
+                    "#permiso-" + idPermiso + "-rol-" + idRol
+                )[0];
 
                 // Guardar el estado actual del switch
                 let isChecked = switchElem.checked;
 
                 // Obtener el estado actual de data-switchery
-                let dataSwitchery = switchElem.getAttribute('data-switchery');
+                let dataSwitchery = switchElem.getAttribute("data-switchery");
 
                 // Guardar el evento onchange original
                 let originalOnChange = switchElem.onchange;
 
                 // Eliminar el objeto Switchery del elemento HTML
-                $(switchElem).next('.switchery').remove();
+                $(switchElem).next(".switchery").remove();
 
                 // Cambiar el evento onchange a la nueva función
-                switchElem.setAttribute('onchange', 'ponerPermiso(' + idPermiso + ', ' + idRol + ')');
+                switchElem.setAttribute(
+                    "onchange",
+                    "ponerPermiso(" + idPermiso + ", " + idRol + ")"
+                );
 
                 // Crear un nuevo objeto Switchery para el elemento
-                let switchery = new Switchery(switchElem, { /* nuevas opciones */ });
+                let switchery = new Switchery(switchElem, {
+                    /* nuevas opciones */
+                });
 
                 // Establecer el estado del switch
                 if (isChecked) {
@@ -172,14 +184,12 @@ function quitarPermiso(idPermiso, idRol) {
                 }
 
                 // Establecer el estado actual de data-switchery
-                switchElem.setAttribute('data-switchery', dataSwitchery);
+                switchElem.setAttribute("data-switchery", dataSwitchery);
 
                 //MUESTRO LA ALERTA DE EXITO
                 toastr.success(json["msg"], json["titulo"]);
 
                 // new Switchery(switchElem);
-
-
             } else {
                 toastr.error(json["msg"], json["titulo"]);
             }
@@ -187,11 +197,11 @@ function quitarPermiso(idPermiso, idRol) {
         error: function (json) {
             toastr.error(json["msg"], json["titulo"]);
         },
+        complete: function () {
+            div_cargando.style.display = "none";
+        },
     });
-
 }
-
-
 
 function ponerPermiso(idPermiso, idRol) {
     //console.log(idPermiso, idRol);
@@ -203,33 +213,37 @@ function ponerPermiso(idPermiso, idRol) {
             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
         },
         beforeSend: function () {
-            // $(boton).prop('disabled', true).html(''
-            //     +'<div class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></div>'
-            // );
+            div_cargando.style.display = "flex";
         },
         success: function (json) {
             if (json["estado"]) {
-
                 // Seleccionar el elemento HTML del switch
-                let switchElem = $('#permiso-' + idPermiso + '-rol-' + idRol)[0];
+                let switchElem = $(
+                    "#permiso-" + idPermiso + "-rol-" + idRol
+                )[0];
 
                 // Guardar el estado actual del switch
                 let isChecked = switchElem.checked;
 
                 // Obtener el estado actual de data-switchery
-                let dataSwitchery = switchElem.getAttribute('data-switchery');
+                let dataSwitchery = switchElem.getAttribute("data-switchery");
 
                 // Guardar el evento onchange original
                 let originalOnChange = switchElem.onchange;
 
                 // Eliminar el objeto Switchery del elemento HTML
-                $(switchElem).next('.switchery').remove();
+                $(switchElem).next(".switchery").remove();
 
                 // Cambiar el evento onchange a la nueva función
-                switchElem.setAttribute('onchange', 'quitarPermiso(' + idPermiso + ', ' + idRol + ')');
+                switchElem.setAttribute(
+                    "onchange",
+                    "quitarPermiso(" + idPermiso + ", " + idRol + ")"
+                );
 
                 // Crear un nuevo objeto Switchery para el elemento
-                let switchery = new Switchery(switchElem, { /* nuevas opciones */ });
+                let switchery = new Switchery(switchElem, {
+                    /* nuevas opciones */
+                });
 
                 // Establecer el estado del switch
                 if (isChecked) {
@@ -239,14 +253,12 @@ function ponerPermiso(idPermiso, idRol) {
                 }
 
                 // Establecer el estado actual de data-switchery
-                switchElem.setAttribute('data-switchery', dataSwitchery);
+                switchElem.setAttribute("data-switchery", dataSwitchery);
 
                 //MUESTRO LA ALERTA DE EXITO
                 toastr.success(json["msg"], json["titulo"]);
 
                 // new Switchery(switchElem);
-
-
             } else {
                 toastr.error(json["msg"], json["titulo"]);
             }
@@ -254,6 +266,42 @@ function ponerPermiso(idPermiso, idRol) {
         error: function (json) {
             toastr.error(json["msg"], json["titulo"]);
         },
+        complete: function () {
+            div_cargando.style.display = "none";
+        },
     });
+}
 
+function editarRolModal(idRol) {
+    $.ajax({
+        type: "GET",
+        url: URL_RUTA + "/roles/ver/" + idRol,
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
+        beforeSend: function () {
+            div_cargando.style.display = "flex";
+        },
+        success: function (json) {
+            if (json["estado"]) {
+                //PONGO LOS DATOS DEL ROL A EDITR, INCLUYENDO EL ID
+                $("#idRol").val(json["datos"]["id"]);
+                $("#name").val(json["datos"]["name"]);
+
+                //MUESTRO EL MODAL
+                $("#modal-roles").modal("show");
+
+                //MUESTRO LA ALERTA DE EXITO
+                toastr.success(json["msg"], json["titulo"]);
+            } else {
+                toastr.error(json["msg"], json["titulo"]);
+            }
+        },
+        error: function (json) {
+            toastr.error(json["msg"], json["titulo"]);
+        },
+        complete: function () {
+            div_cargando.style.display = "none";
+        },
+    });
 }

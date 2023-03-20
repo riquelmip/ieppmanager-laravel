@@ -74,8 +74,8 @@
 
                             <!--Submenu-->
                             <ul class="collapse">
-                                <li><a href="{{ route('roles.index') }}l">Usuarios</a></li>
-                                <li><a href="{{ route('roles.index') }}">Roles</a></li>
+                                <li><a href="{{ route('roles') }}l">Usuarios</a></li>
+                                <li><a href="{{ route('roles') }}">Roles</a></li>
                                 <li><a href="dashboard-3.html">Permisos</a></li>
                             </ul>
                         </li>
