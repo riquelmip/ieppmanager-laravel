@@ -18,8 +18,10 @@
             <h3 class="panel-title">A continuación se muestra el listado</h3>
         </div> --}}
         <div class="panel-body">
-            <button id="btn-nuevo-usuario" class="btn btn-primary">Nuevo</button>
-            <br><br>
+            @can('crear-usuarios')
+                <button id="btn-nuevo-usuario" class="btn btn-primary">Nuevo</button><br><br>
+            @endcan
+
             <table id="t-usuarios" class="table table-striped table-bordered" cellspacing="0" width="100%">
                 <thead>
                     <tr>
@@ -102,7 +104,8 @@
                                 <div class="form-group">
                                     <label class="control-label" for="estado">Estado</label>
                                     <div>
-                                        <select name="estado" id="estado" class="form-control select2" style="width: 100%;">
+                                        <select name="estado" id="estado" class="form-control select2"
+                                            style="width: 100%;">
                                             <option value="0">Inactivo</option>
                                             <option value="1">Activo</option>
                                         </select>
@@ -154,7 +157,8 @@
 
                 <!--Modal footer-->
                 <div class="modal-footer">
-                    <button data-dismiss="modal" class="btn btn-default" onclick="reiniciarId();" type="button">Cancelar</button>
+                    <button data-dismiss="modal" class="btn btn-default" onclick="reiniciarId();"
+                        type="button">Cancelar</button>
                     <button type="button" onclick="eliminarUsuario();" class="btn btn-primary">Eliminar</button>
                 </div>
 

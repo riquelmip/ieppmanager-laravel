@@ -18,8 +18,10 @@
             <h3 class="panel-title">A continuación se muestra el listado</h3>
         </div> --}}
         <div class="panel-body">
-            <button id="btn-nuevo-rol" class="btn btn-primary">Nuevo</button>
-            <br><br>
+            @can('crear-roles')
+                <button id="btn-nuevo-rol" class="btn btn-primary">Nuevo</button>
+                <br><br>
+            @endcan
             <table id="t-roles" class="table table-striped table-bordered" cellspacing="0" width="100%">
                 <thead>
                     <tr>
@@ -113,7 +115,6 @@
                     <!--Modal footer-->
                     <div class="modal-footer">
                         <button data-dismiss="modal" class="btn btn-default" type="button">Cerrar</button>
-                        <button type="submit" class="btn btn-primary">Guardar</button>
                     </div>
 
                 </form>
@@ -148,7 +149,8 @@
 
                 <!--Modal footer-->
                 <div class="modal-footer">
-                    <button data-dismiss="modal" class="btn btn-default" onclick="reiniciarId();" type="button">Cancelar</button>
+                    <button data-dismiss="modal" class="btn btn-default" onclick="reiniciarId();"
+                        type="button">Cancelar</button>
                     <button type="button" onclick="eliminarRol();" class="btn btn-primary">Eliminar</button>
                 </div>
 

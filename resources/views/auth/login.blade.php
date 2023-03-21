@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <title>Login page | Nifty - Admin Template</title>
+    <title>Login</title>
 
 
     <!--STYLESHEET-->
@@ -125,7 +125,7 @@
                 <div class="pad-all">
                     @if (Route::has('password.request'))
                         <a href="{{ route('password.request') }}"
-                            class="btn-link mar-rgt">{{ __('¿Olvidaste tu contraseña ?') }}</a>
+                            class="btn-link mar-rgt">{{ __('¿Olvidaste tu contraseña?') }}</a>
                     @endif
 
                     <a href="{{ route('register') }}" class="btn-link mar-lft">Crear una cuenta</a>

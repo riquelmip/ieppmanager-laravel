@@ -10,9 +10,11 @@ use Spatie\Permission\Models\Role;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 class UsuarioController extends Controller
 {
+    
 
     function __construct()
     {
@@ -25,6 +27,10 @@ class UsuarioController extends Controller
         $this->middleware('permission:editar-usuarios', ['only' => ['edit', 'update']]);
         //Permiso de borrar usuarios solo tiene acceso el metodo destroy
         $this->middleware('permission:borrar-usuarios', ['only' => ['destroy']]);
+
+       
+        
+        
     }
 
    
@@ -41,11 +47,13 @@ class UsuarioController extends Controller
     public function cargarTabla()
     {
         try {
+            //OBTENGO LOS DATOS DEL USUARIO LOGUEADO Y SU ROL
+            $usuarioLogueado = User::with('roles')->find(Auth::user()->id);
+            $rolLogueado = $usuarioLogueado->roles->first();
+
             //HAGO EL SELECT A LA BASE DE DATOS PARA PODER MOSTRAR LOS REGISTROS
             $usuarios = User::all();
-
             $tablaHTML = '';
-
 
             foreach ($usuarios as $usuario) {
                 if ($usuario['estado'] === 0) {
@@ -58,8 +66,14 @@ class UsuarioController extends Controller
                 $btnEliminar = '';
 
                 if ($usuario['id'] != 1) {
-                    $btnEditar .= '<button type="button" onclick="editarUsuarioModal(\'' . $usuario['id'] . '\')" class="btn btn-icon btn-primary"><i class="fa fa-edit"></i></button>';
-                    $btnEliminar .= '<button type="button" onclick="eliminarUsuarioModalConfirm(\'' . $usuario['id'] . '\')" class="btn btn-icon btn-danger"><i class="fa fa-trash"></i></button>';
+
+                    if ($rolLogueado->hasPermissionTo('editar-usuarios')) {
+                        $btnEditar .= '<button type="button" onclick="editarUsuarioModal(\'' . $usuario['id'] . '\')" class="btn btn-icon btn-primary"><i class="fa fa-edit"></i></button>';
+                    }
+
+                    if ($rolLogueado->hasPermissionTo('borrar-usuarios')) {
+                        $btnEliminar .= '<button type="button" onclick="eliminarUsuarioModalConfirm(\'' . $usuario['id'] . '\')" class="btn btn-icon btn-danger"><i class="fa fa-trash"></i></button>';
+                    } 
                 }
 
                 $tablaHTML .=  '<tr>' .

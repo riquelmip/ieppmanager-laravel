@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Spatie\Permission\Models\Permission;
@@ -269,6 +271,10 @@ class RolController extends Controller
     public function cargarTabla()
     {
         try {
+            //OBTENGO LOS DATOS DEL USUARIO LOGUEADO Y SU ROL
+            $usuarioLogueado = User::with('roles')->find(Auth::user()->id);
+            $rolLogueado = $usuarioLogueado->roles->first();
+             
             //HAGO EL SELECT A LA BASE DE DATOS PARA PODER MOSTRAR LOS REGISTROS
             $roles = Role::all();
 
@@ -281,9 +287,17 @@ class RolController extends Controller
                 $btnEliminar = '';
 
                 if ($rol['id'] != 1) {
-                    $btnPermisos .= '<button type="button" onclick="permisosRolModal(\'' . $rol['id'] . '\')" class="btn btn-icon btn-warning"><i class="fa fa-shield"></i></button>';
-                    $btnEditar .= '<button type="button" onclick="editarRolModal(\'' . $rol['id'] . '\')" class="btn btn-icon btn-primary"><i class="fa fa-edit"></i></button>';
-                    $btnEliminar .= '<button type="button" onclick="eliminarRolModalConfirm(\'' . $rol['id'] . '\')" class="btn btn-icon btn-danger"><i class="fa fa-trash"></i></button>';
+
+                    if ($rolLogueado->hasPermissionTo('asignar-permisos')) {
+                        $btnPermisos .= '<button type="button" onclick="permisosRolModal(\'' . $rol['id'] . '\')" class="btn btn-icon btn-warning"><i class="fa fa-shield"></i></button>';
+                    }
+                    if ($rolLogueado->hasPermissionTo('editar-roles')) {
+                        $btnEditar .= '<button type="button" onclick="editarRolModal(\'' . $rol['id'] . '\')" class="btn btn-icon btn-primary"><i class="fa fa-edit"></i></button>';
+                    }
+                    if ($rolLogueado->hasPermissionTo('borrar-roles')) {
+                        $btnEliminar .= '<button type="button" onclick="eliminarRolModalConfirm(\'' . $rol['id'] . '\')" class="btn btn-icon btn-danger"><i class="fa fa-trash"></i></button>';
+                    }
+                    
                 }
 
                 $tablaHTML .=  '<tr>' .
