@@ -14,26 +14,19 @@ use Illuminate\Support\Facades\Auth;
 
 class UsuarioController extends Controller
 {
-    
-
     function __construct()
     {
         //DOY LOS PERMISOS SEGUN EL ROL
-        //El metodo index tiene todos los permisos debido a que ahi estan los botones
         $this->middleware('permission:ver-usuarios|crear-usuarios|editar-usuarios|borrar-usuarios', ['only' => ['index']]);
-        //Permiso de crear usuarios solo tiene acceso los metodos create y store
-        $this->middleware('permission:crear-usuarios', ['only' => ['create', 'store']]);
-        //Permiso de editar usuarios solo tiene acceso los metodos edit y update
-        $this->middleware('permission:editar-usuarios', ['only' => ['edit', 'update']]);
-        //Permiso de borrar usuarios solo tiene acceso el metodo destroy
-        $this->middleware('permission:borrar-usuarios', ['only' => ['destroy']]);
-
-       
-        
-        
+        $this->middleware(
+            'permission:ver-usuarios',
+            ['only' => ['cargarTabla', 'obtenerRoles', 'obtenerUsuario']]
+        );
+        $this->middleware('permission:crear-usuarios', ['only' => ['guardar']]);
+        $this->middleware('permission:editar-usuarios', ['only' => ['guardar']]);
+        $this->middleware('permission:borrar-usuarios', ['only' => ['eliminarUsuario']]);
     }
 
-   
     public function index()
     {
         try {
