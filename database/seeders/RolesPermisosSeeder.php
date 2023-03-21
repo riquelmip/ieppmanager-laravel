@@ -45,9 +45,11 @@ class RolesPermisosSeeder extends Seeder
         }
 
         //CREO EL SUPER USUARIO
-        $usuario = User::create(['username' => 'superadmin',
+        $usuario = User::create([
+            'username' => 'superadmin',
             'email' => 'superadmin@gmail.com',
             'password' => Hash::make('superadmin'),
+            'estado' => true,
         ]);
 
         // SI NO SE HA CREADO NINGUN ROL

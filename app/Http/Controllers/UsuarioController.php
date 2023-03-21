@@ -72,7 +72,7 @@ class UsuarioController extends Controller
                 '<td>' .
                 $usuario['email'] .
                 '</td>' .
-                '<td>' .
+                    '<td class="text-center">' .
                 $usuario['estado'] .
                 '</td>' .
                 '<td class="text-center">' .
@@ -105,57 +105,104 @@ class UsuarioController extends Controller
     {
         $idUsuario = $request->input('idUsuario');
 
-        //VALIDO LOS CAMPOS
-        $validator = Validator::make($request->all(), [
-            'username' => 'required',
-            'email' => 'required',
-            'password' => 'required',
-            'rol' => 'required',
-            'estado' => 'required',
-        ]);
-
-        //SI FALLA LA VALIDACION
-        if ($validator->fails()) {
-            $errors = implode('<br>', $validator->errors()->all());
-
-            return response()->json([
-                'estado' => false,
-                'titulo' => 'Error',
-                'msg' => 'Revise los campos',
-                'errors' => $errors
-            ]);
-        }
-
         try {
             //SI EL ID ES 0, ENTONCES ES NUEVO REGISTRO
             if (intval($idUsuario) === 0) {
+
+                //VALIDO LOS CAMPOS
+                $validator = Validator::make($request->all(), [
+                    'username' => 'required|unique:users',
+                    'email' => 'required|email|unique:users',
+                    'password' => 'required|same:confirm-password',
+                    'rol' => 'required|min:1',
+                    'estado' => 'required',
+                ]);
+
+                //SI FALLA LA VALIDACION
+                if ($validator->fails()) {
+                    $errors = implode('<br>', $validator->errors()->all());
+
+                    return response()->json([
+                        'estado' => false,
+                        'titulo' => 'Error',
+                        'msg' => 'Revise los campos',
+                        'errors' => $errors
+                    ]);
+                }
+
                 //SI PASAN LAS VALIDACIONES, HAGO EL REGISTRO
-                $rol = Role::create(['name' => $request->input('name')]);
+                $usuario = User::create([
+                    'username' => $request->input('username'),
+                    'email' => $request->input('email'),
+                    'password' => Hash::make($request->input('password')),
+                    'estado' => $request->input('estado')
+                ]);
+
+
+                //OBTENGO LOS DATOS DEL ROL ELEGIDO
+                $rol = Role::findById($request->input('rol'));
+
+                //ASIGNO EL ROL A ESE USUARIO
+                $usuario->assignRole($rol->name);
 
                 return response()->json(
                     [
                         'estado' => true,
                         'titulo' => 'Éxito',
                         'msg' => 'Registro realizado',
-                        'datos' => $rol
+                        'datos' => $usuario
                     ]
                 );
             } else {
                 //ES EDICION
 
-                //OBTENGO LOS DATOS DE ESE ROL
-                $rol = Role::findById($idRol);
 
-                //HAGO LA EDICION DEL NOMBRE
-                $rol->name = $request->input('name');
-                $rol->save();
+                //VALIDO LOS CAMPOS
+                $validator = Validator::make($request->all(), [
+                    'username' => 'required|unique:users,username,' . $idUsuario,
+                    'email' => 'required|email|unique:users,email,' . $idUsuario,
+                    'password' => 'nullable|same:confirm-password',
+                    'rol' => 'required|min:1',
+                    'estado' => 'required',
+                ]);
+
+                //SI FALLA LA VALIDACION
+                if ($validator->fails()) {
+                    $errors = implode('<br>', $validator->errors()->all());
+
+                    return response()->json([
+                        'estado' => false,
+                        'titulo' => 'Error',
+                        'msg' => 'Revise los campos',
+                        'errors' => $errors
+                    ]);
+                }
+
+                //OBTENGO LOS DATOS DE ESE USUARIO
+                $usuario = User::find($idUsuario);
+
+                //HAGO LA EDICION DEL USUARIO
+                $usuario->username = $request->input('username');
+                $usuario->email = $request->input('email');
+                //SI LA CONTRASEÑA NO VIENE VACIA
+                if (!is_null($usuario->password)) {
+                    $usuario->password = Hash::make($request->input('password'));
+                }
+                $usuario->estado = $request->input('estado');
+                $usuario->save();
+
+                //OBTENGO LOS DATOS DEL ROL ELEGIDO
+                $rol = Role::findById($request->input('rol'));
+
+                //ASIGNO EL ROL A ESE USUARIO
+                $usuario->syncRoles([$rol->name]); // reemplaza todos los roles anteriores por el nuevo rol 'nuevo_rol'
 
                 return response()->json(
                     [
                         'estado' => true,
                         'titulo' => 'Éxito',
                         'msg' => 'Actualización realizada',
-                        'datos' => $rol
+                        'datos' => $usuario
                     ]
                 );
             }
@@ -171,136 +218,110 @@ class UsuarioController extends Controller
         }
     }
 
-
-    
-    public function create()
+    public function obtenerRoles()
     {
         try {
-            //OBTENGO EL LISTADO DE LOS ROLES PARA EL SELECT DEL FORM
-            $roles = Role::where('id', '!=', '1')->pluck('name', 'name')->all(); //EXCEPTUANDO AL SUPER ADMIN
+            //OBTENGO EL LISTADO DE LOS ROLES   
+            $roles = Role::all();
 
-            return view('usuarios.crear', compact('roles'));
-        } catch (\Illuminate\Database\QueryException $e) {
-            // Si ocurre una excepción al hacer la consulta, se maneja aquí
-            //return response()->json(['message' => 'Ocurrió un error al hacer la consulta'], 500);
-            return redirect()->route('usuarios.index')->with('error', true);
-        }
-    }
-
-
-    public function store(Request $request)
-    {
-        //VALIDO EL FORMULARIO
-        $this->validate($request, [
-            'name' => 'required',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|same:confirm-password',
-            'roles' => 'required'
-        ]);
-
-        try {
-
-            //AGREGO TODO EL REQUEST A UNA VARIABLE
-            $input = $request->all();
-
-            //HAGO EL HASH A LA CONTRASEÑA
-            $input['password'] = Hash::make($input['password']);
-
-            //HAGO EL REGISTRO
-            $user = User::create($input);
-
-            //ASIGNO EL ROL A ESE USUARIO
-            $user->assignRole($request->input('roles'));
-
-            return redirect()->route('usuarios.index')->with('crear', true);
-        } catch (\Illuminate\Database\QueryException $e) {
-            // Si ocurre una excepción al hacer la consulta, se maneja aquí
-            //return response()->json(['message' => 'Ocurrió un error al hacer la consulta'], 500);
-            return redirect()->route('usuarios.index')->with('error', true);
-        }
-    }
-
-    public function edit($id)
-    {
-        try {
-            //OBTENGO EL REGISTRO DE ESE USUARIO
-            $usuario = User::find($id);
-
-            //OBTENGO EL LISTADO DE LOS ROLES
-            $roles = Role::where('id', '!=', '1')->pluck('name', 'name')->all();
-
-            //OBTENGO EL ROL DE ESE USUARIO
-            $usuarioRol = $usuario->roles->pluck('name', 'name')->all();
-
-            return view('usuarios.editar', compact('usuario', 'roles', 'usuarioRol'));
-        } catch (\Illuminate\Database\QueryException $e) {
-            // Si ocurre una excepción al hacer la consulta, se maneja aquí
-            //return response()->json(['message' => 'Ocurrió un error al hacer la consulta'], 500);
-            return redirect()->route('usuarios.index')->with('error', true);
-        }
-    }
-
-
-    public function update(Request $request, $id)
-    {
-        //VALIDO EL FORMULARIO
-        $this->validate($request, [
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email,' . $id,
-            'password' => 'same:confirm-password',
-            'roles' => 'required'
-        ]);
-
-        try {
-            //AGREGO EL REQUEST A UNA VARIABLE INPUT
-            $input = $request->all();
-
-            //SI LA CONTRASEÑA NO VIENE VACIA
-            if (!empty($input['password'])) {
-                //HAGO EL HASH
-                $input['password'] = Hash::make($input['password']);
-            } else {
-                //COMO NO VIENE CONTRASEÑA, LA SACO DEL ARRAY PARA QUE NO LA EDITE
-                $input = Arr::except($input, array('password'));
+            $htmlRoles = "";
+            $where_admin = "";
+            // if ($_SESSION['login_datos_' . nombreproyecto()]['id'] != 1) {
+            //     $where_admin = " AND id != 1";
+            // }
+            $htmlRoles .= '<option value="0">Seleccione una opción</option>';
+            for ($i = 0; $i < count($roles); $i++) {
+                //SI EL ROL NO ES DE SUPERADMINISTRADOR
+                if ($roles[$i]['id'] != 1) {
+                    $htmlRoles .= '<option value="' . $roles[$i]['id'] . '">' . $roles[$i]['name'] . '</option>';
+                }
             }
 
-            //OBTENGO EL REGISTRO DE ESE USUARIO
-            $user = User::find($id);
 
-            //HAGO LA EDICION
-            $user->update($input);
-
-            //OBTENGO LA RELACION DEL USUARIOS Y SUS ROLES, Y LA ELIMINO
-            DB::table('model_has_roles')->where('model_id', $id)->delete();
-
-            //AHORA ASIGNO EL NUEVO ROL QUE VENIA DE LA EDICION
-            $user->assignRole($request->input('roles'));
-
-            return redirect()->route('usuarios.index')->with('editar', true);
-        } catch (\Illuminate\Database\QueryException $e) {
-            // Si ocurre una excepción al hacer la consulta, se maneja aquí
-            //return response()->json(['message' => 'Ocurrió un error al hacer la consulta'], 500);
-            return redirect()->route('usuarios.index')->with('error', true);
+            return response()->json(
+                [
+                    'estado' => true,
+                    'titulo' => 'Éxito',
+                    'msg' => 'Datos obtenidos correctamente',
+                    'datos' => $htmlRoles
+                ]
+            );
+        } catch (Exception $e) {
+            return response()->json(
+                [
+                    'estado' => false,
+                    'titulo' => 'Error',
+                    'msg' => 'Ocurrió un error al obtener la información',
+                    'errors' => $e->getMessage()
+                ]
+            );
         }
     }
 
-
-    public function destroy($id)
+    public function obtenerUsuario($id)
     {
         try {
-            //OBTENGO EL REGISTRO DE ESE USUARIO Y LO ELIMINO
-            User::find($id)->delete();
+            //OBTENGO LOS DATOS DEL ROL
+            //$usuario = User::findById($id);
+            $usuario = User::with('roles')->find($id);
 
-            return redirect()->route('usuarios.index')->with('eliminar', true);
-        } catch (\Illuminate\Database\QueryException $e) {
-            // Si ocurre una excepción al hacer la consulta, se maneja aquí
-            //return response()->json(['message' => 'Ocurrió un error al hacer la consulta'], 500);
-            return redirect()->route('usuarios.index')->with('error', true);
+            //SI EL USUARIO TIENE ROL ASIGNADO
+            if (!empty($usuario->roles)) {
+                $rol = $usuario->roles->first();
+                $usuario->roles = $usuario->roles->first();
+            } else {
+                //SI NO TIENE ROL ASIGNADO
+                $usuario->roles = 0;
+            }
+
+            return response()->json(
+                [
+                    'estado' => true,
+                    'titulo' => 'Éxito',
+                    'msg' => 'Datos obtenidos correctamente',
+                    'datos' => $usuario
+                ]
+            );
+        } catch (Exception $e) {
+            return response()->json(
+                [
+                    'estado' => false,
+                    'titulo' => 'Error',
+                    'msg' => 'Ocurrió un error al obtener la información',
+                    'errors' => $e->getMessage()
+                ]
+            );
         }
     }
 
-    public function show($id)
+    public function eliminarUsuario(Request $request)
     {
-        //
+        try {
+            //OBTENGO EL ID DEL USUARIO DEL POST
+            $idUsuario = intval(json_decode($request->getContent(), true)['idUsuario']);
+
+            //OBTENGO EL REGISTRO DE USUARIO Y LO ELIMINO
+            User::find($idUsuario)->delete();
+
+            return response()->json(
+                [
+                    'estado' => true,
+                    'titulo' => 'Éxito',
+                    'msg' => 'Eliminación realizada',
+                    'datos' => $idUsuario
+                ]
+            );
+        } catch (Exception $e) {
+            return response()->json(
+                [
+                    'estado' => false,
+                    'titulo' => 'Error',
+                    'msg' => 'Ocurrió un error al realizar el proceso',
+                    'errors' => $e->getMessage()
+                ]
+            );
+        }
     }
+
+    
 }

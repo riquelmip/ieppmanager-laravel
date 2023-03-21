@@ -38,4 +38,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/usuarios', [UsuarioController::class, 'index'])->name('usuarios');
     Route::get('/usuarios/cargartabla', [UsuarioController::class, 'cargarTabla'])->name('usuarios/cargartabla');
     Route::post('/usuarios/guardar', [UsuarioController::class, 'guardar'])->name('usuarios/guardar');
+    Route::get('/usuarios/roles', [UsuarioController::class, 'obtenerRoles'])->name('usuarios/roles');
+    Route::get('/usuarios/ver/{id}', [UsuarioController::class, 'obtenerUsuario']);
+    Route::post('/usuarios/eliminar', [UsuarioController::class, 'eliminarUsuario'])->name('usuarios/eliminar');
 });

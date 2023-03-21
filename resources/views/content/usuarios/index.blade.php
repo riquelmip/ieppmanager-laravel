@@ -83,8 +83,8 @@
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label class="control-label" for="password-confirm">Confirmar Contraseña</label>
-                                    <input type="password" id="password-confirm" name="password-confirm"
+                                    <label class="control-label" for="confirm-password">Confirmar Contraseña</label>
+                                    <input type="password" id="confirm-password" name="confirm-password"
                                         class="form-control">
                                 </div>
                             </div>
@@ -94,7 +94,7 @@
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label class="control-label" for="rol">Rol</label>
-                                    <select name="rol" id="rol" class="form-control">
+                                    <select name="rol" id="rol" class="form-control select2" style="width: 100%;">
                                     </select>
                                 </div>
                             </div>
@@ -102,7 +102,7 @@
                                 <div class="form-group">
                                     <label class="control-label" for="estado">Estado</label>
                                     <div>
-                                        <select name="estado" id="estado" class="form-control">
+                                        <select name="estado" id="estado" class="form-control select2" style="width: 100%;">
                                             <option value="0">Inactivo</option>
                                             <option value="1">Activo</option>
                                         </select>
@@ -154,8 +154,8 @@
 
                 <!--Modal footer-->
                 <div class="modal-footer">
-                    <button data-dismiss="modal" class="btn btn-default" type="button">Cancelar</button>
-                    <button type="button" onclick="eliminarRol();" class="btn btn-primary">Eliminar</button>
+                    <button data-dismiss="modal" class="btn btn-default" onclick="reiniciarId();" type="button">Cancelar</button>
+                    <button type="button" onclick="eliminarUsuario();" class="btn btn-primary">Eliminar</button>
                 </div>
 
             </div>

@@ -72,7 +72,7 @@
         }
 
         .select2-container--default .select2-dropdown {
-            z-index: 19999;
+            z-index: 40000;
         }
     </style>
 

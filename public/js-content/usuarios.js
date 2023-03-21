@@ -12,7 +12,21 @@ document.addEventListener("DOMContentLoaded", function () {
         $("#modal-usuarios").modal("show");
     });
 
-    $("#estado").select2();
+    selectRoles();
+
+    //INICIALIZANDO LOS SELECT2
+    $('.select2').select2({
+        "language": {
+            "noResults": function () {
+                return "No se encontraron resultados";
+            }
+        },
+        escapeMarkup: function (markup) {
+            return markup;
+        },
+        dropdownParent: $('#modal-usuarios .modal-body')
+    });
+
     cargarDatos("t-usuarios", "/usuarios/cargartabla");
 
     $("#form-usuarios").submit(function (event) {
@@ -30,6 +44,7 @@ document.addEventListener("DOMContentLoaded", function () {
             },
             success: function (json) {
                 if (json["estado"]) {
+                    console.log(json);
                     cargarDatos("t-usuarios", "/usuarios/cargartabla");
                     $("#modal-usuarios").modal("hide");
                     $("#form-usuarios").trigger("reset");
@@ -50,48 +65,13 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    $("#form-permisos").submit(function (event) {
-        event.preventDefault(); // detiene el comportamiento predeterminado del formulario
-        var formData = $(this).serialize();
-        $.ajax({
-            type: "POST",
-            url: APP_URL + "/usuarios/permisos",
-            data: formData,
-            headers: {
-                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-            },
-            beforeSend: function () {
-                div_cargando.style.display = "flex";
-            },
-            success: function (json) {
-                if (json["estado"]) {
-                    cargarDatos("t-usuarios", "/usuarios/cargartabla");
-                    $("#modal-usuarios").modal("hide");
-                    $("#form-usuarios").trigger("reset");
-                    toastr.success(json["msg"], json["titulo"]);
-                } else {
-                    toastr.error(
-                        json["errors"],
-                        json["titulo"] + ", " + json["msg"]
-                    );
-                }
-            },
-            error: function (json) {
-                toastr.error(json["msg"], json["titulo"]);
-            },
-            complete: function () {
-                div_cargando.style.display = "none";
-            },
-        });
-    });
 });
 
-function permisosRolModal(idRol) {
+function selectRoles() {
     //obtenerPermisos();
     $.ajax({
-        type: "POST",
-        url: APP_URL + "/usuarios/permisos",
-        data: JSON.stringify({ idRol: idRol }),
+        type: "GET",
+        url: APP_URL + "/usuarios/roles",
         headers: {
             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
         },
@@ -100,27 +80,9 @@ function permisosRolModal(idRol) {
         },
         success: function (json) {
             if (json["estado"]) {
-                //CREO EL HTML DELA LISTA DE PERMISOS PARA LA TABLA
 
-                //console.log(json);
-                //DESTRUYO LA TABLA
-                $("#t-usuarios-permisos").DataTable().destroy();
-
-                //PONGO EL HTML EN EL DIV TBODY DE LA TABLA
-                $("#t-usuarios-permisos-body").empty().html(json["datos"]);
-
-                //OBTENGO EL ARRAY DE TODOS LOS ELEMENTOS CON LA CLASE DE SWITCH
-                var elems = Array.prototype.slice.call(
-                    document.querySelectorAll(".js-switch")
-                );
-
-                //RECORRO EL ARRAY DE TODOS LOS ELEMENTOS CON LA CLASE DE SWITCH Y CREO CADA UNO
-                elems.forEach(function (html) {
-                    new Switchery(html);
-                });
-
-                //INICIALIZO LA TABLA
-                datatable("t-usuarios-permisos");
+                //PONGO EL HTML 
+                $("#rol").empty().html(json["datos"]);
 
                 //MUESTRO LA ALERTA DE EXITO
                 toastr.success(json["msg"], json["titulo"]);
@@ -135,151 +97,12 @@ function permisosRolModal(idRol) {
             div_cargando.style.display = "none";
         },
     });
-    $("#modal-permisos").modal("show");
 }
 
-function quitarPermiso(idPermiso, idRol) {
-    //console.log(idPermiso, idRol);
-    $.ajax({
-        type: "POST",
-        url: APP_URL + "/usuarios/quitarpermiso",
-        data: JSON.stringify({ idPermiso: idPermiso, idRol: idRol }),
-        headers: {
-            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-        },
-        beforeSend: function () {
-            div_cargando.style.display = "flex";
-        },
-        success: function (json) {
-            if (json["estado"]) {
-                // Seleccionar el elemento HTML del switch
-                let switchElem = $(
-                    "#permiso-" + idPermiso + "-usuario-" + idRol
-                )[0];
-
-                // Guardar el estado actual del switch
-                let isChecked = switchElem.checked;
-
-                // Obtener el estado actual de data-switchery
-                let dataSwitchery = switchElem.getAttribute("data-switchery");
-
-                // Guardar el evento onchange original
-                let originalOnChange = switchElem.onchange;
-
-                // Eliminar el objeto Switchery del elemento HTML
-                $(switchElem).next(".switchery").remove();
-
-                // Cambiar el evento onchange a la nueva función
-                switchElem.setAttribute(
-                    "onchange",
-                    "ponerPermiso(" + idPermiso + ", " + idRol + ")"
-                );
-
-                // Crear un nuevo objeto Switchery para el elemento
-                let switchery = new Switchery(switchElem, {
-                    /* nuevas opciones */
-                });
-
-                // Establecer el estado del switch
-                if (isChecked) {
-                    switchery.setPosition(true);
-                } else {
-                    switchery.setPosition(false);
-                }
-
-                // Establecer el estado actual de data-switchery
-                switchElem.setAttribute("data-switchery", dataSwitchery);
-
-                //MUESTRO LA ALERTA DE EXITO
-                toastr.success(json["msg"], json["titulo"]);
-
-                // new Switchery(switchElem);
-            } else {
-                toastr.error(json["msg"], json["titulo"]);
-            }
-        },
-        error: function (json) {
-            toastr.error(json["msg"], json["titulo"]);
-        },
-        complete: function () {
-            div_cargando.style.display = "none";
-        },
-    });
-}
-
-function ponerPermiso(idPermiso, idRol) {
-    //console.log(idPermiso, idRol);
-    $.ajax({
-        type: "POST",
-        url: APP_URL + "/usuarios/ponerpermiso",
-        data: JSON.stringify({ idPermiso: idPermiso, idRol: idRol }),
-        headers: {
-            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-        },
-        beforeSend: function () {
-            div_cargando.style.display = "flex";
-        },
-        success: function (json) {
-            if (json["estado"]) {
-                // Seleccionar el elemento HTML del switch
-                let switchElem = $(
-                    "#permiso-" + idPermiso + "-usuario-" + idRol
-                )[0];
-
-                // Guardar el estado actual del switch
-                let isChecked = switchElem.checked;
-
-                // Obtener el estado actual de data-switchery
-                let dataSwitchery = switchElem.getAttribute("data-switchery");
-
-                // Guardar el evento onchange original
-                let originalOnChange = switchElem.onchange;
-
-                // Eliminar el objeto Switchery del elemento HTML
-                $(switchElem).next(".switchery").remove();
-
-                // Cambiar el evento onchange a la nueva función
-                switchElem.setAttribute(
-                    "onchange",
-                    "quitarPermiso(" + idPermiso + ", " + idRol + ")"
-                );
-
-                // Crear un nuevo objeto Switchery para el elemento
-                let switchery = new Switchery(switchElem, {
-                    /* nuevas opciones */
-                });
-
-                // Establecer el estado del switch
-                if (isChecked) {
-                    switchery.setPosition(false);
-                } else {
-                    switchery.setPosition(true);
-                }
-
-                // Establecer el estado actual de data-switchery
-                switchElem.setAttribute("data-switchery", dataSwitchery);
-
-                //MUESTRO LA ALERTA DE EXITO
-                toastr.success(json["msg"], json["titulo"]);
-
-                // new Switchery(switchElem);
-            } else {
-                toastr.error(json["msg"], json["titulo"]);
-            }
-        },
-        error: function (json) {
-            toastr.error(json["msg"], json["titulo"]);
-        },
-        complete: function () {
-            div_cargando.style.display = "none";
-        },
-    });
-}
-
-function editarRolModal(idRol) {
+function editarUsuarioModal(idUsuario) {
     $.ajax({
         type: "GET",
-        url: APP_URL + "/usuarios/ver/" + idRol,
+        url: APP_URL + "/usuarios/ver/" + idUsuario,
         headers: {
             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
         },
@@ -289,8 +112,16 @@ function editarRolModal(idRol) {
         success: function (json) {
             if (json["estado"]) {
                 //PONGO LOS DATOS DEL ROL A EDITR, INCLUYENDO EL ID
-                $("#idRol").val(json["datos"]["id"]);
-                $("#name").val(json["datos"]["name"]);
+                $("#idUsuario").val(json["datos"]["id"]);
+                $("#username").val(json["datos"]["username"]);
+                $("#email").val(json["datos"]["email"]);
+                if (json["datos"]["roles"] == 0) {
+                    $("#rol").val(0).select2();
+                } else {
+                    $("#rol").val(json["datos"]["roles"][0]['id']).select2();
+                }
+
+                $("#estado").val(json["datos"]["estado"]);
 
                 //MUESTRO EL MODAL
                 $("#modal-usuarios").modal("show");
@@ -310,21 +141,26 @@ function editarRolModal(idRol) {
     });
 }
 
-function eliminarRolModalConfirm(idRol) {
+function eliminarUsuarioModalConfirm(idUsuario) {
     //PONGO EL ID DEL REGISTRO A ELIMINAR
-    $("#id-eliminar").val(idRol);
+    $("#id-eliminar").val(idUsuario);
     //MUESTRO EL MODAL
     $("#modal-eliminar").modal("show");
 }
 
-function eliminarRol() {
-    //OBTENGO EL ID DEL ROL QUE ESTA OCULTO EN EL INPUT DEL MODAL
-    idRol = $("#id-eliminar").val();
+function reiniciarId() {
+    //PONGO EL ID DEL REGISTRO A ELIMINAR
+    $("#id-eliminar").val(0);
+}
+
+function eliminarUsuario() {
+    //OBTENGO EL ID DEL USUARIO QUE ESTA OCULTO EN EL INPUT DEL MODAL
+    idUsuario = $("#id-eliminar").val();
     //HAGO LA PETICION
     $.ajax({
         type: "POST",
         url: APP_URL + "/usuarios/eliminar",
-        data: JSON.stringify({ idRol: idRol }),
+        data: JSON.stringify({ idUsuario: idUsuario }),
         headers: {
             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
         },
@@ -356,3 +192,9 @@ function eliminarRol() {
         },
     });
 }
+
+
+
+
+
+

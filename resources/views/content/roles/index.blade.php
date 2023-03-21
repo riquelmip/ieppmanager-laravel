@@ -148,7 +148,7 @@
 
                 <!--Modal footer-->
                 <div class="modal-footer">
-                    <button data-dismiss="modal" class="btn btn-default" type="button">Cancelar</button>
+                    <button data-dismiss="modal" class="btn btn-default" onclick="reiniciarId();" type="button">Cancelar</button>
                     <button type="button" onclick="eliminarRol();" class="btn btn-primary">Eliminar</button>
                 </div>
 

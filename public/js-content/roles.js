@@ -316,6 +316,11 @@ function eliminarRolModalConfirm(idRol) {
     $("#modal-eliminar").modal("show");
 }
 
+function reiniciarId() {
+    //PONGO EL ID DEL REGISTRO A ELIMINAR
+    $("#id-eliminar").val(0);
+}
+
 function eliminarRol() {
     //OBTENGO EL ID DEL ROL QUE ESTA OCULTO EN EL INPUT DEL MODAL
     idRol = $("#id-eliminar").val();
