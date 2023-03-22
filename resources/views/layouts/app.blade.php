@@ -8,7 +8,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
     <title>@yield('title') | {{ config('app.name') }}</title>
-    <link rel="icon" href="{{ asset('/img/logosolo.png') }}">
+    <link rel="icon" href="{{ asset('/img/logosolo.png') }}" type="image/png">
 
     <!--STYLESHEET-->
     <!--=================================================-->
