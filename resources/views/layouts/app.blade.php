@@ -50,6 +50,10 @@
     <link href="{{ asset('template/plugins/datatables/extensions/Responsive/css/responsive.dataTables.min.css') }}"
         rel="stylesheet">
 
+    <!--summernote -->
+    {{-- <link href="{{ asset('template/plugins/summernote/summernote-bs4.min.css') }}" rel="stylesheet"> --}}
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+
     <style>
         #div_cargando {
             position: fixed;
@@ -338,6 +342,11 @@
     <script src="{{ asset('template/plugins/datatables/media/js/dataTables.bootstrap.js') }}"></script>
     <script src="{{ asset('template/plugins/datatables/extensions/Responsive/js/dataTables.responsive.min.js') }}">
     </script>
+
+    <!--summernote -->
+    {{-- <script src="{{ asset('template/plugins/summernote/summernote-bs4.min.js') }}"></script> --}}
+
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
 
     <!-- VARIABLE DE ENTORNO: AP URL PARA PETICIONES -->
     <script>

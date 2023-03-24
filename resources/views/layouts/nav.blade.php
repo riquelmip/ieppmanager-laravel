@@ -65,7 +65,6 @@
                         </li>
 
                         <!--USUARIOS-->
-
                         <li @if ($page_menu == 'usuarios') ? class="active-sub" @endif>
                             <a href="#">
                                 <i class="demo-pli-checked-user"></i>
@@ -75,8 +74,10 @@
 
                             <!--Submenu-->
                             <ul @if ($page_menu == 'usuarios') ? class="collapse in" : class="collapse" @endif>
-                                <li @if ($page_submenu == 'usuarios') ? class="active-link" @endif><a href="{{ route('usuarios') }}">Usuarios</a></li>
-                                <li @if ($page_submenu == 'roles') ? class="active-link" @endif><a href="{{ route('roles') }}">Roles</a></li>
+                                <li @if ($page_submenu == 'usuarios') ? class="active-link" @endif><a
+                                        href="{{ route('usuarios') }}">Usuarios</a></li>
+                                <li @if ($page_submenu == 'roles') ? class="active-link" @endif><a
+                                        href="{{ route('roles') }}">Roles</a></li>
                             </ul>
                         </li>
 
@@ -86,8 +87,8 @@
                         <li class="list-header">LETRAS</li>
 
                         <!--HIMNARIO-->
-                        <li>
-                            <a href="widgets.html">
+                        <li @if ($page_menu == 'himnario') ? class="active-sub" @endif>
+                            <a href="{{ route('himnario') }}">
                                 <i class="demo-pli-folder"></i>
                                 <span class="menu-title">
                                     Himnario Oficial
@@ -95,8 +96,45 @@
                             </a>
                         </li>
 
-                        <!--CADENAS Y COROS-->
-                        <li>
+                        <!--CANCIONERO-->
+                        <li @if ($page_menu == 'cancionero') ? class="active-sub" @endif>
+                            <a href="{{ route('cancionero') }}">
+                                <i class="demo-pli-folder"></i>
+                                <span class="menu-title">
+                                    Cancionero
+                                </span>
+                            </a>
+                        </li>
+
+                        <!--AUTORES-->
+                        <li @if ($page_menu == 'autores') ? class="active-sub" @endif>
+                            <a href="{{ route('autores') }}">
+                                <i class="demo-pli-find-user"></i>
+                                <span class="menu-title">
+                                    Autores
+                                </span>
+                            </a>
+                        </li>
+
+                        <!--COROS-->
+                        <li @if ($page_menu == 'coros') ? class="active-sub" @endif>
+                            <a href="#">
+                                <i class="demo-pli-folder-search"></i>
+                                <span class="menu-title">Coros</span>
+                                <i class="arrow"></i>
+                            </a>
+
+                            <!--Submenu-->
+                            <ul @if ($page_menu == 'coros') ? class="collapse in" : class="collapse" @endif>
+                                <li @if ($page_submenu == 'coros-avivamiento') ? class="active-link" @endif><a
+                                        href="{{ route('usuarios') }}">Avivamiento</a></li>
+                                <li @if ($page_submenu == 'coros-adoracion') ? class="active-link" @endif><a
+                                        href="{{ route('roles') }}">Adoración</a></li>
+                            </ul>
+                        </li>
+
+                        <!--CADENAS-->
+                        <li @if ($page_menu == 'cadenas') ? class="active-sub" @endif>
                             <a href="#">
                                 <i class="demo-pli-folder-organizing"></i>
                                 <span class="menu-title">Cadenas de Coros</span>
@@ -104,15 +142,18 @@
                             </a>
 
                             <!--Submenu-->
-                            <ul class="collapse">
-                                <li><a href="ui-buttons.html">Avivamiento</a></li>
-                                <li><a href="ui-panels.html">Adoración</a></li>
+                            <ul @if ($page_menu == 'cadenas') ? class="collapse in" : class="collapse" @endif>
+                                <li @if ($page_submenu == 'cadenas-avivamiento') ? class="active-link" @endif><a
+                                        href="{{ route('usuarios') }}">Avivamiento</a></li>
+                                <li @if ($page_submenu == 'cadenas-adoracion') ? class="active-link" @endif><a
+                                        href="{{ route('roles') }}">Adoración</a></li>
                             </ul>
                         </li>
 
 
 
-                       
+
+
 
                         <li class="list-divider"></li>
 

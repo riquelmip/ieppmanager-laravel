@@ -52,7 +52,6 @@ function datatable(tabla) {
     });
 }
 
-
 function cargarDatos(tabla, ruta) {
     $.ajax({
         type: "GET",
@@ -63,10 +62,14 @@ function cargarDatos(tabla, ruta) {
         success: function (json) {
             if (json["estado"]) {
                 //DESTRUYO LA TABLA
-                $("#" + tabla).DataTable().destroy();
+                $("#" + tabla)
+                    .DataTable()
+                    .destroy();
 
                 //PONGO EL HTML EN EL DIV TBODY DE LA TABLA
-                $("#" + tabla + "-body").empty().html(json['datos']);
+                $("#" + tabla + "-body")
+                    .empty()
+                    .html(json["datos"]);
 
                 //INICIALIZO LA TABLA
                 datatable(tabla);
@@ -83,5 +86,26 @@ function cargarDatos(tabla, ruta) {
         complete: function () {
             div_cargando.style.display = "none";
         },
+    });
+}
+
+function iniciarSummernote(tamañoInicial, idContenedor) {
+    //DESTRUYO EL SUMMERNOTE SI EXISTIERA PARA LUEGO QUITAR EL TEXTO ANTERIOR QUE PUDO QUEDAR
+    $("#" + idContenedor).summernote("destroy"); // Destruye el editor actual
+    $("#" + idContenedor).val(""); // Limpia el contenido del editor
+
+    //INICIALIZO EL SUMMERNOTE
+    $("#" + idContenedor).summernote({
+        height: tamañoInicial,
+        toolbar: [
+            ["style", ["style"]],
+            ["font", ["bold", "underline", "clear"]],
+            ["color", ["color"]],
+            ["para", ["ul", "ol", "paragraph"]],
+            ["insert", ["link", "picture", "video"]],
+            ["table", ["table"]],
+            ["view", ["codeview"]],
+        ],
+        fullscreen: false,
     });
 }

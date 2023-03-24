@@ -38,6 +38,23 @@ class RolesPermisosSeeder extends Seeder
             'crear-usuarios',
             'editar-usuarios',
             'borrar-usuarios',
+
+            //Tabla autores
+            'ver-autores',
+            'crear-autores',
+            'editar-autores',
+            'borrar-autores',
+
+            //Tabla alabanzas
+            'ver-alabanzas-himnario',
+            'crear-alabanzas-himnario',
+            'editar-alabanzas-himnario',
+            'borrar-alabanzas-himnario',
+
+            'ver-alabanzas-cancionero',
+            'crear-alabanzas-cancionero',
+            'editar-alabanzas-cancionero',
+            'borrar-alabanzas-cancionero',
         ];
 
         foreach ($permisos as $permiso) {
@@ -98,6 +115,6 @@ class RolesPermisosSeeder extends Seeder
 
         $adminRol->syncPermissions($nombres_permisos_admin); //Asigno los permisos al rol de admin
 
-        
+
     }
 }
