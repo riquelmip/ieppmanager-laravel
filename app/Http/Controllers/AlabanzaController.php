@@ -23,6 +23,15 @@ class AlabanzaController extends Controller
         $this->middleware('permission:crear-alabanzas-himnario', ['only' => ['guardarAlabanzaHimnario']]);
         $this->middleware('permission:editar-alabanzas-himnario', ['only' => ['guardarAlabanzaHimnario']]);
         $this->middleware('permission:borrar-alabanzas-himnario', ['only' => ['eliminarAlabanzaHimnario']]);
+
+        $this->middleware('permission:ver-alabanzas-cancionero|crear-alabanzas-cancionero|editar-alabanzas-cancionero|borrar-alabanzas-cancionero', ['only' => ['cancionero', 'cargarTablaCancionero']]);
+        $this->middleware(
+            'permission:ver-alabanzas-cancionero',
+            ['only' => ['cargarTablaCancionero', 'obtenerAutores', 'obtenerAlabanzaCancionero']]
+        );
+        $this->middleware('permission:crear-alabanzas-cancionero', ['only' => ['guardarAlabanzaCancionero']]);
+        $this->middleware('permission:editar-alabanzas-cancionero', ['only' => ['guardarAlabanzaCancionero']]);
+        $this->middleware('permission:borrar-alabanzas-cancionero', ['only' => ['eliminarAlabanzaCancionero']]);
     }
 
     /* ---------------------------------------------------------------------------

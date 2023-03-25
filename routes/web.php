@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AlabanzaController;
 use App\Http\Controllers\AutorController;
+use App\Http\Controllers\CoroController;
 use App\Http\Controllers\RolController;
 use App\Http\Controllers\UsuarioController;
 use Illuminate\Support\Facades\Route;
@@ -66,4 +67,13 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/cancionero/guardar', [AlabanzaController::class, 'guardarAlabanzaCancionero'])->name('cancionero/guardar');
     Route::get('/cancionero/ver/{id}', [AlabanzaController::class, 'obtenerAlabanzaCancionero']);
     Route::post('/cancionero/eliminar', [AlabanzaController::class, 'eliminarAlabanzaCancionero'])->name('cancionero/eliminar');
+
+    //RUTAS COROS
+    Route::get('/coros/avivamiento', [CoroController::class, 'avivamiento'])->name('coros/avivamiento');
+    Route::get('/coros/adoracion', [CoroController::class, 'adoracion'])->name('coros/adoracion');
+    Route::get('/coros/cargartabla/{id}', [CoroController::class, 'cargarTabla']);
+    Route::post('/coros/guardar', [CoroController::class, 'guardar'])->name('coros/guardar');
+    Route::get('/coros/autores', [CoroController::class, 'obtenerAutores'])->name('coros/autores');
+    Route::get('/coros/ver/{id}', [CoroController::class, 'obtenerCoro']);
+    Route::post('/coros/eliminar', [AlabaCoroControllernzaController::class, 'eliminarCoro'])->name('coros/eliminar');
 });

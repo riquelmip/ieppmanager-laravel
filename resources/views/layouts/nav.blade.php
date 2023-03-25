@@ -127,9 +127,9 @@
                             <!--Submenu-->
                             <ul @if ($page_menu == 'coros') ? class="collapse in" : class="collapse" @endif>
                                 <li @if ($page_submenu == 'coros-avivamiento') ? class="active-link" @endif><a
-                                        href="{{ route('usuarios') }}">Avivamiento</a></li>
+                                        href="{{ route('coros/avivamiento') }}">Avivamiento</a></li>
                                 <li @if ($page_submenu == 'coros-adoracion') ? class="active-link" @endif><a
-                                        href="{{ route('roles') }}">Adoración</a></li>
+                                        href="{{ route('coros/adoracion') }}">Adoración</a></li>
                             </ul>
                         </li>
 

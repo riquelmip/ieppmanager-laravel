@@ -55,6 +55,17 @@ class RolesPermisosSeeder extends Seeder
             'crear-alabanzas-cancionero',
             'editar-alabanzas-cancionero',
             'borrar-alabanzas-cancionero',
+
+            //Tabla COROS
+            'ver-coros-avivamiento',
+            'crear-coros-avivamiento',
+            'editar-coros-avivamiento',
+            'borrar-coros-avivamiento',
+
+            'ver-coros-adoracion',
+            'crear-coros-adoracion',
+            'editar-coros-adoracion',
+            'borrar-coros-adoracion',
         ];
 
         foreach ($permisos as $permiso) {
