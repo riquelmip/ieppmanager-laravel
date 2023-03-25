@@ -75,5 +75,5 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/coros/guardar', [CoroController::class, 'guardar'])->name('coros/guardar');
     Route::get('/coros/autores', [CoroController::class, 'obtenerAutores'])->name('coros/autores');
     Route::get('/coros/ver/{id}', [CoroController::class, 'obtenerCoro']);
-    Route::post('/coros/eliminar', [AlabaCoroControllernzaController::class, 'eliminarCoro'])->name('coros/eliminar');
+    Route::post('/coros/eliminar', [CoroController::class, 'eliminarCoro'])->name('coros/eliminar');
 });

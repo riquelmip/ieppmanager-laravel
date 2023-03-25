@@ -176,7 +176,7 @@ function reiniciarId() {
     $("#id-eliminar").val(0);
 }
 
-function eliminarAlabanzaCancionero() {
+function eliminarCoro() {
     //OBTENGO EL ID DEL USUARIO QUE ESTA OCULTO EN EL INPUT DEL MODAL
     idCoro = $("#id-eliminar").val();
     //HAGO LA PETICION
@@ -195,7 +195,10 @@ function eliminarAlabanzaCancionero() {
                 //PONGO EL ID EN EL MODAL EN 0
                 $("#id-eliminar").val(0);
                 //CARGO NUEVAMENTE LA TABLA
-                cargarDatos("t-coros", "/coros/cargartabla");
+                cargarDatos(
+                    "t-coros",
+                    "/coros/cargartabla/" + $("#tipo_coro").val()
+                );
                 //QUITO EL MODAL
                 $("#modal-eliminar").modal("hide");
                 //PONGO LA ALERTA
