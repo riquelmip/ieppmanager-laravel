@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AlabanzaController;
 use App\Http\Controllers\AutorController;
+use App\Http\Controllers\CadenaController;
 use App\Http\Controllers\CoroController;
 use App\Http\Controllers\RolController;
 use App\Http\Controllers\UsuarioController;
@@ -76,4 +77,14 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/coros/autores', [CoroController::class, 'obtenerAutores'])->name('coros/autores');
     Route::get('/coros/ver/{id}', [CoroController::class, 'obtenerCoro']);
     Route::post('/coros/eliminar', [CoroController::class, 'eliminarCoro'])->name('coros/eliminar');
+
+    //RUTAS CADENAS
+    Route::get('/cadenas/avivamiento', [CadenaController::class, 'avivamiento'])->name('cadenas/avivamiento');
+    Route::get('/cadenas/adoracion', [CadenaController::class, 'adoracion'])->name('cadenas/adoracion');
+    Route::get('/cadenas/cargartabla/{id}', [CadenaController::class, 'cargarTabla']);
+    Route::post('/cadenas/guardar', [CadenaController::class, 'guardar'])->name('cadenas/guardar');
+    Route::get('/cadenas/coros/{id}', [CadenaController::class, 'obtenerCoros']);
+    Route::get('/cadenas/ver/{id}', [CadenaController::class, 'obtenerCadena']);
+    Route::get('/cadenas/obtenerCoro/{id}', [CadenaController::class, 'obtenerCoro']);
+    Route::post('/cadenas/eliminar', [CadenaController::class, 'eliminarCoro'])->name('cadenas/eliminar');
 });

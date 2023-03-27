@@ -144,9 +144,9 @@
                             <!--Submenu-->
                             <ul @if ($page_menu == 'cadenas') ? class="collapse in" : class="collapse" @endif>
                                 <li @if ($page_submenu == 'cadenas-avivamiento') ? class="active-link" @endif><a
-                                        href="{{ route('usuarios') }}">Avivamiento</a></li>
+                                        href="{{ route('cadenas/avivamiento') }}">Avivamiento</a></li>
                                 <li @if ($page_submenu == 'cadenas-adoracion') ? class="active-link" @endif><a
-                                        href="{{ route('roles') }}">Adoración</a></li>
+                                        href="{{ route('cadenas/adoracion') }}">Adoración</a></li>
                             </ul>
                         </li>
 

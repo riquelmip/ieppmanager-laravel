@@ -4,34 +4,35 @@ namespace App\Http\Controllers;
 
 use App\Models\Autor;
 use App\Models\Coro;
+use App\Models\Cadena;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
-class CoroController extends Controller
+class CadenaController extends Controller
 {
     function __construct()
     {
         //DOY LOS PERMISOS SEGUN EL ROL
-        $this->middleware('permission:ver-coros-adoracion|crear-coros-adoracion|editar-coros-adoracion|borrar-coros-adoracion', ['only' => ['adoracion', 'cargarTabla']]);
-        $this->middleware('permission:ver-coros-avivamiento|crear-coros-avivamiento|editar-coros-avivamiento|borrar-coros-avivamiento', ['only' => ['avivamiento', 'cargarTabla']]);
+        $this->middleware('permission:ver-cadenas-adoracion|crear-cadenas-adoracion|editar-cadenas-adoracion|borrar-cadenas-adoracion', ['only' => ['adoracion', 'cargarTabla']]);
+        $this->middleware('permission:ver-cadenas-avivamiento|crear-cadenas-avivamiento|editar-cadenas-avivamiento|borrar-cadenas-avivamiento', ['only' => ['avivamiento', 'cargarTabla']]);
         $this->middleware(
-            'permission:ver-coros-adoracion|ver-coros-avivamiento',
+            'permission:ver-cadenas-adoracion|ver-cadenas-avivamiento',
             ['only' => ['cargarTabla', 'obtenerAutores', 'obtenerCoro']]
         );
-        $this->middleware('permission:crear-coros-adoracion|crear-coros-avivamiento', ['only' => ['guardar']]);
-        $this->middleware('permission:editar-coros-adoracion|crear-coros-avivamiento', ['only' => ['guardar']]);
-        $this->middleware('permission:borrar-coros-adoracion|crear-coros-avivamiento', ['only' => ['eliminarCoro']]);
+        $this->middleware('permission:crear-cadenas-adoracion|crear-cadenas-avivamiento', ['only' => ['guardar']]);
+        $this->middleware('permission:editar-cadenas-adoracion|crear-cadenas-avivamiento', ['only' => ['guardar']]);
+        $this->middleware('permission:borrar-cadenas-adoracion|crear-cadenas-avivamiento', ['only' => ['eliminarCoro']]);
     }
 
     public function avivamiento()
     {
         try {
 
-            $tipo_coro = 0;
-            return view('content.coros.index', compact('tipo_coro'));
+            $tipo_cadena = 0;
+            return view('content.cadenas.index', compact('tipo_cadena'));
         } catch (Exception $e) {
 
             // return redirect()->route('content.roles.index')->with('error', true);
@@ -42,15 +43,15 @@ class CoroController extends Controller
     {
         try {
 
-            $tipo_coro = 1;
-            return view('content.coros.index', compact('tipo_coro'));
+            $tipo_cadena = 1;
+            return view('content.cadenas.index', compact('tipo_cadena'));
         } catch (Exception $e) {
 
             // return redirect()->route('content.roles.index')->with('error', true);
         }
     }
 
-    public function cargarTabla($tipo_coro)
+    public function cargarTabla($tipo_cadena)
     {
         try {
             //OBTENGO LOS DATOS DEL USUARIO LOGUEADO Y SU ROL
@@ -58,34 +59,34 @@ class CoroController extends Controller
             $rolLogueado = $usuarioLogueado->roles->first();
 
             //HAGO EL SELECT A LA BASE DE DATOS PARA PODER MOSTRAR LOS REGISTROS
-            $coros = Coro::where('tipo_coro', $tipo_coro)->get(); //Segun el tipo de coro //Avivamiento = 0, Adoracion = 1
+            $cadenas = Cadena::where('tipo_cadena', $tipo_cadena)->get(); //Segun el tipo de cadena //Avivamiento = 0, Adoracion = 1
             $tablaHTML = '';
 
-            foreach ($coros as $coro) {
-                if ($coro['estado'] === 0) {
-                    $coro['estado'] = '<span class="badge badge-warning">Inactivo</span>';
+            foreach ($cadenas as $cadena) {
+                if ($cadenas['estado'] === 0) {
+                    $cadenas['estado'] = '<span class="badge badge-warning">Inactivo</span>';
                 } else {
-                    $coro['estado'] = '<span class="badge badge-primary">Activo</span>';
+                    $cadenas['estado'] = '<span class="badge badge-primary">Activo</span>';
                 }
 
                 $btnEditar = '';
                 $btnEliminar = '';
 
-                if ($tipo_coro) { //ES ADORACION = 1
-                    if ($rolLogueado->hasPermissionTo('editar-coros-adoracion')) {
-                        $btnEditar .= '<button type="button" onclick="editarCoroModal(\'' . $coro['id'] . '\')" class="btn btn-icon btn-primary"><i class="fa fa-edit"></i></button>';
+                if ($tipo_cadena) { //ES ADORACION = 1
+                    if ($rolLogueado->hasPermissionTo('editar-cadenas-adoracion')) {
+                        $btnEditar .= '<button type="button" onclick="editarCadenaModal(\'' . $cadena['id'] . '\')" class="btn btn-icon btn-primary"><i class="fa fa-edit"></i></button>';
                     }
 
-                    if ($rolLogueado->hasPermissionTo('borrar-coros-adoracion')) {
-                        $btnEliminar .= '<button type="button" onclick="eliminarCoroModalConfirm(\'' . $coro['id'] . '\')" class="btn btn-icon btn-danger"><i class="fa fa-trash"></i></button>';
+                    if ($rolLogueado->hasPermissionTo('borrar-cadenas-adoracion')) {
+                        $btnEliminar .= '<button type="button" onclick="eliminarCadenaModalConfirm(\'' . $cadena['id'] . '\')" class="btn btn-icon btn-danger"><i class="fa fa-trash"></i></button>';
                     }
                 } else {
-                    if ($rolLogueado->hasPermissionTo('editar-coros-avivamiento')) {
-                        $btnEditar .= '<button type="button" onclick="editarCoroModal(\'' . $coro['id'] . '\')" class="btn btn-icon btn-primary"><i class="fa fa-edit"></i></button>';
+                    if ($rolLogueado->hasPermissionTo('editar-cadenas-avivamiento')) {
+                        $btnEditar .= '<button type="button" onclick="editarCadenaModal(\'' . $cadena['id'] . '\')" class="btn btn-icon btn-primary"><i class="fa fa-edit"></i></button>';
                     }
 
-                    if ($rolLogueado->hasPermissionTo('borrar-coros-avivamiento')) {
-                        $btnEliminar .= '<button type="button" onclick="eliminarCoroModalConfirm(\'' . $coro['id'] . '\')" class="btn btn-icon btn-danger"><i class="fa fa-trash"></i></button>';
+                    if ($rolLogueado->hasPermissionTo('borrar-cadenas-avivamiento')) {
+                        $btnEliminar .= '<button type="button" onclick="eliminarCadenaModalConfirm(\'' . $cadena['id'] . '\')" class="btn btn-icon btn-danger"><i class="fa fa-trash"></i></button>';
                     }
                 }
 
@@ -93,10 +94,10 @@ class CoroController extends Controller
 
                 $tablaHTML .=  '<tr>' .
                     '<td>' .
-                    $coro['nombre'] .
+                    $cadena['nombre'] .
                     '</td>' .
                     '<td class="text-center">' .
-                    $coro['estado'] .
+                    $cadena['estado'] .
                     '</td>' .
                     '<td class="text-center">' .
                     $btnEditar . ' ' . $btnEliminar .
@@ -155,7 +156,7 @@ class CoroController extends Controller
                 }
 
                 //SI PASAN LAS VALIDACIONES, HAGO EL REGISTRO
-                $coro = Coro::create([
+                $cadena = Cadena::create([
                     'tipo_coro' => $tipo_coro,
                     'nombre' => $request->input('nombre'),
                     'id_autor' => ($request->input('id_autor') == 0) ? null : $request->input('id_autor'), //SI NO HA SELECCIONADO
@@ -169,7 +170,7 @@ class CoroController extends Controller
                         'estado' => true,
                         'titulo' => 'Éxito',
                         'msg' => 'Registro realizado',
-                        'datos' => $coro
+                        'datos' => $cadena
                     ]
                 );
             } else {
@@ -197,22 +198,22 @@ class CoroController extends Controller
                 }
 
                 //OBTENGO LOS DATOS DE ESA ALABANZA DE HIMNARIO
-                $coro = Coro::find($idCoro);
+                $cadena = Cadena::find($idCoro);
 
                 //HAGO LA EDICION DE LA ALABANZA
-                $coro->nombre = $request->input('nombre');
-                ($request->input('id_autor') == 0) ? $coro->id_autor = $coro->id_autor : $request->input('id_autor');
-                $coro->nota = $request->input('nota');
-                $coro->estado = $request->input('estado');
-                $coro->letra = $request->input('letra');
-                $coro->save();
+                $cadena->nombre = $request->input('nombre');
+                $cadena->id_autor = $request->input('id_autor');
+                $cadena->nota = $request->input('nota');
+                $cadena->estado = $request->input('estado');
+                $cadena->letra = $request->input('letra');
+                $cadena->save();
 
                 return response()->json(
                     [
                         'estado' => true,
                         'titulo' => 'Éxito',
                         'msg' => 'Actualización realizada',
-                        'datos' => $coro
+                        'datos' => $cadena
                     ]
                 );
             }
@@ -228,16 +229,16 @@ class CoroController extends Controller
         }
     }
 
-    public function obtenerAutores()
+    public function obtenerCoros($tipo_cadena)
     {
         try {
-            //OBTENGO EL LISTADO DE LOS AUTORES
-            $autores = Autor::where('estado', true)->orderBy('nombre')->get();
+            //OBTENGO EL LISTADO DE LOS COROS
+            $coros = Coro::where('tipo_coro', $tipo_cadena)->where('estado', true)->get();
 
-            $htmlAutores = "";
-            $htmlAutores .= '<option value="0">Seleccione una opción</option>';
-            for ($i = 0; $i < count($autores); $i++) {
-                $htmlAutores .= '<option value="' . $autores[$i]['id'] . '">' . $autores[$i]['nombre'] . '</option>';
+            $htmlCoros = "";
+            $htmlCoros .= '<option value="0">Seleccione una opción</option>';
+            for ($i = 0; $i < count($coros); $i++) {
+                $htmlCoros .= '<option value="' . $coros[$i]['id'] . '">' . $coros[$i]['nombre'] . '</option>';
             }
 
             return response()->json(
@@ -245,7 +246,7 @@ class CoroController extends Controller
                     'estado' => true,
                     'titulo' => 'Éxito',
                     'msg' => 'Datos obtenidos correctamente',
-                    'datos' => $htmlAutores
+                    'datos' => $htmlCoros
                 ]
             );
         } catch (Exception $e) {
@@ -264,17 +265,28 @@ class CoroController extends Controller
     public function obtenerCoro($id)
     {
         try {
-            //OBTENGO LOS DATOS
-            $coro = Coro::find($id);
+            if ($id != 0) {
+                //OBTENGO LOS DATOS
+                $coro =   Coro::find($id);
 
-            return response()->json(
-                [
-                    'estado' => true,
-                    'titulo' => 'Éxito',
-                    'msg' => 'Datos obtenidos correctamente',
-                    'datos' => $coro
-                ]
-            );
+                return response()->json(
+                    [
+                        'estado' => true,
+                        'titulo' => 'Éxito',
+                        'msg' => 'Datos obtenidos correctamente',
+                        'datos' => $coro
+                    ]
+                );
+            } else {
+                return response()->json(
+                    [
+                        'estado' => false,
+                        'titulo' => 'Error',
+                        'msg' => 'No existe el coro',
+                        'errors' => 'No existe el coro',
+                    ]
+                );
+            }
         } catch (Exception $e) {
             return response()->json(
                 [
@@ -294,7 +306,7 @@ class CoroController extends Controller
             $idCoro = intval(json_decode($request->getContent(), true)['idCoro']);
 
             //OBTENGO EL REGISTRO Y LO ELIMINO
-            Coro::find($idCoro)->delete();
+            Cadena::find($idCoro)->delete();
 
             return response()->json(
                 [

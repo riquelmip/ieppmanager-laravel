@@ -66,6 +66,17 @@ class RolesPermisosSeeder extends Seeder
             'crear-coros-adoracion',
             'editar-coros-adoracion',
             'borrar-coros-adoracion',
+
+            //Tabla CADENAS
+            'ver-cadenas-avivamiento',
+            'crear-cadenas-avivamiento',
+            'editar-cadenas-avivamiento',
+            'borrar-cadenas-avivamiento',
+
+            'ver-cadenas-adoracion',
+            'crear-cadenas-adoracion',
+            'editar-cadenas-adoracion',
+            'borrar-cadenas-adoracion',
         ];
 
         foreach ($permisos as $permiso) {
