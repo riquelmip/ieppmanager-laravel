@@ -1,64 +1,108 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
 
 <p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+  <a href="https://github.com/riquelmip/ieppmanager">
+    <img src="images/logo.png" alt="Logo" width="80" height="80">
+  </a>
+
+  <h3 align="center">IEPPManager</h3>
+
+  <p align="center">
+    Administrador de recursos de la Iglesia Príncipe de paz.
+    <br/>
+    <br/>
+    <a href="https://github.com/riquelmip/ieppmanager">Ver Demo</a>
+  </p>
 </p>
 
-## About Laravel
+![Downloads](https://img.shields.io/github/downloads/riquelmip/ieppmanager/total) ![Contributors](https://img.shields.io/github/contributors/riquelmip/ieppmanager?color=dark-green) ![Forks](https://img.shields.io/github/forks/riquelmip/ieppmanager?style=social) ![Stargazers](https://img.shields.io/github/stars/riquelmip/ieppmanager?style=social) ![Issues](https://img.shields.io/github/issues/riquelmip/ieppmanager) ![License](https://img.shields.io/github/license/riquelmip/ieppmanager) 
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Sobre el proyecto
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+![Screen Shot](images/screenshot.png)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Este proyecto es un administrador de recursos para la Iglesia Evangélica del Príncipe de Paz, el cual contempla lo siguiente:
 
-## Learning Laravel
+1. Administración de las letras del himnario oficial, cancionero de alabanzas, cadenas de coros de avivamiento y adoración.
+2. Administración de predicaciones según los usuarios registrados en el sistema.
+3. Administración de actividades a realizar, las cuales llevan todos los cantos que se tocarán en una actividad.
+4. Administración de privilegios para cada culto, de acuerdo a las directivas que existen.
+5. Administración de acordes
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Construcción
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Este sistema está desarrollado en con las siguientes tecnologías:
 
-## Laravel Sponsors
+* [Laravel](https://laravel.com/)
+* [MySQL](https://www.mysql.com/)
+* [Bootstrap](https://getbootstrap.com/)
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+## Empezando...
 
-### Premium Partners
+A continuación se muestran las instrucciones para instalar el sistema localmente.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+### Prerequisitos
 
-## Contributing
+Los prerequisitos son tener instalado en tu sistema:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+- Un servidor local como Laragon, XAMPP o WampServer (PHP y MySQL)
 
-## Code of Conduct
+### Instalación
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Clonar el repositorio
 
-## Security Vulnerabilities
+```sh
+git clone https://github.com/riquelmip/ieppmanager.git
+```
+Una vez hayamos clonado el repositorio de nuestro proyecto Laravel en local, debemos hacer los siguientes ajustes para que éste pueda correr en nuestro equipo.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Instalar dependencias
 
-## License
+Instalaremos con Composer, el manejador de dependencias para PHP, las dependencias definidos en el archivo composer.json. Para ello abriremos una terminal en la carpeta del proyecto y ejecutaremos:
+```sh
+composer install
+```
+También debemos instalar las dependencias de NPM definidas en el archivo package.json con:
+```sh
+npm install
+```
+Crear una base de datos
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Tendrás que configurar algún dato más en el .env relativo a esto, por ejemplo el puerto y el tipo de conexión, ademas del nombre de la base.
+
+Crear el archivo .env
+Este archivo es necesario para, entre otras cosas, configurar la conexión de la bbdd, el entorno del proyecto, motores para envio y recepción de correos etc …
+
+Como por cuestiones de seguridad tampoco se subió, necesitamos crearlo.
+
+Podemos duplicar el archivo .env.example, renombrarlo a .env e incluir los datos de conexión de la base de datos que indicamos en el paso anterior.
+```PHP
+DB_CONNECTION=mysql
+DB_HOST=localhost
+DB_PORT=3306
+DB_DATABASE=laravel_project
+DB_USERNAME=root
+DB_PASSWORD=secret
+```
+Generar una clave
+La clave de aplicación es una cadena aleatoria almacenada en la clave APP_KEY dentro del archivo .env. Notarás que también falta.
+
+Para crear la nueva clave e insertarla automáticamente en el .env, ejecutaremos:
+```sh
+php artisan key:generate
+```
+Ejecutar migraciones
+Por último, ejecutamos las migraciones para que se generen las tablas con:
+```sh
+php artisan migrate 
+```
+
+## Uso
+
+Para correr el sistema debes poner en la terminal de tu proyecto:
+```sh
+php artisan serve
+```
+
+## Autor
+
+* **Riquelmi Palacios** - *Desarrollador Web* - [Riquelmi Palacios](https://github.com/riquelmip/) - *Desarrollador del sistema*
