@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Autor;
 use App\Models\Coro;
 use App\Models\Cadena;
+use App\Models\DetalleCadena;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
@@ -60,13 +61,15 @@ class CadenaController extends Controller
 
             //HAGO EL SELECT A LA BASE DE DATOS PARA PODER MOSTRAR LOS REGISTROS
             $cadenas = Cadena::where('tipo_cadena', $tipo_cadena)->get(); //Segun el tipo de cadena //Avivamiento = 0, Adoracion = 1
+            
             $tablaHTML = '';
 
             foreach ($cadenas as $cadena) {
-                if ($cadenas['estado'] === 0) {
-                    $cadenas['estado'] = '<span class="badge badge-warning">Inactivo</span>';
+                if ($cadena['estado']) {
+                    $cadena['estado'] = '<span class="badge badge-primary">Activo</span>';
+                    
                 } else {
-                    $cadenas['estado'] = '<span class="badge badge-primary">Activo</span>';
+                    $cadena['estado'] = '<span class="badge badge-warning">Inactivo</span>';
                 }
 
                 $btnEditar = '';
@@ -127,43 +130,61 @@ class CadenaController extends Controller
 
     public function guardar(Request $request)
     {
-        $idCoro = $request->input('idCoro');
-        $tipo_coro = $request->input('tipo_coro');
+
+
+        $idCadena = $request->input('idCadena');
+        $tipo_cadena = $request->input('tipo_cadena');
+        $arrCoros = json_decode($request->input('coros'), true);
+
+        //VALIDO LOS CAMPOS
+        $validator = Validator::make($request->all(), [
+            'nombre' => 'required',
+            'nota' => 'nullable|min:1',
+            'estado' => 'required',
+        ]);
+
+        //SI FALLA LA VALIDACION
+        if ($validator->fails()) {
+            $errors = implode('<br>', $validator->errors()->all());
+
+            return response()->json([
+                'estado' => false,
+                'titulo' => 'Error',
+                'msg' => 'Revise los campos',
+                'errors' => $errors
+            ]);
+        }
+
+        //SI EL ARRAY DE COROS VIENE VACIO
+        if (empty($arrCoros)) {
+            return response()->json([
+                'estado' => false,
+                'titulo' => 'Error',
+                'msg' => '',
+                'errors' => 'No ha añadido ningún coro a la cadena'
+            ]);
+        }
 
         try {
             //SI EL ID ES 0, ENTONCES ES NUEVO REGISTRO
-            if (intval($idCoro) === 0) {
-
-                //VALIDO LOS CAMPOS
-                $validator = Validator::make($request->all(), [
-                    'nombre' => 'required|unique:alabanzas',
-                    'id_autor' => 'nullable|min:1',
-                    'nota' => 'nullable|min:1',
-                    'estado' => 'required',
-                    'letra' => 'required',
-                ]);
-
-                //SI FALLA LA VALIDACION
-                if ($validator->fails()) {
-                    $errors = implode('<br>', $validator->errors()->all());
-
-                    return response()->json([
-                        'estado' => false,
-                        'titulo' => 'Error',
-                        'msg' => 'Revise los campos',
-                        'errors' => $errors
-                    ]);
-                }
+            if (intval($idCadena) === 0) {
 
                 //SI PASAN LAS VALIDACIONES, HAGO EL REGISTRO
                 $cadena = Cadena::create([
-                    'tipo_coro' => $tipo_coro,
+                    'tipo_cadena' => $tipo_cadena,
                     'nombre' => $request->input('nombre'),
-                    'id_autor' => ($request->input('id_autor') == 0) ? null : $request->input('id_autor'), //SI NO HA SELECCIONADO
                     'nota' => ($request->input('nota') == 0) ? null : $request->input('nota'), //SI NO HA SELECCIONADO
                     'estado' => $request->input('estado'),
-                    'letra' => $request->input('letra'),
+                    'id_usuario' => Auth::user()->id
                 ]);
+
+                foreach ($arrCoros as $coro) {
+                    DetalleCadena::create([
+                        'id_cadena' => $cadena['id'],
+                        'id_coro' => $coro['id'],
+                        'numero' => $coro['numero']
+                    ]);
+                }
 
                 return response()->json(
                     [

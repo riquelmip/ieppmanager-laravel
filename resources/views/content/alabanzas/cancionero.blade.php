@@ -108,8 +108,8 @@
                                     <div>
                                         <select name="estado" id="estado" class="form-control select2"
                                             style="width: 100%;">
-                                            <option value="0">Inactivo</option>
                                             <option value="1">Activo</option>
+                                            <option value="0">Inactivo</option>
                                         </select>
                                     </div>
                                 </div>

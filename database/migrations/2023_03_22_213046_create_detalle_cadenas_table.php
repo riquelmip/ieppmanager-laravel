@@ -19,6 +19,7 @@ class CreateDetalleCadenasTable extends Migration
             $table->foreign('id_cadena')->references('id')->on('cadenas');
             $table->unsignedBigInteger('id_coro')->nullable(); //Referencia al coro que irá e la cadena
             $table->foreign('id_coro')->references('id')->on('coros');
+            $table->integer('numero')->nullable();
             $table->timestamps();
         });
     }

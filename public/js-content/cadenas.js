@@ -1,4 +1,6 @@
 var arrayCorosTemp = [];
+var contador = 0;
+
 document.addEventListener("DOMContentLoaded", function () {
     $("#btn-nuevo-cadena").click(function () {
         //RESETAR EL FORM
@@ -48,10 +50,12 @@ document.addEventListener("DOMContentLoaded", function () {
         event.preventDefault(); // detiene el comportamiento predeterminado del formulario
         // Obtener el valor del campo que deseas agregar al formulario
         var tipo_cadena = $("#tipo_cadena").val();
-
+        // Convertir el array a una cadena JSON
+        var jsonCoros = JSON.stringify(arrayCorosTemp);
         // Agregar el valor al objeto formData
         var formData = $(this).serializeArray();
         formData.push({ name: "tipo_cadena", value: tipo_cadena });
+        formData.push({ name: "coros", value: jsonCoros });
         formData = $.param(formData);
         $.ajax({
             type: "POST",
@@ -141,8 +145,10 @@ function añadirCoro() {
             },
             success: function (json) {
                 if (json["estado"]) {
+                    contador = contador + 1;
                     arrayCorosTemp.push({
                         id: json["datos"]["id"],
+                        numero: contador,
                         nombre: json["datos"]["nombre"],
                         accion:
                             '<button type="button" onclick="eliminarCoro(\'' +
@@ -175,6 +181,9 @@ function reiniciarTablaCorosTemp() {
         // Accediendo a los atributos del objeto
         tablaHTML +=
             "<tr>" +
+            "<td>" +
+            coro.numero +
+            "</td>" +
             "<td>" +
             coro.nombre +
             "</td>" +
