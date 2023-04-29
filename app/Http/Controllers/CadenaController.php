@@ -61,13 +61,12 @@ class CadenaController extends Controller
 
             //HAGO EL SELECT A LA BASE DE DATOS PARA PODER MOSTRAR LOS REGISTROS
             $cadenas = Cadena::where('tipo_cadena', $tipo_cadena)->get(); //Segun el tipo de cadena //Avivamiento = 0, Adoracion = 1
-            
+
             $tablaHTML = '';
 
             foreach ($cadenas as $cadena) {
                 if ($cadena['estado']) {
                     $cadena['estado'] = '<span class="badge badge-primary">Activo</span>';
-                    
                 } else {
                     $cadena['estado'] = '<span class="badge badge-warning">Inactivo</span>';
                 }
@@ -197,37 +196,23 @@ class CadenaController extends Controller
             } else {
                 //ES EDICION
 
-                //VALIDO LOS CAMPOS
-                $validator = Validator::make($request->all(), [
-                    'nombre' => 'required|unique:alabanzas,nombre,' . $idCoro,
-                    'id_autor' => 'nullable|min:1',
-                    'nota' => 'nullable|min:1',
-                    'estado' => 'required',
-                    'letra' => 'required',
-                ]);
-
-                //SI FALLA LA VALIDACION
-                if ($validator->fails()) {
-                    $errors = implode('<br>', $validator->errors()->all());
-
-                    return response()->json([
-                        'estado' => false,
-                        'titulo' => 'Error',
-                        'msg' => 'Revise los campos',
-                        'errors' => $errors
-                    ]);
-                }
-
-                //OBTENGO LOS DATOS DE ESA ALABANZA DE HIMNARIO
-                $cadena = Cadena::find($idCoro);
-
-                //HAGO LA EDICION DE LA ALABANZA
+                $cadena = Cadena::find($idCadena);
                 $cadena->nombre = $request->input('nombre');
-                $cadena->id_autor = $request->input('id_autor');
                 $cadena->nota = $request->input('nota');
                 $cadena->estado = $request->input('estado');
-                $cadena->letra = $request->input('letra');
                 $cadena->save();
+
+                //ELIMINO LOS DETALLES
+                DetalleCadena::where('id_cadena', $idCadena)->delete();
+
+                //CREO LOS NUEVOS
+                foreach ($arrCoros as $coro) {
+                    DetalleCadena::create([
+                        'id_cadena' => $cadena['id'],
+                        'id_coro' => $coro['id'],
+                        'numero' => $coro['numero']
+                    ]);
+                }
 
                 return response()->json(
                     [
@@ -283,6 +268,53 @@ class CadenaController extends Controller
     }
 
 
+    public function obtenerCadena($id)
+    {
+        try {
+            if ($id != 0) {
+                //OBTENGO LOS DATOS
+                $cadena =   Cadena::find($id);
+                $coros = DetalleCadena::select(
+                    'detalle_cadenas.id_coro',
+                    'detalle_cadenas.id_cadena',
+                    'detalle_cadenas.numero',
+                    'coros.nombre'
+                )->join('coros', 'coros.id', 'detalle_cadenas.id_coro')
+                    ->where('detalle_cadenas.id_cadena', $cadena->id)->orderBy('detalle_cadenas.numero')->get();
+                $cadena->coros = $coros;
+
+
+                return response()->json(
+                    [
+                        'estado' => true,
+                        'titulo' => 'Éxito',
+                        'msg' => 'Datos obtenidos correctamente',
+                        'datos' => $cadena
+                    ]
+                );
+            } else {
+                return response()->json(
+                    [
+                        'estado' => false,
+                        'titulo' => 'Error',
+                        'msg' => 'No existe la cadena',
+                        'errors' => 'No existe la cadena',
+                    ]
+                );
+            }
+        } catch (Exception $e) {
+            return response()->json(
+                [
+                    'estado' => false,
+                    'titulo' => 'Error',
+                    'msg' => 'Ocurrió un error al obtener la información',
+                    'errors' => $e->getMessage()
+                ]
+            );
+        }
+    }
+
+
     public function obtenerCoro($id)
     {
         try {
@@ -320,21 +352,25 @@ class CadenaController extends Controller
         }
     }
 
-    public function eliminarCoro(Request $request)
+    public function eliminarCadena(Request $request)
     {
         try {
             //OBTENGO EL ID DEL POST
-            $idCoro = intval(json_decode($request->getContent(), true)['idCoro']);
+            $idCadena = intval(json_decode($request->getContent(), true)['idCadena']);
+
+
+            //ELIMINO LOS DETALLES
+            DetalleCadena::where('id_cadena', $idCadena)->delete();
 
             //OBTENGO EL REGISTRO Y LO ELIMINO
-            Cadena::find($idCoro)->delete();
+            Cadena::find($idCadena)->delete();
 
             return response()->json(
                 [
                     'estado' => true,
                     'titulo' => 'Éxito',
                     'msg' => 'Eliminación realizada',
-                    'datos' => $idCoro
+                    'datos' => $idCadena
                 ]
             );
         } catch (Exception $e) {

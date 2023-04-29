@@ -20,6 +20,8 @@ document.addEventListener("DOMContentLoaded", function () {
         //INICIALIZO LA TABLA
         reiniciarTablaCorosTemp();
 
+        contador = 0;
+
         //MUESTRO EL MODAL
         $("#modal-cadenas")
             .modal({
@@ -217,7 +219,14 @@ function eliminarCoro(idCoro) {
     reiniciarTablaCorosTemp();
 }
 
-function editarCoroModal(idCadena) {
+function editarCadenaModal(idCadena) {
+    // Utilizamos el método splice para eliminar todos los elementos del array
+    arrayCorosTemp.splice(0, arrayCorosTemp.length);
+    //INICIALIZO LA TABLA
+    reiniciarTablaCorosTemp();
+
+    contador = 0;
+
     $.ajax({
         type: "GET",
         url: APP_URL + "/cadenas/ver/" + idCadena,
@@ -232,19 +241,25 @@ function editarCoroModal(idCadena) {
                 //PONGO LOS DATOS A EDITAR, INCLUYENDO EL ID
                 $("#idCadena").val(json["datos"]["id"]);
                 $("#nombre").val(json["datos"]["nombre"]);
-                json["datos"]["id_autor"] == null
-                    ? $("#id_autor").val(0).select2()
-                    : $("#id_autor").val(json["datos"]["id_autor"]).select2();
-
                 json["datos"]["nota"] == null
                     ? $("#nota").val(0).select2()
                     : $("#nota").val(json["datos"]["nota"]).select2();
 
                 $("#estado").val(json["datos"]["estado"]).select2();
-                //$("#letra").val(json["datos"]["letra"]);
 
-                iniciarSummernote(400, "letra");
-                $("#letra").summernote("code", json["datos"]["letra"]);
+                json["datos"]["coros"].forEach((c) => {
+                    contador = c["numero"];
+                    arrayCorosTemp.push({
+                        id: c["id_coro"],
+                        numero: contador,
+                        nombre: c["nombre"],
+                        accion:
+                            '<button type="button" onclick="eliminarCoro(\'' +
+                            c["id_coro"] +
+                            '\')" class="btn btn-icon btn-danger"><i class="fa fa-trash"></i></button>',
+                    });
+                    reiniciarTablaCorosTemp();
+                });
 
                 //MUESTRO EL MODAL
                 $("#modal-cadenas").modal("show");
@@ -264,7 +279,7 @@ function editarCoroModal(idCadena) {
     });
 }
 
-function eliminarCoroModalConfirm(idCadena) {
+function eliminarCadenaModalConfirm(idCadena) {
     //PONGO EL ID DEL REGISTRO A ELIMINAR
     $("#id-eliminar").val(idCadena);
     //MUESTRO EL MODAL

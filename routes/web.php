@@ -86,5 +86,5 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/cadenas/coros/{id}', [CadenaController::class, 'obtenerCoros']);
     Route::get('/cadenas/ver/{id}', [CadenaController::class, 'obtenerCadena']);
     Route::get('/cadenas/obtenerCoro/{id}', [CadenaController::class, 'obtenerCoro']);
-    Route::post('/cadenas/eliminar', [CadenaController::class, 'eliminarCoro'])->name('cadenas/eliminar');
+    Route::post('/cadenas/eliminar', [CadenaController::class, 'eliminarCadena'])->name('cadenas/eliminar');
 });

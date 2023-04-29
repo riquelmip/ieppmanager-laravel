@@ -212,7 +212,7 @@
                 <div class="modal-footer">
                     <button data-dismiss="modal" class="btn btn-default" onclick="reiniciarId();"
                         type="button">Cancelar</button>
-                    <button type="button" onclick="eliminarCoro();" class="btn btn-primary">Eliminar</button>
+                    <button type="button" onclick="eliminarCadena();" class="btn btn-primary">Eliminar</button>
                 </div>
 
             </div>
