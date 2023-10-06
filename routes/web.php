@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\AlabanzaController;
+use App\Http\Controllers\AlabanzaWebController;
 use App\Http\Controllers\AutorController;
 use App\Http\Controllers\CadenaController;
 use App\Http\Controllers\CoroController;
+use App\Http\Controllers\PredicaController;
 use App\Http\Controllers\RolController;
 use App\Http\Controllers\UsuarioController;
 use Illuminate\Support\Facades\Route;
@@ -87,4 +89,17 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/cadenas/ver/{id}', [CadenaController::class, 'obtenerCadena']);
     Route::get('/cadenas/obtenerCoro/{id}', [CadenaController::class, 'obtenerCoro']);
     Route::post('/cadenas/eliminar', [CadenaController::class, 'eliminarCadena'])->name('cadenas/eliminar');
+
+    //RUTAS PREDICAS
+    Route::get('/predicas', [PredicaController::class, 'index'])->name('predicas');
+    Route::get('/predicas/cargartabla', [PredicaController::class, 'cargarTabla'])->name('predicas/cargartabla');
+    Route::post('/predicas/guardar', [PredicaController::class, 'guardar'])->name('predicas/guardar');
+    Route::get('/predicas/ver/{id}', [PredicaController::class, 'obtener']);
+    Route::post('/predicas/eliminar', [PredicaController::class, 'eliminar'])->name('predicas/eliminar');
 });
+
+
+//RUTAS PARA INICIO SIN NECESIDAD DE AUTENTICACION
+
+Route::get('/public/himnario', [AlabanzaWebController::class, 'himnario'])->name('public/himnario');
+Route::get('/public/himnario/cargartabla', [AlabanzaWebController::class, 'cargarTablaHimnario'])->name('public/himnario/cargartabla');

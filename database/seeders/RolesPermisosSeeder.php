@@ -77,6 +77,36 @@ class RolesPermisosSeeder extends Seeder
             'crear-cadenas-adoracion',
             'editar-cadenas-adoracion',
             'borrar-cadenas-adoracion',
+
+            //Tabla predicas
+            'ver-predicas',
+            'crear-predicas',
+            'editar-predicas',
+            'borrar-predicas',
+
+            //Tabla tipo_directivas
+            'ver-tipo_directivas',
+            'crear-tipo_directivas',
+            'editar-tipo_directivas',
+            'borrar-tipo_directivas',
+
+            //Tabla directivas
+            'ver-directivas',
+            'crear-directivas',
+            'editar-directivas',
+            'borrar-directivas',
+
+            //Tabla privilegios_directivas
+            'ver-privilegios_directivas',
+            'crear-privilegios_directivas',
+            'editar-privilegios_directivas',
+            'borrar-privilegios_directivas',
+
+            //Tabla reportes_directivas
+            'ver-reportes_directivas',
+            'crear-reportes_directivas',
+            'editar-reportes_directivas',
+            'borrar-reportes_directivas',
         ];
 
         foreach ($permisos as $permiso) {

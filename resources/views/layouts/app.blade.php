@@ -78,6 +78,42 @@
         .select2-container--default .select2-dropdown {
             z-index: 40000;
         }
+
+        /* .fixed-fluid [class*="fixed-"] {
+            background-color: #ffff;
+            border-radius: 3px;
+        } */
+
+        .tag:not(.label) {
+            background-color: #294f75;
+            font-size: .9em;
+            padding: 5px 10px;
+            border-radius: 3px;
+            border: 1px solid #1e3b58;
+            line-height: 1.42857;
+            vertical-align: middle;
+            -webkit-transition: all .15s;
+            transition: all .15s;
+            margin-bottom: 4px;
+            color: #ffff
+        }
+
+        /* a {
+            text-decoration: none;
+            color: #ffff;
+            outline: 0;
+        }
+
+        a:hover,
+        a:focus {
+            text-decoration: none;
+            color: #b7bec2;
+            outline: 0 !important;
+        } */
+
+        .tag-white {
+            color: #ffff;
+        }
     </style>
 
     <!--SECCION CSS DE CADA PAGINA-->

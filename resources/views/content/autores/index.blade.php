@@ -18,7 +18,7 @@
                 <button id="btn-nuevo-autor" class="btn btn-primary">Nuevo</button><br><br>
             @endcan
 
-            <table id="t-autores" class="table table-striped table-bordered" cellspacing="0" width="100%">
+            <table id="t-autores" class="table table-striped" cellspacing="0" width="100%">
                 <thead>
                     <tr>
                         <th>ID</th>

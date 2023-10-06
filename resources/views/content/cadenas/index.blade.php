@@ -35,7 +35,7 @@
                 @endcan
             @endif
 
-            <table id="t-cadenas" class="table table-striped table-bordered" cellspacing="0" width="100%">
+            <table id="t-cadenas" class="table table-striped" cellspacing="0" width="100%">
                 <thead>
                     <tr>
                         <th>Nombre</th>
@@ -150,7 +150,7 @@
                             <div class="col-sm-12">
                                 <div class="form-group">
                                     <label class="control-label" for="letra">Cadena</label>
-                                    <table id="t-cadena-temp" class="table table-striped table-bordered" cellspacing="0"
+                                    <table id="t-cadena-temp" class="table table-striped" cellspacing="0"
                                         width="100%">
                                         <thead>
                                             <tr>

@@ -22,7 +22,7 @@
                 <button id="btn-nuevo-himnario" class="btn btn-primary">Nuevo</button><br><br>
             @endcan
 
-            <table id="t-himnario" class="table table-striped table-bordered" cellspacing="0" width="100%">
+            <table id="t-himnario" class="table table-striped" cellspacing="0" width="100%">
                 <thead>
                     <tr>
                         <th>Num Himnario</th>

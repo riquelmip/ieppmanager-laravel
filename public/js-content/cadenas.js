@@ -34,17 +34,7 @@ document.addEventListener("DOMContentLoaded", function () {
     selectCoros();
 
     //INICIALIZANDO LOS SELECT2
-    $(".select2").select2({
-        language: {
-            noResults: function () {
-                return "No se encontraron resultados";
-            },
-        },
-        escapeMarkup: function (markup) {
-            return markup;
-        },
-        dropdownParent: $("#modal-cadenas .modal-body"),
-    });
+    iniciarSelects('modal-cadenas')
 
     cargarDatos("t-cadenas", "/cadenas/cargartabla/" + $("#tipo_cadena").val());
 

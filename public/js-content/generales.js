@@ -109,3 +109,31 @@ function iniciarSummernote(tamañoInicial, idContenedor) {
         fullscreen: false,
     });
 }
+
+function iniciarSelects(modal) {
+    $(".select2").select2({
+        language: {
+            noResults: function () {
+                return "No se encontraron resultados";
+            },
+        },
+        escapeMarkup: function (markup) {
+            return markup;
+        },
+        dropdownParent: $("#" + modal + " .modal-body"),
+    });
+}
+
+function iniciarSelectIndividual(select, modal) {
+    $("#" + select).select2({
+        language: {
+            noResults: function () {
+                return "No se encontraron resultados";
+            },
+        },
+        escapeMarkup: function (markup) {
+            return markup;
+        },
+        dropdownParent: $("#" + modal + " .modal-body"),
+    });
+}

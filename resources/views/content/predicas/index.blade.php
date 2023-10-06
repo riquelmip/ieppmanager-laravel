@@ -1,23 +1,16 @@
 @extends('layouts.app')
 
-@section('title', 'Coros')
+@section('title', 'Predicas')
 
 @section('page-name')
     @php
-        if ($tipo_coro) {
-            $page_menu = 'coros';
-            $page_submenu = 'coros-adoracion';
-        } else {
-            $page_menu = 'coros';
-            $page_submenu = 'coros-avivamiento';
-        }
-        
+        $page_menu = 'predica';
+        $page_submenu = 'predica';
     @endphp
 @endsection
 
 @section('content')
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <input type="hidden" value="{{ $tipo_coro }}" name="tipo_coro" id="tipo_coro">
     <!-- Basic Data Tables -->
     <!--===================================================-->
     <div class="panel">
@@ -25,25 +18,20 @@
             <h3 class="panel-title">A continuación se muestra el listado</h3>
         </div> --}}
         <div class="panel-body">
-            @if ($tipo_coro)
-                @can('crear-coros-adoracion')
-                    <button id="btn-nuevo-coro" class="btn btn-primary">Nuevo Coro de Adoración</button><br><br>
-                @endcan
-            @else
-                @can('crear-coros-avivamiento')
-                    <button id="btn-nuevo-coro" class="btn btn-primary">Nuevo Coro de Avivamiento</button><br><br>
-                @endcan
-            @endif
+            @can('crear-predicas')
+                <button id="btn-nuevo-predica" class="btn btn-primary">Nuevo</button><br><br>
+            @endcan
 
-            <table id="t-coros" class="table table-striped" cellspacing="0" width="100%">
+            <table id="t-predica" class="table table-striped" cellspacing="0" width="100%">
                 <thead>
                     <tr>
                         <th>Nombre</th>
+                        <th>Descripción</th>
                         <th class="min-tablet">Estado</th>
                         <th class="min-tablet">Acciones</th>
                     </tr>
                 </thead>
-                <tbody id="t-coros-body">
+                <tbody id="t-predica-body">
 
                 </tbody>
             </table>
@@ -55,7 +43,7 @@
 
 @section('modals')
     <!-- CREAR Y EDITAR -->
-    <div class="modal fade" id="modal-coros" role="dialog" tabindex="-1" aria-labelledby="demo-default-modal"
+    <div class="modal fade" id="modal-predica" role="dialog" tabindex="-1" aria-labelledby="demo-default-modal"
         aria-hidden="true" style="display: none;">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -63,61 +51,21 @@
                 <!--Modal header-->
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><i class="pci-cross pci-circle"></i></button>
-                    <h4 class="modal-title"> Coro de @if ($tipo_coro)
-                            Adoración
-                        @else
-                            Avivamiento
-                        @endif
-                    </h4>
+                    <h4 class="modal-title">Predica</h4>
                 </div>
 
-                <form id="form-coros">
-                    <input type="hidden" value="0" name="idCoro" id="idCoro">
+                <form id="form-predica">
+                    <input type="hidden" value="0" name="idPredica" id="idPredica">
                     <!--Modal body-->
                     <div class="modal-body">
                         <span class="text-primary">Los campos con (*) son
                             obligatorios.</span><br><br>
 
                         <div class="row">
-                            <div class="col-sm-12">
+                            <div class="col-sm-9">
                                 <div class="form-group">
                                     <label class="control-label" for="nombre">Nombre (*)</label>
                                     <input type="text" id="nombre" name="nombre" class="form-control">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label class="control-label" for="id_autor">Autor</label>
-                                    <select name="id_autor" id="id_autor" class="form-control select2"
-                                        style="width: 100%;">
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-sm-3">
-                                <div class="form-group">
-                                    <label class="control-label" for="nota">Nota</label>
-                                    <div>
-                                        <select name="nota" id="nota" class="form-control select2"
-                                            style="width: 100%;">
-                                            <option value="0">Seleccione una nota</option>
-                                            <option value="C">C</option>
-                                            <option value="C#">C#/Db</option>
-                                            <option value="D">D</option>
-                                            <option value="D#">D#/Eb</option>
-                                            <option value="E">E</option>
-                                            <option value="F">F</option>
-                                            <option value="F#">F#/Gb</option>
-                                            <option value="G">G</option>
-                                            <option value="G#">G#/Ab</option>
-                                            <option value="A">A</option>
-                                            <option value="A#">A#/Bb</option>
-                                            <option value="B">B</option>
-                                        </select>
-                                    </div>
-
                                 </div>
                             </div>
                             <div class="col-sm-3">
@@ -137,8 +85,18 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="form-group">
-                                    <label class="control-label" for="letra">Letra (*)</label>
-                                    <textarea name="letra" id="letra" cols="30" rows="10" class="form-control note-superhero"></textarea>
+                                    <label class="control-label" for="letra">Descripción Corta(*)</label>
+                                    <textarea name="descripcion_corta" id="descripcion_corta" cols="30" rows="3" class="form-control"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label class="control-label" for="letra">Descripción Larga(*)</label>
+                                    <textarea name="descripcion_larga" id="descripcion_larga" cols="30" rows="10"
+                                        class="form-control note-superhero"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -167,8 +125,7 @@
 
                 <!--Modal header-->
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><i
-                            class="pci-cross pci-circle"></i></button>
+                    <button type="button" class="close" data-dismiss="modal"><i class="pci-cross pci-circle"></i></button>
                     <h4 class="modal-title">Eliminar Registro</h4>
                 </div>
 
@@ -188,7 +145,7 @@
                 <div class="modal-footer">
                     <button data-dismiss="modal" class="btn btn-default" onclick="reiniciarId();"
                         type="button">Cancelar</button>
-                    <button type="button" onclick="eliminarCoro();" class="btn btn-primary">Eliminar</button>
+                    <button type="button" onclick="eliminarPredica();" class="btn btn-primary">Eliminar</button>
                 </div>
 
             </div>
@@ -198,8 +155,5 @@
 @endsection
 
 @section('page-js')
-
-    <script src="{{ asset('js-content/coros.js') }}"></script>
-
-
+    <script src="{{ asset('js-content/predicas.js') }}"></script>
 @endsection
