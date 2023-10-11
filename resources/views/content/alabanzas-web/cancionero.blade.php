@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
-@section('title', 'Himnario Oficial de Alabanzas')
+@section('title', 'Cancionero de Alabanzas')
 
 @section('page-name')
     @php
-        $page_menu = 'himnario-web';
-        $page_submenu = 'himnario-web';
+        $page_menu = 'cancionero-web';
+        $page_submenu = 'cancionero-web';
     @endphp
 @endsection
 
@@ -29,7 +29,7 @@
                     <div class="panel">
                         <div class="panel-body">
 
-                            <table id="t-himnario-web" class="table table-striped" cellspacing="0" width="100%">
+                            <table id="t-cancionero-web" class="table table-striped" cellspacing="0" width="100%">
                                 <thead>
                                     <tr>
                                         <th class="col-lg-1">Num</th>
@@ -37,7 +37,7 @@
                                         <th class="min-tablet">Ver</th>
                                     </tr>
                                 </thead>
-                                <tbody id="t-himnario-web-body">
+                                <tbody id="t-cancionero-web-body">
 
                                 </tbody>
                             </table>
@@ -104,5 +104,5 @@
 @endsection
 
 @section('page-js')
-    <script src="{{ asset('js-content/himnario-web.js') }}"></script>
+    <script src="{{ asset('js-content/cancionero-web.js') }}"></script>
 @endsection

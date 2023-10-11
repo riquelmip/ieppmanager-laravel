@@ -25,6 +25,7 @@
             <table id="t-predica" class="table table-striped" cellspacing="0" width="100%">
                 <thead>
                     <tr>
+                        <th>Num</th>
                         <th>Nombre</th>
                         <th>Descripción</th>
                         <th class="min-tablet">Estado</th>

@@ -17,6 +17,7 @@ class CreateCorosTable extends Migration
             $table->id();
             $table->boolean('tipo_coro')->default(false); //Avivamiento = 0, Adoracion = 1
             $table->string('nombre')->unique(); //Nombre del coro
+            $table->string('slug')->unique(); //Slug 
             $table->unsignedBigInteger('id_autor')->nullable(); //Referencia al autor de la alabanza
             $table->foreign('id_autor')->references('id')->on('autor');
             $table->text('letra'); //Letra de la alabanza

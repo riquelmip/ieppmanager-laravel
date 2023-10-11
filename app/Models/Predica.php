@@ -11,6 +11,7 @@ class Predica extends Model
     protected $table = 'predicas';
     protected $fillable = [
         'nombre',
+        'slug',
         'descripcion_corta',
         'descripcion_larga',
         'id_usuario',

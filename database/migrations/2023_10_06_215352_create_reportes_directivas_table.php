@@ -36,6 +36,7 @@ class CreateReportesDirectivasTable extends Migration
             $table->integer('asis_u_femenil')->nullable();
             $table->integer('asis_pastor')->nullable();
             $table->integer('asis_otros')->nullable();
+            $table->integer('total_asistencia')->nullable();
             $table->timestamps();
         });
     }

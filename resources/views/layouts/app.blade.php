@@ -298,6 +298,9 @@
                     <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
                     <!--End breadcrumb-->
 
+                    <!--CONTENIDO DE CADA PAGINA-->
+                    @yield('error-head')
+
                 </div>
 
                 <!--Page content-->

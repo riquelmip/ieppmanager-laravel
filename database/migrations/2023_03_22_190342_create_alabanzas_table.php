@@ -18,6 +18,7 @@ class CreateAlabanzasTable extends Migration
             $table->boolean('tipo_alabanza')->default(false); //Himnario = 0, Cancionero = 1
             $table->integer('numero_himnario')->nullable(); //Numero de pagina del himnario, y para cancionero num correlativo
             $table->string('nombre')->unique(); //Nombre de la alabanza
+            $table->string('slug')->unique(); //Slug de la alabanza
             $table->unsignedBigInteger('id_autor')->nullable(); //Referencia al autor de la alabanza
             $table->foreign('id_autor')->references('id')->on('autor');
             $table->text('letra'); //Letra de la alabanza

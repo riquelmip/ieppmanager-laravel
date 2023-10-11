@@ -3,7 +3,7 @@ toastr.options = {
     debug: false,
     newestOnTop: false,
     progressBar: true,
-    positionClass: "toast-top-right",
+    positionClass: "toast-bottom-right",
     preventDuplicates: false,
     onclick: null,
     showDuration: "300",
@@ -49,6 +49,7 @@ function datatable(tabla) {
         ],
         iDisplayLength: 5,
         responsive: true,
+        stateSave: true, //Guarda el num de pag donde te quedaste
     });
 }
 
@@ -99,12 +100,13 @@ function iniciarSummernote(tamañoInicial, idContenedor) {
         height: tamañoInicial,
         toolbar: [
             ["style", ["style"]],
+            ["fontname", ["fontname"]],
             ["font", ["bold", "underline", "clear"]],
             ["color", ["color"]],
             ["para", ["ul", "ol", "paragraph"]],
-            ["insert", ["link", "picture", "video"]],
+            ["insert", ["link"]],
             ["table", ["table"]],
-            ["view", ["codeview"]],
+            // ["view", ["codeview"]],
         ],
         fullscreen: false,
     });

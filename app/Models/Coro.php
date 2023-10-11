@@ -12,6 +12,7 @@ class Coro extends Model
     protected $fillable = [
         'tipo_coro',
         'nombre',
+        'slug',
         'id_autor',
         'letra',
         'nota',

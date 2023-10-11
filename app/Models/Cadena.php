@@ -12,6 +12,7 @@ class Cadena extends Model
     protected $fillable = [
         'tipo_cadena',
         'nombre',
+        'slug',
         'nota',
         'id_usuario',
         'estado',

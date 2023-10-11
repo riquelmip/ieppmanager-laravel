@@ -16,6 +16,7 @@ class CreatePredicasTable extends Migration
         Schema::create('predicas', function (Blueprint $table) {
             $table->id();
             $table->string('nombre')->unique(); //Nombre de la predica
+            $table->string('slug')->unique(); //Slug
             $table->text('descripcion_corta');
             $table->text('descripcion_larga');
             $table->unsignedBigInteger('id_usuario')->nullable(); //Referencia al usuario que crea la alabanza

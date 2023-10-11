@@ -17,6 +17,7 @@ class CreateCadenasTable extends Migration
             $table->id();
             $table->boolean('tipo_cadena')->default(false); //Avivamiento = 0, Adoracion = 1
             $table->string('nombre')->unique(); //Nombre de la Cadena
+            $table->string('slug')->unique(); //Slug
             $table->string('nota')->nullable(); //Nota en la que sale mejor al grupo de alabanza, Ojo: Esto solo puede ser visto a quienes tendran el rol de Grupo de Alabanza
             $table->unsignedBigInteger('id_usuario')->nullable(); //Referencia al usuario que crea la alabanza
             $table->foreign('id_usuario')->references('id')->on('users');

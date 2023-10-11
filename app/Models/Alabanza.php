@@ -13,6 +13,7 @@ class Alabanza extends Model
         'tipo_alabanza',
         'numero_himnario',
         'nombre',
+        'slug',
         'id_autor',
         'letra',
         'nota',

@@ -4,6 +4,7 @@ use App\Http\Controllers\AlabanzaController;
 use App\Http\Controllers\AlabanzaWebController;
 use App\Http\Controllers\AutorController;
 use App\Http\Controllers\CadenaController;
+use App\Http\Controllers\CadenaWebController;
 use App\Http\Controllers\CoroController;
 use App\Http\Controllers\PredicaController;
 use App\Http\Controllers\RolController;
@@ -95,11 +96,26 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/predicas/cargartabla', [PredicaController::class, 'cargarTabla'])->name('predicas/cargartabla');
     Route::post('/predicas/guardar', [PredicaController::class, 'guardar'])->name('predicas/guardar');
     Route::get('/predicas/ver/{id}', [PredicaController::class, 'obtener']);
+    Route::get('/predicas/ver-predica', [PredicaController::class, 'verPredica'])->name('predicas/ver-predica');
     Route::post('/predicas/eliminar', [PredicaController::class, 'eliminar'])->name('predicas/eliminar');
 });
 
 
 //RUTAS PARA INICIO SIN NECESIDAD DE AUTENTICACION
 
+//HIMNARIO
 Route::get('/public/himnario', [AlabanzaWebController::class, 'himnario'])->name('public/himnario');
 Route::get('/public/himnario/cargartabla', [AlabanzaWebController::class, 'cargarTablaHimnario'])->name('public/himnario/cargartabla');
+Route::get('/public/himnario/ver', [AlabanzaWebController::class, 'verAlabanza']);
+
+//CANCIONERO
+Route::get('/public/cancionero', [AlabanzaWebController::class, 'cancionero'])->name('public/cancionero');
+Route::get('/public/cancionero/cargartabla', [AlabanzaWebController::class, 'cargarTablaCancionero'])->name('public/cancionero/cargartabla');
+Route::get('/public/cancionero/ver', [AlabanzaWebController::class, 'verAlabanzaCancionero']);
+
+//CADENAS
+Route::get('/public/cadenas/avivamiento', [CadenaWebController::class, 'avivamiento'])->name('public/cadenas/avivamiento');
+Route::get('/public/cadenas/adoracion', [CadenaWebController::class, 'adoracion'])->name('public/cadenas/adoracion');
+Route::get('/public/cadenas/cargartabla/{tipo}', [CadenaWebController::class, 'cargarTabla']);
+Route::get('/public/cadenas/ver-cadena-avivamiento', [CadenaWebController::class, 'verCadenaAvivamiento']);
+Route::get('/public/cadenas/ver-cadena-adoracion', [CadenaWebController::class, 'verCadenaAdoracion']);
