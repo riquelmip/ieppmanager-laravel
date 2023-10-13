@@ -3,6 +3,7 @@
 use App\Http\Controllers\AlabanzaController;
 use App\Http\Controllers\AlabanzaWebController;
 use App\Http\Controllers\AutorController;
+use App\Http\Controllers\BibliaWebController;
 use App\Http\Controllers\CadenaController;
 use App\Http\Controllers\CadenaWebController;
 use App\Http\Controllers\CoroController;
@@ -22,9 +23,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('inicio');
-})->name('inicio');
+Route::get('/', [App\Http\Controllers\HomeController::class, 'inicio'])->name('inicio');
 
 Auth::routes();
 
@@ -119,3 +118,12 @@ Route::get('/public/cadenas/adoracion', [CadenaWebController::class, 'adoracion'
 Route::get('/public/cadenas/cargartabla/{tipo}', [CadenaWebController::class, 'cargarTabla']);
 Route::get('/public/cadenas/ver-cadena-avivamiento', [CadenaWebController::class, 'verCadenaAvivamiento']);
 Route::get('/public/cadenas/ver-cadena-adoracion', [CadenaWebController::class, 'verCadenaAdoracion']);
+
+Route::get('/public/biblias/biblia-rv1960', [BibliaWebController::class, 'bibliarv'])->name('public/biblias/biblia-rv1960');
+Route::get('/public/biblias/biblia/libro/{numero}', [BibliaWebController::class, 'verLibro'])->name('biblia.libro');
+Route::get('/public/biblias/biblia/libro/{numlibro}/capitulo/{numcapitulo}', [BibliaWebController::class, 'verVersiculo'])->name('biblia.capitulo');
+
+
+Route::get('/public/biblias/holy-bible', [BibliaWebController::class, 'bibliahb'])->name('public/biblias/holy-bible');
+Route::get('/public/biblias/bible/book/{numero}', [BibliaWebController::class, 'viewBook'])->name('bible.book');
+Route::get('/public/biblias/bible/chapter/{numlibro}/capitulo/{numcapitulo}', [BibliaWebController::class, 'viewChapter'])->name('book.chapter');

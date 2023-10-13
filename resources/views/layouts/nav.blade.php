@@ -51,21 +51,22 @@
 
                     <ul id="mainnav-menu" class="list-group">
 
+                        <!--INICIO-->
+                        <li @if ($page_menu == 'inicio') ? class="active-sub" @endif>
+                            <a href="{{ route('inicio') }}">
+                                <i class="demo-pli-home"></i>
+                                <span class="menu-title">
+                                    Inicio
+                                </span>
+                            </a>
+                        </li>
+
                         @if (Route::has('login'))
                             @auth
 
                                 <!--Category name-->
                                 <li class="list-header">GENERAL</li>
 
-                                <!--INICIO-->
-                                <li @if ($page_menu == 'inicio') ? class="active-sub" @endif>
-                                    <a href="{{ route('inicio') }}">
-                                        <i class="demo-pli-home"></i>
-                                        <span class="menu-title">
-                                            Inicio
-                                        </span>
-                                    </a>
-                                </li>
 
                                 <!--USUARIOS-->
                                 <li @if ($page_menu == 'usuarios') ? class="active-sub" @endif>
@@ -207,6 +208,23 @@
                                         href="{{ route('public/cadenas/avivamiento') }}">Avivamiento</a></li>
                                 <li @if ($page_submenu == 'cadenas-adoracion-web') ? class="active-link" @endif><a
                                         href="{{ route('public/cadenas/adoracion') }}">Adoración</a></li>
+                            </ul>
+                        </li>
+
+                        <!--BIBLIAS-->
+                        <li @if ($page_menu == 'biblias-web') ? class="active-sub" @endif>
+                            <a href="#">
+                                <i class="fa fa-book"></i>
+                                <span class="menu-title">Bíblias</span>
+                                <i class="arrow"></i>
+                            </a>
+
+                            <!--Submenu-->
+                            <ul @if ($page_menu == 'biblias-web') ? class="collapse in" : class="collapse" @endif>
+                                <li @if ($page_submenu == 'biblia-web') ? class="active-link" @endif><a
+                                        href="{{ route('public/biblias/biblia-rv1960') }}">Biblia RV-1960</a></li>
+                                <li @if ($page_submenu == 'bible-web') ? class="active-link" @endif><a
+                                        href="{{ route('public/biblias/holy-bible') }}">Holy Bible</a></li>
                             </ul>
                         </li>
 

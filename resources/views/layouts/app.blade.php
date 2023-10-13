@@ -114,6 +114,43 @@
         .tag-white {
             color: #ffff;
         }
+
+        .jumbotron {
+            padding: 30px;
+            background-color: #fff;
+        }
+
+
+
+        .logo-img {
+            width: 25%;
+            max-width: 100%;
+        }
+
+        @media (min-width: 768px) {
+            .logo-img {
+                width: 25%;
+            }
+        }
+
+        @media (min-width: 992px) {
+            .logo-img {
+                width: 30%;
+            }
+        }
+
+        @media (min-width: 1200px) {
+            .logo-img {
+                width: 100%;
+                height: 100%;
+            }
+
+            /* Alineación vertical */
+            .align-items-center {
+                display: flex;
+                align-items: center;
+            }
+        }
     </style>
 
     <!--SECCION CSS DE CADA PAGINA-->
