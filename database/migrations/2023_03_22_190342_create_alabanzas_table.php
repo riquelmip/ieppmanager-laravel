@@ -26,6 +26,8 @@ class CreateAlabanzasTable extends Migration
             $table->unsignedBigInteger('id_usuario')->nullable(); //Referencia al usuario que crea la alabanza
             $table->foreign('id_usuario')->references('id')->on('users');
             $table->boolean('estado')->default(false); //Inactivo = 0, Activo = 1
+            $table->boolean('tipo_video')->default(false); //Embebido = 0, Url = 1
+            $table->string('url_video')->nullable();
             $table->timestamps();
         });
     }

@@ -8,12 +8,13 @@ document.addEventListener("DOMContentLoaded", function () {
         //PONGO EL AUTOR Y NOTA EN OPCION SELECCIONAR
         $("#id_autor").val(0).select2();
         $("#nota").val(0).select2();
+        $("#tipo_video").val(0).select2();
 
         //RESETEO EL FORM
         $("#form-himnario").trigger("reset");
 
         //INICIALIZO EL SUMMERNOTE EN EL CAMPO
-        iniciarSummernote(400, "letra");
+        iniciarSummernote(300, "letra");
 
         //MUESTRO EL MODAL
         $("#modal-himnario")
@@ -124,6 +125,8 @@ function editarAlabanzaHimnarioModal(idHimnario) {
                 $("#idHimnario").val(json["datos"]["id"]);
                 $("#numero_himnario").val(json["datos"]["numero_himnario"]);
                 $("#nombre").val(json["datos"]["nombre"]);
+                $("#tipo_video").val(json["datos"]["tipo_video"]).select2();
+                $("#url_video").val(json["datos"]["url_video"]);
                 json["datos"]["id_autor"] == null
                     ? $("#id_autor").val(0).select2()
                     : $("#id_autor").val(json["datos"]["id_autor"]).select2();

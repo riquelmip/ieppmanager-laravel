@@ -151,6 +151,8 @@ class AlabanzaController extends Controller
                         'estado' => $request->input('estado'),
                         'letra' => $request->input('letra'),
                         'id_usuario' => Auth::user()->id,
+                        'tipo_video' => ($request->input('tipo_video') == 0) ? 0 : $request->input('tipo_video'), //SI NO HA SELECCIONADO
+                        'url_video' => ($request->input('url_video') == null) ? null : $request->input('url_video'), //SI NO HA SELECCIONADO
                     ]);
 
                     return response()->json(
@@ -161,54 +163,56 @@ class AlabanzaController extends Controller
                             'datos' => $himnario
                         ]
                     );
-                }
-            } else {
-                //ES EDICION
+                } else {
+                    //ES EDICION
 
-                //VALIDO LOS CAMPOS
-                $validator = Validator::make($request->all(), [
-                    'numero_himnario' => 'required|unique:alabanzas,numero_himnario,' . $idHimnario,
-                    'nombre' => 'required|unique:alabanzas,nombre,' . $idHimnario,
-                    'id_autor' => 'nullable|min:1',
-                    'nota' => 'nullable|min:1',
-                    'estado' => 'required',
-                    'letra' => 'required',
-                ]);
-
-                //SI FALLA LA VALIDACION
-                if ($validator->fails()) {
-                    $errors = implode('<br>', $validator->errors()->all());
-
-                    return response()->json([
-                        'estado' => false,
-                        'titulo' => 'Error',
-                        'msg' => 'Revise los campos',
-                        'errors' => $errors
+                    //VALIDO LOS CAMPOS
+                    $validator = Validator::make($request->all(), [
+                        'numero_himnario' => 'required|unique:alabanzas,numero_himnario,' . $idHimnario,
+                        'nombre' => 'required|unique:alabanzas,nombre,' . $idHimnario,
+                        'id_autor' => 'nullable|min:1',
+                        'nota' => 'nullable|min:1',
+                        'estado' => 'required',
+                        'letra' => 'required',
                     ]);
+
+                    //SI FALLA LA VALIDACION
+                    if ($validator->fails()) {
+                        $errors = implode('<br>', $validator->errors()->all());
+
+                        return response()->json([
+                            'estado' => false,
+                            'titulo' => 'Error',
+                            'msg' => 'Revise los campos',
+                            'errors' => $errors
+                        ]);
+                    }
+
+                    //OBTENGO LOS DATOS DE ESA ALABANZA DE HIMNARIO
+                    $himnario = Alabanza::find($idHimnario);
+
+                    //HAGO LA EDICION DE LA ALABANZA
+                    $himnario->numero_himnario = $request->input('numero_himnario');
+                    $himnario->nombre = $request->input('nombre');
+                    $himnario->slug = Str::slug($request->input('nombre'));
+                    $himnario->id_autor = ($request->input('id_autor') == 0) ? null : $request->input('id_autor');
+                    $himnario->nota = $request->input('nota');
+                    $himnario->estado = $request->input('estado');
+                    $himnario->letra = $request->input('letra');
+                    $himnario->id_usuario = Auth::user()->id;
+                    $himnario->tipo_video = ($request->input('tipo_video') == 0) ? 0 : $request->input('tipo_video');
+                    $himnario->url_video = ($request->input('url_video') == null) ? null : $request->input('url_video');
+                    $himnario->save();
+
+                    return response()->json(
+                        [
+                            'estado' => true,
+                            'titulo' => 'Éxito',
+                            'msg' => 'Actualización realizada',
+                            'datos' => $himnario
+                        ]
+                    );
                 }
-
-                //OBTENGO LOS DATOS DE ESA ALABANZA DE HIMNARIO
-                $himnario = Alabanza::find($idHimnario);
-
-                //HAGO LA EDICION DE LA ALABANZA
-                $himnario->numero_himnario = $request->input('numero_himnario');
-                $himnario->nombre = $request->input('nombre');
-                $himnario->slug = Str::slug($request->input('nombre'));
-                $himnario->id_autor = $request->input('id_autor');
-                $himnario->nota = $request->input('nota');
-                $himnario->estado = $request->input('estado');
-                $himnario->letra = $request->input('letra');
-                $himnario->id_usuario = Auth::user()->id;
-                $himnario->save();
-
-                return response()->json(
-                    [
-                        'estado' => true,
-                        'titulo' => 'Éxito',
-                        'msg' => 'Actualización realizada',
-                        'datos' => $himnario
-                    ]
-                );
             }
         } catch (Exception $e) {
             return response()->json(
@@ -436,6 +440,8 @@ class AlabanzaController extends Controller
                         'estado' => $request->input('estado'),
                         'letra' => $request->input('letra'),
                         'id_usuario' => Auth::user()->id,
+                        'tipo_video' => ($request->input('tipo_video') == 0) ? 0 : $request->input('tipo_video'), //SI NO HA SELECCIONADO
+                        'url_video' => ($request->input('url_video') == null) ? null : $request->input('url_video'), //SI NO HA SELECCIONADO
                     ]);
 
                     return response()->json(
@@ -476,11 +482,13 @@ class AlabanzaController extends Controller
                     //HAGO LA EDICION DE LA ALABANZA
                     $cancionero->nombre = $request->input('nombre');
                     $cancionero->slug = Str::slug($request->input('nombre'));
-                    $cancionero->id_autor = $request->input('id_autor');
+                    $cancionero->id_autor = ($request->input('id_autor') == 0) ? null : $request->input('id_autor');
                     $cancionero->nota = $request->input('nota');
                     $cancionero->estado = $request->input('estado');
                     $cancionero->letra = $request->input('letra');
                     $cancionero->id_usuario = Auth::user()->id;
+                    $cancionero->tipo_video = ($request->input('tipo_video') == 0) ? 0 : $request->input('tipo_video');
+                    $cancionero->url_video = ($request->input('url_video') == null) ? null : $request->input('url_video');
                     $cancionero->save();
 
                     return response()->json(

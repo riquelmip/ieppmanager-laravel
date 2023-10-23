@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
         // \App\Models\User::factory(10)->create();
         $this->call(RolesPermisosSeeder::class);
         $this->call(AutoresSeeder::class);
+        $this->call(TiposDirectivasSeeder::class);
         $this->call(CorosSeeder::class);
     }
 }

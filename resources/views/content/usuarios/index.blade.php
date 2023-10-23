@@ -75,6 +75,20 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="control-label" for="nombre">Nombres</label>
+                                    <input type="text" id="nombre" name="nombre" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="control-label" for="apellido">Apellidos</label>
+                                    <input type="text" id="apellido" name="apellido" class="form-control">
+                                </div>
+                            </div>
+                        </div>
 
                         <div class="row">
                             <div class="col-sm-6">
@@ -93,14 +107,22 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-sm-6">
+                            <div class="col-sm-4">
                                 <div class="form-group">
                                     <label class="control-label" for="rol">Rol</label>
                                     <select name="rol" id="rol" class="form-control select2" style="width: 100%;">
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-sm-6">
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label class="control-label" for="id_directiva">Directiva</label>
+                                    <select name="id_directiva" id="id_directiva" class="form-control select2"
+                                        style="width: 100%;">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
                                 <div class="form-group">
                                     <label class="control-label" for="estado">Estado</label>
                                     <div>

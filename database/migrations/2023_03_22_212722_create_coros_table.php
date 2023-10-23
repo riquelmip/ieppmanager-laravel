@@ -23,6 +23,8 @@ class CreateCorosTable extends Migration
             $table->text('letra'); //Letra de la alabanza
             $table->string('nota')->nullable(); //Nota en la que sale mejor al grupo de alabanza, Ojo: Esto solo puede ser visto a quienes tendran el rol de Grupo de Alabanza
             $table->boolean('estado')->default(false); //Inactivo = 0, Activo = 1
+            $table->boolean('tipo_video')->default(false); //Embebido = 0, Url = 1
+            $table->string('url_video')->nullable();
             $table->timestamps();
         });
     }

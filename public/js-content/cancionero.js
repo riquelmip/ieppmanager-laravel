@@ -8,12 +8,12 @@ document.addEventListener("DOMContentLoaded", function () {
         //PONGO EL AUTOR Y NOTA EN OPCION SELECCIONAR
         $("#id_autor").val(0).select2();
         $("#nota").val(0).select2();
-
+        $("#tipo_video").val(0).select2();
         //RESETEO EL FORM
         $("#form-cancionero").trigger("reset");
 
         //INICIALIZO EL SUMMERNOTE EN EL CAMPO
-        iniciarSummernote(400, "letra");
+        iniciarSummernote(300, "letra");
 
         //MUESTRO EL MODAL
         $("#modal-cancionero")
@@ -123,6 +123,8 @@ function editarAlabanzaCancioneroModal(idCancionero) {
                 //PONGO LOS DATOS A EDITAR, INCLUYENDO EL ID
                 $("#idCancionero").val(json["datos"]["id"]);
                 $("#nombre").val(json["datos"]["nombre"]);
+                $("#tipo_video").val(json["datos"]["tipo_video"]).select2();
+                $("#url_video").val(json["datos"]["url_video"]);
                 json["datos"]["id_autor"] == null
                     ? $("#id_autor").val(0).select2()
                     : $("#id_autor").val(json["datos"]["id_autor"]).select2();

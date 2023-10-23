@@ -19,7 +19,12 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->boolean('estado')->default(false); //Inactivo = 0, Activo = 1
+            $table->string('nombre')->nullable();
+            $table->string('apellido')->nullable();
+            $table->boolean('estado')->default(true); //Inactivo = 0, Activo = 1
+            $table->boolean('tipo_usuario')->default(false); //General = 0, Directivas = 1
+            $table->unsignedBigInteger('id_directiva')->nullable();
+            $table->foreign('id_directiva')->references('id')->on('directiva');
             $table->rememberToken();
             $table->timestamps();
         });

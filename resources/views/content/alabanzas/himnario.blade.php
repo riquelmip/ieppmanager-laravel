@@ -77,6 +77,27 @@
                         </div>
 
                         <div class="row">
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="control-label" for="tipo_video">Tipo Video (*)</label>
+                                    <div>
+                                        <select name="tipo_video" id="tipo_video" class="form-control select2"
+                                            style="width: 100%;">
+                                            <option value="0">Embebido</option>
+                                            <option value="1">Url sola</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-9">
+                                <div class="form-group">
+                                    <label class="control-label" for="url_video">Url Video (*)</label>
+                                    <input type="text" id="url_video" name="url_video" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label class="control-label" for="id_autor">Autor</label>

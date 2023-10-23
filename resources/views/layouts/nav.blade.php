@@ -61,11 +61,70 @@
                             </a>
                         </li>
 
+                        <!--Category name-->
+                        <li class="list-header">WEB</li>
+
+                        <!--HIMNARIO-->
+                        <li @if ($page_menu == 'himnario-web') ? class="active-sub" @endif>
+                            <a href="{{ route('public/himnario') }}">
+                                <i class="demo-pli-folder"></i>
+                                <span class="menu-title">
+                                    Himnario Oficial
+                                </span>
+                            </a>
+                        </li>
+
+
+                        <!--CANCIONERO-->
+                        <li @if ($page_menu == 'cancionero-web') ? class="active-sub" @endif>
+                            <a href="{{ route('public/cancionero') }}">
+                                <i class="demo-pli-folder"></i>
+                                <span class="menu-title">
+                                    Cancionero
+                                </span>
+                            </a>
+                        </li>
+
+
+                        <!--CADENAS-->
+                        <li @if ($page_menu == 'cadenas-web') ? class="active-sub" @endif>
+                            <a href="#">
+                                <i class="demo-pli-folder-organizing"></i>
+                                <span class="menu-title">Cadenas de Coros</span>
+                                <i class="arrow"></i>
+                            </a>
+
+                            <!--Submenu-->
+                            <ul @if ($page_menu == 'cadenas-web') ? class="collapse in" : class="collapse" @endif>
+                                <li @if ($page_submenu == 'cadenas-avivamiento-web') ? class="active-link" @endif><a
+                                        href="{{ route('public/cadenas/avivamiento') }}">Avivamiento</a></li>
+                                <li @if ($page_submenu == 'cadenas-adoracion-web') ? class="active-link" @endif><a
+                                        href="{{ route('public/cadenas/adoracion') }}">Adoración</a></li>
+                            </ul>
+                        </li>
+
+                        <!--BIBLIAS-->
+                        <li @if ($page_menu == 'biblias-web') ? class="active-sub" @endif>
+                            <a href="#">
+                                <i class="fa fa-book"></i>
+                                <span class="menu-title">Bíblias</span>
+                                <i class="arrow"></i>
+                            </a>
+
+                            <!--Submenu-->
+                            <ul @if ($page_menu == 'biblias-web') ? class="collapse in" : class="collapse" @endif>
+                                <li @if ($page_submenu == 'biblia-web') ? class="active-link" @endif><a
+                                        href="{{ route('public/biblias/biblia-rv1960') }}">Biblia RV-1960</a></li>
+                                <li @if ($page_submenu == 'bible-web') ? class="active-link" @endif><a
+                                        href="{{ route('public/biblias/holy-bible') }}">Holy Bible</a></li>
+                            </ul>
+                        </li>
+
                         @if (Route::has('login'))
                             @auth
 
                                 <!--Category name-->
-                                <li class="list-header">GENERAL</li>
+                                <li class="list-header">ADMIN</li>
 
 
                                 <!--USUARIOS-->
@@ -86,9 +145,6 @@
                                 </li>
 
                                 <li class="list-divider"></li>
-
-                                <!--Category name-->
-                                <li class="list-header">LETRAS</li>
 
                                 <!--HIMNARIO-->
                                 <li @if ($page_menu == 'himnario') ? class="active-sub" @endif>
@@ -166,67 +222,27 @@
 
                                 <li class="list-divider"></li>
 
+                                <!--directivas-->
+                                <li @if ($page_menu == 'directivas') ? class="active-sub" @endif>
+                                    <a href="#">
+                                        <i class="fa fa-users"></i>
+                                        <span class="menu-title">Directivas</span>
+                                        <i class="arrow"></i>
+                                    </a>
+
+                                    <!--Submenu-->
+                                    <ul @if ($page_menu == 'directivas') ? class="collapse in" : class="collapse" @endif>
+                                        <li @if ($page_submenu == 'tipos_directivas') ? class="active-link" @endif><a
+                                                href="{{ route('tipos_directivas') }}">Tipos Directivas</a></li>
+                                        <li @if ($page_submenu == 'directivas') ? class="active-link" @endif><a
+                                                href="{{ route('directivas') }}">Directivas</a></li>
+                                    </ul>
+                                </li>
+
                             @endauth
                         @endif
 
-                        <!--Category name-->
-                        <li class="list-header">WEB</li>
 
-                        <!--HIMNARIO-->
-                        <li @if ($page_menu == 'himnario-web') ? class="active-sub" @endif>
-                            <a href="{{ route('public/himnario') }}">
-                                <i class="demo-pli-folder"></i>
-                                <span class="menu-title">
-                                    Himnario Oficial
-                                </span>
-                            </a>
-                        </li>
-
-
-                        <!--CANCIONERO-->
-                        <li @if ($page_menu == 'cancionero-web') ? class="active-sub" @endif>
-                            <a href="{{ route('public/cancionero') }}">
-                                <i class="demo-pli-folder"></i>
-                                <span class="menu-title">
-                                    Cancionero
-                                </span>
-                            </a>
-                        </li>
-
-
-                        <!--CADENAS-->
-                        <li @if ($page_menu == 'cadenas-web') ? class="active-sub" @endif>
-                            <a href="#">
-                                <i class="demo-pli-folder-organizing"></i>
-                                <span class="menu-title">Cadenas de Coros</span>
-                                <i class="arrow"></i>
-                            </a>
-
-                            <!--Submenu-->
-                            <ul @if ($page_menu == 'cadenas-web') ? class="collapse in" : class="collapse" @endif>
-                                <li @if ($page_submenu == 'cadenas-avivamiento-web') ? class="active-link" @endif><a
-                                        href="{{ route('public/cadenas/avivamiento') }}">Avivamiento</a></li>
-                                <li @if ($page_submenu == 'cadenas-adoracion-web') ? class="active-link" @endif><a
-                                        href="{{ route('public/cadenas/adoracion') }}">Adoración</a></li>
-                            </ul>
-                        </li>
-
-                        <!--BIBLIAS-->
-                        <li @if ($page_menu == 'biblias-web') ? class="active-sub" @endif>
-                            <a href="#">
-                                <i class="fa fa-book"></i>
-                                <span class="menu-title">Bíblias</span>
-                                <i class="arrow"></i>
-                            </a>
-
-                            <!--Submenu-->
-                            <ul @if ($page_menu == 'biblias-web') ? class="collapse in" : class="collapse" @endif>
-                                <li @if ($page_submenu == 'biblia-web') ? class="active-link" @endif><a
-                                        href="{{ route('public/biblias/biblia-rv1960') }}">Biblia RV-1960</a></li>
-                                <li @if ($page_submenu == 'bible-web') ? class="active-link" @endif><a
-                                        href="{{ route('public/biblias/holy-bible') }}">Holy Bible</a></li>
-                            </ul>
-                        </li>
 
                     </ul>
 

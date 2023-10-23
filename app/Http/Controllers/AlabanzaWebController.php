@@ -35,7 +35,7 @@ class AlabanzaWebController extends Controller
     public function cancionero()
     {
         try {
-            $autores = Autor::inRandomOrder()->limit(10)->get();
+            $autores = Autor::whereNotIn('id', [1])->inRandomOrder()->limit(15)->get(); //EXCEPTO AUTOR CONGREGACIONAL PORQUE ESO ES PARA HIMNARIO
 
             return view('content.alabanzas-web.cancionero', compact('autores'));
         } catch (Exception $e) {
@@ -95,11 +95,16 @@ class AlabanzaWebController extends Controller
         }
     }
 
-    public function cargarTablaCancionero()
+    public function cargarTablaCancionero($idAutor)
     {
         try {
             //HAGO EL SELECT A LA BASE DE DATOS PARA PODER MOSTRAR LOS REGISTROS
-            $himnario = Alabanza::where('tipo_alabanza', true)->orderBy('id')->get(); //Solo los que son del cancionero
+            if ($idAutor != 0) {
+                $himnario = Alabanza::where('tipo_alabanza', true)->where('id_autor', $idAutor)->orderBy('id')->get(); //Solo los que son del cancionero
+            } else {
+                $himnario = Alabanza::where('tipo_alabanza', true)->orderBy('id')->get(); //Solo los que son del cancionero
+            }
+
             $tablaHTML = '';
             $contadorPagina = 1; // Inicializa un contador de página
             foreach ($himnario as $alabanza) {

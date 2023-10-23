@@ -17,5 +17,7 @@ class Coro extends Model
         'letra',
         'nota',
         'estado',
+        'tipo_video',
+        'url_video',
     ];
 }

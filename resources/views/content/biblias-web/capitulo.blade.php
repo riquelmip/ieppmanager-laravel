@@ -13,50 +13,108 @@
 @section('content')
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <div class="panel">
-        <div class="panel-body">
+
+
+
+    <div class="row">
+        <div class="col-lg-7">
             <div class="row">
-                <a title="Volver al índice" href="{{ route('public/biblias/biblia-rv1960') }}"
-                    class="btn btn-primary btn-icon btn-circle"><i class="fa fa-long-arrow-left"></i></a>
+                <div class="col-lg-12">
+                    <!--===================================================-->
+                    <div class="panel">
+                        <div class="panel-body">
+                            <div class="row">
+                                <a title="Volver al índice" href="{{ route('public/biblias/biblia-rv1960') }}"
+                                    class="btn btn-primary btn-icon btn-circle"><i class="fa fa-long-arrow-left"></i></a>
 
-                {{-- Botón Anterior --}}
-                <a title="Anterior capítulo" href="{{ $capitulosPaginados->previousPageUrl() }}"
-                    class="btn btn-primary btn-icon btn-circle {{ $capitulosPaginados->onFirstPage() ? ' disabled' : '' }}">
-                    <i class="fa fa-arrow-left"></i>
-                </a>
+                                {{-- Botón Anterior --}}
+                                <a title="Anterior capítulo" href="{{ $capitulosPaginados->previousPageUrl() }}"
+                                    class="btn btn-primary btn-icon btn-circle {{ $capitulosPaginados->onFirstPage() ? ' disabled' : '' }}">
+                                    <i class="fa fa-arrow-left"></i>
+                                </a>
 
-                {{-- Botón Siguiente --}}
-                <a title="Siguiente capítulo" href="{{ $capitulosPaginados->nextPageUrl() }}"
-                    class="btn btn-primary btn-icon btn-circle {{ $capitulosPaginados->hasMorePages() ? '' : ' disabled' }}">
-                    <i class="fa fa-arrow-right"></i>
-                </a>
+                                {{-- Botón Siguiente --}}
+                                <a title="Siguiente capítulo" href="{{ $capitulosPaginados->nextPageUrl() }}"
+                                    class="btn btn-primary btn-icon btn-circle {{ $capitulosPaginados->hasMorePages() ? '' : ' disabled' }}">
+                                    <i class="fa fa-arrow-right"></i>
+                                </a>
 
-                <a title="Seleccionar capítulo" data-target="#t-cap-modal" data-toggle="modal"
-                    class="btn btn-primary btn-icon btn-circle"> <i class="fa fa-table"></i></a>
-            </div>
-            @foreach ($capitulosPaginados as $capitulo)
-                <h2 class="text-center"><strong>Capítulo {{ $capitulo['capitulo'] }}</strong></h2>
-                <h4 class="text-center"><strong>{{ $capitulo['libro'] }}</strong></h4>
-                <div class="list-group list-group-striped">
-                    @foreach ($capitulo['versiculos'] as $index => $versiculo)
-                        <a class="list-group-item"
-                            href="{{ route('biblia.capitulo', ['numlibro' => $numLibro, 'numcapitulo' => $capitulosPaginados[0]['capitulo'], 'page' => $index + 1]) }}">
-                            {{ $versiculo }}
-                        </a>
-                    @endforeach
+                                <a title="Seleccionar capítulo" data-target="#t-cap-modal" data-toggle="modal"
+                                    class="btn btn-primary btn-icon btn-circle"> <i class="fa fa-table"></i></a>
+                            </div>
+                            @foreach ($capitulosPaginados as $capitulo)
+                                <h2 class="text-center"><strong>Capítulo {{ $capitulo['capitulo'] }}</strong></h2>
+                                <h4 class="text-center"><strong>{{ $capitulo['libro'] }}</strong></h4>
+                                <div class="list-group list-group-striped">
+                                    @foreach ($capitulo['versiculos'] as $index => $versiculo)
+                                        <a class="list-group-item"
+                                            href="{{ route('biblia.capitulo', ['numlibro' => $numLibro, 'numcapitulo' => $capitulosPaginados[0]['capitulo'], 'page' => $index + 1]) }}">
+                                            {{ $versiculo }}
+                                        </a>
+                                    @endforeach
+
+                                </div>
+                            @endforeach
+
+                            <div class="text-center">
+                                <!-- Mostrar enlaces de paginación -->
+                                {{ $capitulosPaginados->links() }}
+                            </div>
+
+                        </div>
+                    </div>
+                    <!--===================================================-->
 
                 </div>
-            @endforeach
-
-            <div class="text-center">
-                <!-- Mostrar enlaces de paginación -->
-                {{ $capitulosPaginados->links() }}
             </div>
+        </div>
+        <div class="col-lg-5">
+            <div class="row">
+                <div class="col-lg-12">
+                    <!-- Tabs para los comentarios de las biblias de estudio -->
+                    <div class="tab-base">
+                        <!-- Nav Tabs -->
+                        <ul class="nav nav-tabs">
+                            @foreach ($bibliasEstudio as $index => $bibliaEstudio)
+                                <li class="{{ $index === 0 ? 'active' : '' }}">
+                                    <a data-toggle="tab" href="#tab-{{ $index + 1 }}">
+                                        {{ $bibliaEstudio['nombre'] }}
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
 
+                        <!-- Tabs Content -->
+                        <div class="tab-content">
+                            @foreach ($bibliasEstudio as $index => $bibliaEstudio)
+                                <div id="tab-{{ $index + 1 }}"
+                                    class="tab-pane fade {{ $index === 0 ? 'in active' : '' }}">
+                                    <h4 class="text-main text-semibold text-center">Comentarios de la Bíblia
+                                        de Estudio {{ $bibliaEstudio['nombre'] }}</h4>
+
+                                    @foreach ($bibliaEstudio['versiculosFiltrados'] as $versiculo)
+                                        @if ($versiculo['VerseBegin'] == $versiculo['VerseEnd'])
+                                            <p class="text-main text-semibold">Versículo
+                                                {{ $versiculo['VerseBegin'] }}.
+                                            </p>
+                                        @else
+                                            <p class="text-main text-semibold">Versículo {{ $versiculo['VerseBegin'] }}
+                                                al
+                                                {{ $versiculo['VerseEnd'] }}.
+                                            </p>
+                                        @endif
+                                        <div>{!! $versiculo['Comments'] !!}</div>
+                                        <br>
+                                    @endforeach
+
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-
-
 
 
 

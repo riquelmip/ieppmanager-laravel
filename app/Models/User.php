@@ -23,9 +23,13 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'username',
+        'nombre',
+        'apellido',
         'email',
         'password',
         'estado',
+        'tipo_usuario',
+        'id_directiva',
     ];
 
     /**
@@ -46,6 +50,4 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-
-    
 }

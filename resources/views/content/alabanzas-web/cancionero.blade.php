@@ -62,8 +62,11 @@
                             <p class="pad-hor mar-top text-main text-bold text-sm text-uppercase">Alabanzas según Autores
                             </p>
                             <div class="list-group bg-trans pad-btm bord-btm">
+                                <a href="#" onclick="cargarTablaAutores(0);"
+                                    class="list-group-item list-item-sm">Todos</a>
                                 @foreach ($autores as $autor)
-                                    <a href="#" class="list-group-item list-item-sm">{{ $autor->nombre }}</a>
+                                    <a href="#" onclick="cargarTablaAutores('{{ $autor->id }}');"
+                                        class="list-group-item list-item-sm">{{ $autor->nombre }}</a>
                                 @endforeach
 
 

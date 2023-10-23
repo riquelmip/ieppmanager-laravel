@@ -13,18 +13,19 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     selectRoles();
+    selectDirectivas();
 
     //INICIALIZANDO LOS SELECT2
-    $('.select2').select2({
-        "language": {
-            "noResults": function () {
+    $(".select2").select2({
+        language: {
+            noResults: function () {
                 return "No se encontraron resultados";
-            }
+            },
         },
         escapeMarkup: function (markup) {
             return markup;
         },
-        dropdownParent: $('#modal-usuarios .modal-body')
+        dropdownParent: $("#modal-usuarios .modal-body"),
     });
 
     cargarDatos("t-usuarios", "/usuarios/cargartabla");
@@ -64,7 +65,6 @@ document.addEventListener("DOMContentLoaded", function () {
             },
         });
     });
-
 });
 
 function selectRoles() {
@@ -80,9 +80,39 @@ function selectRoles() {
         },
         success: function (json) {
             if (json["estado"]) {
-
-                //PONGO EL HTML 
+                //PONGO EL HTML
                 $("#rol").empty().html(json["datos"]);
+
+                //MUESTRO LA ALERTA DE EXITO
+                toastr.success(json["msg"], json["titulo"]);
+            } else {
+                toastr.error(json["msg"], json["titulo"]);
+            }
+        },
+        error: function (json) {
+            toastr.error(json["msg"], json["titulo"]);
+        },
+        complete: function () {
+            div_cargando.style.display = "none";
+        },
+    });
+}
+
+function selectDirectivas() {
+    //obtenerPermisos();
+    $.ajax({
+        type: "GET",
+        url: APP_URL + "/usuarios/directivas",
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
+        beforeSend: function () {
+            div_cargando.style.display = "flex";
+        },
+        success: function (json) {
+            if (json["estado"]) {
+                //PONGO EL HTML
+                $("#id_directiva").empty().html(json["datos"]);
 
                 //MUESTRO LA ALERTA DE EXITO
                 toastr.success(json["msg"], json["titulo"]);
@@ -114,11 +144,24 @@ function editarUsuarioModal(idUsuario) {
                 //PONGO LOS DATOS DEL ROL A EDITR, INCLUYENDO EL ID
                 $("#idUsuario").val(json["datos"]["id"]);
                 $("#username").val(json["datos"]["username"]);
+                $("#nombre").val(json["datos"]["nombre"]);
+                $("#apellido").val(json["datos"]["apellido"]);
                 $("#email").val(json["datos"]["email"]);
                 if (json["datos"]["roles"] == 0) {
                     $("#rol").val(0).select2();
                 } else {
-                    $("#rol").val(json["datos"]["roles"][0]['id']).select2();
+                    $("#rol").val(json["datos"]["roles"][0]["id"]).select2();
+                }
+
+                if (
+                    json["datos"]["id_directiva"] == null ||
+                    json["datos"]["id_directiva"] == 0
+                ) {
+                    $("#id_directiva").val(0).select2();
+                } else {
+                    $("#id_directiva")
+                        .val(json["datos"]["id_directiva"])
+                        .select2();
                 }
 
                 $("#estado").val(json["datos"]["estado"]);
@@ -192,9 +235,3 @@ function eliminarUsuario() {
         },
     });
 }
-
-
-
-
-
-

@@ -22,6 +22,7 @@ class CreateActasTable extends Migration
             $table->string('hora_inicio');
             $table->string('hora_fin');
             $table->date('proxima_reunion');
+            $table->text('otros')->nullable();
             $table->timestamps();
         });
     }

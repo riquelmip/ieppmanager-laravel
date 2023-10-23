@@ -7,8 +7,10 @@ use App\Http\Controllers\BibliaWebController;
 use App\Http\Controllers\CadenaController;
 use App\Http\Controllers\CadenaWebController;
 use App\Http\Controllers\CoroController;
+use App\Http\Controllers\DirectivaController;
 use App\Http\Controllers\PredicaController;
 use App\Http\Controllers\RolController;
+use App\Http\Controllers\TipoDirectivaController;
 use App\Http\Controllers\UsuarioController;
 use Illuminate\Support\Facades\Route;
 
@@ -45,6 +47,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/usuarios/cargartabla', [UsuarioController::class, 'cargarTabla'])->name('usuarios/cargartabla');
     Route::post('/usuarios/guardar', [UsuarioController::class, 'guardar'])->name('usuarios/guardar');
     Route::get('/usuarios/roles', [UsuarioController::class, 'obtenerRoles'])->name('usuarios/roles');
+    Route::get('/usuarios/directivas', [UsuarioController::class, 'obtenerDirectivas'])->name('usuarios/directivas');
     Route::get('/usuarios/ver/{id}', [UsuarioController::class, 'obtenerUsuario']);
     Route::post('/usuarios/eliminar', [UsuarioController::class, 'eliminarUsuario'])->name('usuarios/eliminar');
 
@@ -97,6 +100,21 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/predicas/ver/{id}', [PredicaController::class, 'obtener']);
     Route::get('/predicas/ver-predica', [PredicaController::class, 'verPredica'])->name('predicas/ver-predica');
     Route::post('/predicas/eliminar', [PredicaController::class, 'eliminar'])->name('predicas/eliminar');
+
+    //RUTAS TIPOS DIRECTIVAS
+    Route::get('/tipos_directivas', [TipoDirectivaController::class, 'index'])->name('tipos_directivas');
+    Route::get('/tipos_directivas/cargartabla', [TipoDirectivaController::class, 'cargarTabla'])->name('tipos_directivas/cargartabla');
+    Route::post('/tipos_directivas/guardar', [TipoDirectivaController::class, 'guardar'])->name('tipos_directivas/guardar');
+    Route::get('/tipos_directivas/ver/{id}', [TipoDirectivaController::class, 'obtenerTipoDirectiva']);
+    Route::post('/tipos_directivas/eliminar', [TipoDirectivaController::class, 'eliminarTipoDirectiva'])->name('tipos_directivas/eliminar');
+
+    //RUTAS DIRECTIVAS
+    Route::get('/directivas', [DirectivaController::class, 'index'])->name('directivas');
+    Route::get('/directivas/cargartabla', [DirectivaController::class, 'cargarTabla'])->name('directivas/cargartabla');
+    Route::post('/directivas/guardar', [DirectivaController::class, 'guardar'])->name('directivas/guardar');
+    Route::get('/directivas/ver/{id}', [DirectivaController::class, 'obtenerDirectiva']);
+    Route::post('/directivas/eliminar', [DirectivaController::class, 'eliminarDirectiva'])->name('directivas/eliminar');
+    Route::get('/directivas/tipos_directivas', [DirectivaController::class, 'obtenerTiposDirectivas'])->name('directivas/tipos_directivas');
 });
 
 
@@ -109,7 +127,7 @@ Route::get('/public/himnario/ver', [AlabanzaWebController::class, 'verAlabanza']
 
 //CANCIONERO
 Route::get('/public/cancionero', [AlabanzaWebController::class, 'cancionero'])->name('public/cancionero');
-Route::get('/public/cancionero/cargartabla', [AlabanzaWebController::class, 'cargarTablaCancionero'])->name('public/cancionero/cargartabla');
+Route::get('/public/cancionero/cargartabla/autor/{idautor}', [AlabanzaWebController::class, 'cargarTablaCancionero'])->name('public.cancionero.tabla');
 Route::get('/public/cancionero/ver', [AlabanzaWebController::class, 'verAlabanzaCancionero']);
 
 //CADENAS

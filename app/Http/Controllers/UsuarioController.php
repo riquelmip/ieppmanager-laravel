@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Directiva;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
@@ -113,9 +114,18 @@ class UsuarioController extends Controller
                     //VALIDO LOS CAMPOS
                     $validator = Validator::make($request->all(), [
                         'username' => 'required|unique:users',
+                        'nombre' => 'required',
+                        'apellido' => 'required',
                         'email' => 'required|email|unique:users',
                         'password' => 'required|same:confirm-password',
-                        'rol' => 'required|min:1',
+                        'rol' => [
+                            'required',
+                            function ($attribute, $value, $fail) {
+                                if ($value == 0) {
+                                    $fail('Debe seleccionar un rol válido.');
+                                }
+                            },
+                        ],
                         'estado' => 'required',
                     ]);
 
@@ -131,12 +141,21 @@ class UsuarioController extends Controller
                         ]);
                     }
 
+                    $tipo_usuario = false;
+                    if ($request->input('id_directiva') != 0) {
+                        $tipo_usuario = true;
+                    }
+
                     //SI PASAN LAS VALIDACIONES, HAGO EL REGISTRO
                     $usuario = User::create([
                         'username' => $request->input('username'),
+                        'nombre' => $request->input('nombre'),
+                        'apellido' => $request->input('apellido'),
                         'email' => $request->input('email'),
                         'password' => Hash::make($request->input('password')),
-                        'estado' => $request->input('estado')
+                        'estado' => $request->input('estado'),
+                        'tipo_usuario' => $tipo_usuario,
+                        'id_directiva' => ($request->input('id_directiva') == 0) ? null : $request->input('id_directiva'),
                     ]);
 
 
@@ -162,8 +181,17 @@ class UsuarioController extends Controller
                     $validator = Validator::make($request->all(), [
                         'username' => 'required|unique:users,username,' . $idUsuario,
                         'email' => 'required|email|unique:users,email,' . $idUsuario,
+                        'nombre' => 'required',
+                        'apellido' => 'required',
                         'password' => 'nullable|same:confirm-password',
-                        'rol' => 'required|min:1',
+                        'rol' => [
+                            'required',
+                            function ($attribute, $value, $fail) {
+                                if ($value == 0) {
+                                    $fail('Debe seleccionar un rol válido.');
+                                }
+                            },
+                        ],
                         'estado' => 'required',
                     ]);
 
@@ -179,17 +207,26 @@ class UsuarioController extends Controller
                         ]);
                     }
 
+                    $tipo_usuario = false;
+                    if ($request->input('id_directiva') != 0) {
+                        $tipo_usuario = true;
+                    }
+
                     //OBTENGO LOS DATOS DE ESE USUARIO
                     $usuario = User::find($idUsuario);
 
                     //HAGO LA EDICION DEL USUARIO
                     $usuario->username = $request->input('username');
+                    $usuario->nombre = $request->input('nombre');
+                    $usuario->apellido = $request->input('apellido');
                     $usuario->email = $request->input('email');
                     //SI LA CONTRASEÑA NO VIENE VACIA
                     if (!is_null($usuario->password)) {
                         $usuario->password = Hash::make($request->input('password'));
                     }
                     $usuario->estado = $request->input('estado');
+                    $usuario->tipo_usuario = $tipo_usuario;
+                    $usuario->id_directiva = ($request->input('id_directiva') == 0) ? null : $request->input('id_directiva');
                     $usuario->save();
 
                     //OBTENGO LOS DATOS DEL ROL ELEGIDO
@@ -247,6 +284,41 @@ class UsuarioController extends Controller
                         'titulo' => 'Éxito',
                         'msg' => 'Datos obtenidos correctamente',
                         'datos' => $htmlRoles
+                    ]
+                );
+            }
+        } catch (Exception $e) {
+            return response()->json(
+                [
+                    'estado' => false,
+                    'titulo' => 'Error',
+                    'msg' => 'Ocurrió un error al obtener la información',
+                    'errors' => $e->getMessage()
+                ]
+            );
+        }
+    }
+
+    public function obtenerDirectivas()
+    {
+        try {
+            if (Auth::user()->can('ver-usuarios')) {
+                //OBTENGO EL LISTADO DE LOS ROLES   
+                $directivas = Directiva::where('estado', true)->get();
+
+                $html = "";
+
+                $html .= '<option value="0">No pertenezco a directivas</option>';
+                for ($i = 0; $i < count($directivas); $i++) {
+                    $html .= '<option value="' . $directivas[$i]['id'] . '">' . $directivas[$i]['nombre'] . ' ' . $directivas[$i]['anio'] . '</option>';
+                }
+
+                return response()->json(
+                    [
+                        'estado' => true,
+                        'titulo' => 'Éxito',
+                        'msg' => 'Datos obtenidos correctamente',
+                        'datos' => $html
                     ]
                 );
             }

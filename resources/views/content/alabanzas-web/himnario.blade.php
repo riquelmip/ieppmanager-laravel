@@ -20,7 +20,7 @@
 
 
     <div class="row">
-        <div class="col-lg-10">
+        <div class="col-lg-12">
             <div class="row">
                 <div class="col-lg-12">
 
@@ -50,46 +50,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-2">
-            <div class="row">
-                <div class="col-lg-12">
 
-
-                    <!--===================================================-->
-                    <div class="panel">
-                        <div class="panel-body">
-
-                            <p class="pad-hor mar-top text-main text-bold text-sm text-uppercase">Alabanzas según Autores
-                            </p>
-                            <div class="list-group bg-trans pad-btm bord-btm">
-                                @foreach ($autores as $autor)
-                                    <a href="#" class="list-group-item list-item-sm">{{ $autor->nombre }}</a>
-                                @endforeach
-
-
-                            </div>
-                            <p class="pad-hor mar-top text-main text-bold text-sm text-uppercase">IEPP Manager</p>
-                            {{-- <p class="pad-hor mar-top text-main text-bold text-sm text-uppercase">Tambien puedes ver</p>
-                            <div class="list-group bg-trans pad-btm ">
-                                <div class="list-group-item list-item-sm"><a href="#" class="btn-link">Cancionero de
-                                        Alabanzas</a><small class="box-block">Letras</small></div>
-                                <div class="list-group-item list-item-sm"><a href="#" class="btn-link">Coros
-                                        elit</a><small class="box-block">Letras</small></div>
-                                <div class="list-group-item list-item-sm"><a href="#" class="btn-link">Cadenas de
-                                        Coros</a><small class="box-block">Letras</small></div>
-
-                            </div> --}}
-
-
-
-                        </div>
-                    </div>
-
-                    <!--===================================================-->
-
-                </div>
-            </div>
-        </div>
     </div>
 
 

@@ -92,7 +92,60 @@ class BibliaWebController extends Controller
             ];
             // Aquí puedes usar $infoLibro para lo que necesites
 
-            return view('content.biblias-web.capitulo', compact('infoLibro', 'capitulos', 'capitulosPaginados', 'numLibro'));
+
+
+
+
+            //PARA LOS COMENTARIOS
+            $pathToIndiceComentarios = public_path('ComentariosBiblias/indice.json');
+            $contenidoIndiceComentarios = file_get_contents($pathToIndiceComentarios);
+
+            // Decodificar el JSON a un array asociativo
+            $contenidoIndiceComentariosJSON = json_decode($contenidoIndiceComentarios, true);
+
+            // Array para almacenar la información de las biblias de estudio
+            $bibliasEstudio = [];
+
+            // Verificar si la decodificación fue exitosa
+            if ($contenidoIndiceComentariosJSON !== null) {
+                foreach ($contenidoIndiceComentariosJSON as $tipoBibliaEstudio) {
+                    $numeroBE = $tipoBibliaEstudio['numero'];
+                    $nombreBE = $tipoBibliaEstudio['titulo'];
+
+                    // Obtener el contenido de la biblia de estudio específico y convertirlo a un array asociativo
+                    $pathToBibliaE = public_path("ComentariosBiblias/{$nombreBE}/Verse.json");
+                    $contenidoVerseBibliaE = json_decode(file_get_contents($pathToBibliaE), true);
+
+                    // Verificar si la decodificación fue exitosa
+                    if ($contenidoVerseBibliaE !== null) {
+                        // Filtrar los versículos que solo sean del libro requerido
+                        $versiculosFiltrados = array_filter($contenidoVerseBibliaE['RECORDS'], function ($versiculo) use ($numLibro) {
+                            return $versiculo['Book'] == $numLibro;
+                        });
+
+                        // Filtrar los versículos que solo sean del capitulo requerido
+                        $versiculosFiltrados = array_filter($versiculosFiltrados, function ($versiculo) use ($page) {
+                            return $versiculo['ChapterBegin'] == $page;
+                        });
+
+
+                        // Crear un objeto con la información de la biblia de estudio actual
+                        $bibliaEstudio = [
+                            'numero' => $numeroBE,
+                            'nombre' => $nombreBE,
+                            'versiculosFiltrados' => array_values($versiculosFiltrados)
+                        ];
+
+                        // Agregar el objeto al array de biblias de estudio
+                        $bibliasEstudio[] = $bibliaEstudio;
+                    }
+                }
+            }
+
+
+
+
+            return view('content.biblias-web.capitulo', compact('infoLibro', 'capitulos', 'capitulosPaginados', 'numLibro', 'bibliasEstudio'));
         } catch (Exception $e) {
             return view('content.error.404');
         }
@@ -150,6 +203,7 @@ class BibliaWebController extends Controller
                 'capitulo' => $capitulo,
                 'versiculosPaginados' => $versiculosPaginados
             ];
+
 
             return view('content.biblias-web.versiculo', compact('infoLibro', 'numLibro', 'versiculosPaginados', 'numCapitulo'));
         } catch (Exception $e) {

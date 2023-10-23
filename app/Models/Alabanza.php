@@ -19,5 +19,7 @@ class Alabanza extends Model
         'nota',
         'id_usuario',
         'estado',
+        'tipo_video',
+        'url_video',
     ];
 }
