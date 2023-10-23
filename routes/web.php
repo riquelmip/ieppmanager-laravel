@@ -9,9 +9,11 @@ use App\Http\Controllers\CadenaWebController;
 use App\Http\Controllers\CoroController;
 use App\Http\Controllers\DirectivaController;
 use App\Http\Controllers\PredicaController;
+use App\Http\Controllers\PrivilegiosDirectivaController;
 use App\Http\Controllers\RolController;
 use App\Http\Controllers\TipoDirectivaController;
 use App\Http\Controllers\UsuarioController;
+use App\Models\PrivilegiosDirectiva;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -115,6 +117,14 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/directivas/ver/{id}', [DirectivaController::class, 'obtenerDirectiva']);
     Route::post('/directivas/eliminar', [DirectivaController::class, 'eliminarDirectiva'])->name('directivas/eliminar');
     Route::get('/directivas/tipos_directivas', [DirectivaController::class, 'obtenerTiposDirectivas'])->name('directivas/tipos_directivas');
+
+    //RUTAS PRIVILEGIOS DIRECTIVAS
+    Route::get('/privilegios_directivas', [PrivilegiosDirectivaController::class, 'index'])->name('privilegios_directivas');
+    Route::get('/privilegios_directivas/cargartabla', [PrivilegiosDirectivaController::class, 'cargarTabla'])->name('privilegios_directivas/cargartabla');
+    Route::post('/privilegios_directivas/guardar', [PrivilegiosDirectivaController::class, 'guardar'])->name('privilegios_directivas/guardar');
+    Route::get('/privilegios_directivas/ver/{id}', [PrivilegiosDirectivaController::class, 'obtenerPrivilegio']);
+    Route::post('/privilegios_directivas/eliminar', [PrivilegiosDirectivaController::class, 'eliminar'])->name('privilegios_directivas/eliminar');
+    Route::get('/privilegios_directivas/directivas', [PrivilegiosDirectivaController::class, 'obtenerDirectivas'])->name('privilegios_directivas/directivas');
 });
 
 

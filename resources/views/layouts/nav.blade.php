@@ -236,6 +236,8 @@
                                                 href="{{ route('tipos_directivas') }}">Tipos Directivas</a></li>
                                         <li @if ($page_submenu == 'directivas') ? class="active-link" @endif><a
                                                 href="{{ route('directivas') }}">Directivas</a></li>
+                                        <li @if ($page_submenu == 'privilegios_directivas') ? class="active-link" @endif><a
+                                                href="{{ route('privilegios_directivas') }}">Privilegios</a></li>
                                     </ul>
                                 </li>
 
