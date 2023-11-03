@@ -16,7 +16,7 @@
     <div class="panel">
         <div class="panel-body">
             <div class="row">
-                <a title="Return to index" href="{{ route('public/biblias/holy-bible') }}"
+                <a title="Return to index" href="{{ route('web/biblias/holy-bible') }}"
                     class="btn btn-primary btn-icon btn-circle"><i class="fa fa-long-arrow-left"></i></a>
 
                 {{-- Botón Anterior --}}

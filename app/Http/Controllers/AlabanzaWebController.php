@@ -53,13 +53,13 @@ class AlabanzaWebController extends Controller
             foreach ($himnario as $alabanza) {
                 $btnVer = '';
 
-                $btnVer .= '<a href="' . url("/public/himnario/ver?page={$contadorPagina}") . '" class="btn btn-icon btn-primary"><i class="fa fa-eye"></i></a>';
+                $btnVer .= '<a href="' . url("/web/himnario/ver?page={$contadorPagina}") . '" class="btn btn-icon btn-primary"><i class="fa fa-eye"></i></a>';
 
                 // Construye el enlace con el slug de la alabanza para el nombre
-                $numLink = '<a href="' . url("/public/himnario/ver?page={$contadorPagina}") . '">' . $alabanza['numero_himnario'] . '</a>';
+                $numLink = '<a href="' . url("/web/himnario/ver?page={$contadorPagina}") . '">' . $alabanza['numero_himnario'] . '</a>';
 
                 // Construye el enlace con el slug de la alabanza para el nombre
-                $nombreLink = '<a href="' . url("/public/himnario/ver?page={$contadorPagina}") . '">' . $alabanza['nombre'] . '</a>';
+                $nombreLink = '<a href="' . url("/web/himnario/ver?page={$contadorPagina}") . '">' . $alabanza['nombre'] . '</a>';
 
                 $tablaHTML .=  '<tr>' .
                     '<td>' .
@@ -110,13 +110,13 @@ class AlabanzaWebController extends Controller
             foreach ($himnario as $alabanza) {
                 $btnVer = '';
 
-                $btnVer .= '<a href="' . url("/public/cancionero/ver?page={$contadorPagina}") . '" class="btn btn-icon btn-primary"><i class="fa fa-eye"></i></a>';
+                $btnVer .= '<a href="' . url("/web/cancionero/ver?page={$contadorPagina}") . '" class="btn btn-icon btn-primary"><i class="fa fa-eye"></i></a>';
 
                 // Construye el enlace con el slug de la alabanza para el nombre
-                $numLink = '<a href="' . url("/public/cancionero/ver?page={$contadorPagina}") . '">' . $contadorPagina . '</a>';
+                $numLink = '<a href="' . url("/web/cancionero/ver?page={$contadorPagina}") . '">' . $contadorPagina . '</a>';
 
                 // Construye el enlace con el slug de la alabanza para el nombre
-                $nombreLink = '<a href="' . url("/public/cancionero/ver?page={$contadorPagina}") . '">' . $alabanza['nombre'] . '</a>';
+                $nombreLink = '<a href="' . url("/web/cancionero/ver?page={$contadorPagina}") . '">' . $alabanza['nombre'] . '</a>';
 
                 $tablaHTML .=  '<tr>' .
                     '<td>' .

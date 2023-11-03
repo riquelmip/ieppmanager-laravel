@@ -131,27 +131,27 @@ Route::group(['middleware' => ['auth']], function () {
 //RUTAS PARA INICIO SIN NECESIDAD DE AUTENTICACION
 
 //HIMNARIO
-Route::get('/public/himnario', [AlabanzaWebController::class, 'himnario'])->name('public/himnario');
-Route::get('/public/himnario/cargartabla', [AlabanzaWebController::class, 'cargarTablaHimnario'])->name('public/himnario/cargartabla');
-Route::get('/public/himnario/ver', [AlabanzaWebController::class, 'verAlabanza']);
+Route::get('/web/himnario', [AlabanzaWebController::class, 'himnario'])->name('web/himnario');
+Route::get('/web/himnario/cargartabla', [AlabanzaWebController::class, 'cargarTablaHimnario'])->name('web/himnario/cargartabla');
+Route::get('/web/himnario/ver', [AlabanzaWebController::class, 'verAlabanza']);
 
 //CANCIONERO
-Route::get('/public/cancionero', [AlabanzaWebController::class, 'cancionero'])->name('public/cancionero');
-Route::get('/public/cancionero/cargartabla/autor/{idautor}', [AlabanzaWebController::class, 'cargarTablaCancionero'])->name('public.cancionero.tabla');
-Route::get('/public/cancionero/ver', [AlabanzaWebController::class, 'verAlabanzaCancionero']);
+Route::get('/web/cancionero', [AlabanzaWebController::class, 'cancionero'])->name('web/cancionero');
+Route::get('/web/cancionero/cargartabla/autor/{idautor}', [AlabanzaWebController::class, 'cargarTablaCancionero'])->name('web.cancionero.tabla');
+Route::get('/web/cancionero/ver', [AlabanzaWebController::class, 'verAlabanzaCancionero']);
 
 //CADENAS
-Route::get('/public/cadenas/avivamiento', [CadenaWebController::class, 'avivamiento'])->name('public/cadenas/avivamiento');
-Route::get('/public/cadenas/adoracion', [CadenaWebController::class, 'adoracion'])->name('public/cadenas/adoracion');
-Route::get('/public/cadenas/cargartabla/{tipo}', [CadenaWebController::class, 'cargarTabla']);
-Route::get('/public/cadenas/ver-cadena-avivamiento', [CadenaWebController::class, 'verCadenaAvivamiento']);
-Route::get('/public/cadenas/ver-cadena-adoracion', [CadenaWebController::class, 'verCadenaAdoracion']);
+Route::get('/web/cadenas/avivamiento', [CadenaWebController::class, 'avivamiento'])->name('web/cadenas/avivamiento');
+Route::get('/web/cadenas/adoracion', [CadenaWebController::class, 'adoracion'])->name('web/cadenas/adoracion');
+Route::get('/web/cadenas/cargartabla/{tipo}', [CadenaWebController::class, 'cargarTabla']);
+Route::get('/web/cadenas/ver-cadena-avivamiento', [CadenaWebController::class, 'verCadenaAvivamiento']);
+Route::get('/web/cadenas/ver-cadena-adoracion', [CadenaWebController::class, 'verCadenaAdoracion']);
 
-Route::get('/public/biblias/biblia-rv1960', [BibliaWebController::class, 'bibliarv'])->name('public/biblias/biblia-rv1960');
-Route::get('/public/biblias/biblia/libro/{numero}', [BibliaWebController::class, 'verLibro'])->name('biblia.libro');
-Route::get('/public/biblias/biblia/libro/{numlibro}/capitulo/{numcapitulo}', [BibliaWebController::class, 'verVersiculo'])->name('biblia.capitulo');
+Route::get('/web/biblias/biblia-rv1960', [BibliaWebController::class, 'bibliarv'])->name('web/biblias/biblia-rv1960');
+Route::get('/web/biblias/biblia/libro/{numero}', [BibliaWebController::class, 'verLibro'])->name('biblia.libro');
+Route::get('/web/biblias/biblia/libro/{numlibro}/capitulo/{numcapitulo}', [BibliaWebController::class, 'verVersiculo'])->name('biblia.capitulo');
 
 
-Route::get('/public/biblias/holy-bible', [BibliaWebController::class, 'bibliahb'])->name('public/biblias/holy-bible');
-Route::get('/public/biblias/bible/book/{numero}', [BibliaWebController::class, 'viewBook'])->name('bible.book');
-Route::get('/public/biblias/bible/chapter/{numlibro}/capitulo/{numcapitulo}', [BibliaWebController::class, 'viewChapter'])->name('book.chapter');
+Route::get('/web/biblias/holy-bible', [BibliaWebController::class, 'bibliahb'])->name('web/biblias/holy-bible');
+Route::get('/web/biblias/bible/book/{numero}', [BibliaWebController::class, 'viewBook'])->name('bible.book');
+Route::get('/web/biblias/bible/chapter/{numlibro}/capitulo/{numcapitulo}', [BibliaWebController::class, 'viewChapter'])->name('book.chapter');

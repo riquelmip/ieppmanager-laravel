@@ -48,17 +48,17 @@ class CadenaWebController extends Controller
                 $btnVer = '';
 
                 if ($tipo == 0) {
-                    $btnVer .= '<a href="' . url("/public/cadenas/ver-cadena-avivamiento?page={$contadorPagina}") . '" class="btn btn-icon btn-primary"><i class="fa fa-eye"></i></a>';
+                    $btnVer .= '<a href="' . url("/web/cadenas/ver-cadena-avivamiento?page={$contadorPagina}") . '" class="btn btn-icon btn-primary"><i class="fa fa-eye"></i></a>';
 
-                    $numLink = '<a href="' . url("/public/cadenas/ver-cadena-avivamiento?page={$contadorPagina}") . '">' . $contadorPagina . '</a>';
+                    $numLink = '<a href="' . url("/web/cadenas/ver-cadena-avivamiento?page={$contadorPagina}") . '">' . $contadorPagina . '</a>';
 
-                    $nombreLink = '<a href="' . url("/public/cadenas/ver-cadena-avivamiento?page={$contadorPagina}") . '">' . $cadena['nombre'] . '</a>';
+                    $nombreLink = '<a href="' . url("/web/cadenas/ver-cadena-avivamiento?page={$contadorPagina}") . '">' . $cadena['nombre'] . '</a>';
                 } else if ($tipo == 1) {
-                    $btnVer .= '<a href="' . url("/public/cadenas/ver-cadena-adoracion?page={$contadorPagina}") . '" class="btn btn-icon btn-primary"><i class="fa fa-eye"></i></a>';
+                    $btnVer .= '<a href="' . url("/web/cadenas/ver-cadena-adoracion?page={$contadorPagina}") . '" class="btn btn-icon btn-primary"><i class="fa fa-eye"></i></a>';
 
-                    $numLink = '<a href="' . url("/public/cadenas/ver-cadena-adoracion?page={$contadorPagina}") . '">' . $contadorPagina . '</a>';
+                    $numLink = '<a href="' . url("/web/cadenas/ver-cadena-adoracion?page={$contadorPagina}") . '">' . $contadorPagina . '</a>';
 
-                    $nombreLink = '<a href="' . url("/public/cadenas/ver-cadena-adoracion?page={$contadorPagina}") . '">' . $cadena['nombre'] . '</a>';
+                    $nombreLink = '<a href="' . url("/web/cadenas/ver-cadena-adoracion?page={$contadorPagina}") . '">' . $cadena['nombre'] . '</a>';
                 }
 
                 $tablaHTML .=  '<tr>' .

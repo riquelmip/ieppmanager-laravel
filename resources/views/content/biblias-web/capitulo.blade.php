@@ -24,7 +24,7 @@
                     <div class="panel">
                         <div class="panel-body">
                             <div class="row">
-                                <a title="Volver al índice" href="{{ route('public/biblias/biblia-rv1960') }}"
+                                <a title="Volver al índice" href="{{ route('web/biblias/biblia-rv1960') }}"
                                     class="btn btn-primary btn-icon btn-circle"><i class="fa fa-long-arrow-left"></i></a>
 
                                 {{-- Botón Anterior --}}

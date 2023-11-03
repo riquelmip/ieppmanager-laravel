@@ -1,3 +1,3 @@
 document.addEventListener("DOMContentLoaded", function () {
-    cargarDatos("t-cadenas-adoracion-web", "/public/cadenas/cargartabla/1");
+    cargarDatos("t-cadenas-adoracion-web", "/web/cadenas/cargartabla/1");
 });

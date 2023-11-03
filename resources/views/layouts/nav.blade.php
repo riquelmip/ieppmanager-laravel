@@ -66,7 +66,7 @@
 
                         <!--HIMNARIO-->
                         <li @if ($page_menu == 'himnario-web') ? class="active-sub" @endif>
-                            <a href="{{ route('public/himnario') }}">
+                            <a href="{{ route('web/himnario') }}">
                                 <i class="demo-pli-folder"></i>
                                 <span class="menu-title">
                                     Himnario Oficial
@@ -77,7 +77,7 @@
 
                         <!--CANCIONERO-->
                         <li @if ($page_menu == 'cancionero-web') ? class="active-sub" @endif>
-                            <a href="{{ route('public/cancionero') }}">
+                            <a href="{{ route('web/cancionero') }}">
                                 <i class="demo-pli-folder"></i>
                                 <span class="menu-title">
                                     Cancionero
@@ -97,9 +97,9 @@
                             <!--Submenu-->
                             <ul @if ($page_menu == 'cadenas-web') ? class="collapse in" : class="collapse" @endif>
                                 <li @if ($page_submenu == 'cadenas-avivamiento-web') ? class="active-link" @endif><a
-                                        href="{{ route('public/cadenas/avivamiento') }}">Avivamiento</a></li>
+                                        href="{{ route('web/cadenas/avivamiento') }}">Avivamiento</a></li>
                                 <li @if ($page_submenu == 'cadenas-adoracion-web') ? class="active-link" @endif><a
-                                        href="{{ route('public/cadenas/adoracion') }}">Adoración</a></li>
+                                        href="{{ route('web/cadenas/adoracion') }}">Adoración</a></li>
                             </ul>
                         </li>
 
@@ -114,9 +114,9 @@
                             <!--Submenu-->
                             <ul @if ($page_menu == 'biblias-web') ? class="collapse in" : class="collapse" @endif>
                                 <li @if ($page_submenu == 'biblia-web') ? class="active-link" @endif><a
-                                        href="{{ route('public/biblias/biblia-rv1960') }}">Biblia RV-1960</a></li>
+                                        href="{{ route('web/biblias/biblia-rv1960') }}">Biblia RV-1960</a></li>
                                 <li @if ($page_submenu == 'bible-web') ? class="active-link" @endif><a
-                                        href="{{ route('public/biblias/holy-bible') }}">Holy Bible</a></li>
+                                        href="{{ route('web/biblias/holy-bible') }}">Holy Bible</a></li>
                             </ul>
                         </li>
 
