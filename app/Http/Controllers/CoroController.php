@@ -155,7 +155,7 @@ class CoroController extends Controller
                         'nota' => ($request->input('nota') == 0) ? null : $request->input('nota'), //SI NO HA SELECCIONADO
                         'estado' => $request->input('estado'),
                         'letra' => $request->input('letra'),
-                        'tipo_video' => ($request->input('tipo_video') == 0) ? 0 : $request->input('tipo_video'), //SI NO HA SELECCIONADO
+                        'tipo_video' => 1,
                         'url_video' => ($request->input('url_video') == null) ? null : $request->input('url_video'), //SI NO HA SELECCIONADO
                     ]);
 
@@ -201,7 +201,7 @@ class CoroController extends Controller
                     $coro->nota = $request->input('nota');
                     $coro->estado = $request->input('estado');
                     $coro->letra = $request->input('letra');
-                    $coro->tipo_video = ($request->input('tipo_video') == 0) ? 0 : $request->input('tipo_video');
+                    $coro->tipo_video = 1;
                     $coro->url_video = ($request->input('url_video') == null) ? null : $request->input('url_video');
                     $coro->save();
 

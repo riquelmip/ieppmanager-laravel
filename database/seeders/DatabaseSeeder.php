@@ -17,6 +17,8 @@ class DatabaseSeeder extends Seeder
         $this->call(RolesPermisosSeeder::class);
         $this->call(AutoresSeeder::class);
         $this->call(TiposDirectivasSeeder::class);
+        $this->call(HimnarioSeeder::class);
+        $this->call(CancioneroSeeder::class);
         $this->call(CorosSeeder::class);
     }
 }

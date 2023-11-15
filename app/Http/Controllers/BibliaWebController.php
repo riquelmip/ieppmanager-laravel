@@ -148,6 +148,7 @@ class BibliaWebController extends Controller
             return view('content.biblias-web.capitulo', compact('infoLibro', 'capitulos', 'capitulosPaginados', 'numLibro', 'bibliasEstudio'));
         } catch (Exception $e) {
             return view('content.error.404');
+            // return $e->getMessage();
         }
     }
 

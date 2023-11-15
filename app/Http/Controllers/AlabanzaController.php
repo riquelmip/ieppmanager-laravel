@@ -151,7 +151,7 @@ class AlabanzaController extends Controller
                         'estado' => $request->input('estado'),
                         'letra' => $request->input('letra'),
                         'id_usuario' => Auth::user()->id,
-                        'tipo_video' => ($request->input('tipo_video') == 0) ? 0 : $request->input('tipo_video'), //SI NO HA SELECCIONADO
+                        'tipo_video' => 1,
                         'url_video' => ($request->input('url_video') == null) ? null : $request->input('url_video'), //SI NO HA SELECCIONADO
                     ]);
 
@@ -200,7 +200,7 @@ class AlabanzaController extends Controller
                     $himnario->estado = $request->input('estado');
                     $himnario->letra = $request->input('letra');
                     $himnario->id_usuario = Auth::user()->id;
-                    $himnario->tipo_video = ($request->input('tipo_video') == 0) ? 0 : $request->input('tipo_video');
+                    $himnario->tipo_video = 1;
                     $himnario->url_video = ($request->input('url_video') == null) ? null : $request->input('url_video');
                     $himnario->save();
 
@@ -440,7 +440,7 @@ class AlabanzaController extends Controller
                         'estado' => $request->input('estado'),
                         'letra' => $request->input('letra'),
                         'id_usuario' => Auth::user()->id,
-                        'tipo_video' => ($request->input('tipo_video') == 0) ? 0 : $request->input('tipo_video'), //SI NO HA SELECCIONADO
+                        'tipo_video' => 1,
                         'url_video' => ($request->input('url_video') == null) ? null : $request->input('url_video'), //SI NO HA SELECCIONADO
                     ]);
 
@@ -487,7 +487,7 @@ class AlabanzaController extends Controller
                     $cancionero->estado = $request->input('estado');
                     $cancionero->letra = $request->input('letra');
                     $cancionero->id_usuario = Auth::user()->id;
-                    $cancionero->tipo_video = ($request->input('tipo_video') == 0) ? 0 : $request->input('tipo_video');
+                    $cancionero->tipo_video = 1;
                     $cancionero->url_video = ($request->input('url_video') == null) ? null : $request->input('url_video');
                     $cancionero->save();
 
